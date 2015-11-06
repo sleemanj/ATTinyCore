@@ -17,6 +17,10 @@ extern "C"{
 
 #define ATTINY_CORE 1
 
+#ifdef NO_MILLIS
+#define ATTINY_CORE_NM 1
+#endif
+  
 #define HIGH 0x1
 #define LOW  0x0
 
@@ -92,7 +96,9 @@ typedef unsigned int word;
 typedef uint8_t boolean;
 typedef uint8_t byte;
 
+#ifndef NO_TONE
 void initToneTimer(void);
+#endif
 void init(void);
 
 void pinMode(uint8_t, uint8_t);
@@ -102,11 +108,16 @@ int analogRead(uint8_t);
 void analogReference(uint8_t mode);
 void analogWrite(uint8_t, int);
 
+#ifndef NO_MILLIS
 unsigned long millis(void);
 unsigned long micros(void);
 void delay(unsigned long);
 void delayMicroseconds(unsigned int us);
 unsigned long pulseIn(uint8_t pin, uint8_t state, unsigned long timeout);
+#else
+void delay(unsigned int ms);
+void delayMicroseconds(unsigned int us);
+#endif
 
 void shiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder, uint8_t val);
 uint8_t shiftIn(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder);
@@ -229,8 +240,10 @@ uint16_t makeWord(byte h, byte l);
 
 unsigned long pulseIn(uint8_t pin, uint8_t state, unsigned long timeout = 1000000L);
 
+#ifndef NO_TONE
 void tone(uint8_t _pin, unsigned int frequency, unsigned long duration = 0);
 void noTone(uint8_t _pin = 255);
+#endif
 
 // WMath prototypes
 long random(long);

@@ -11,7 +11,7 @@
 #ifndef _SPI_H_INCLUDED
 //Uses the same guard as the SPI class as the two cannot be used together
 #define _SPI_H_INCLUDED
-
+#ifndef NO_SPI
 #include <stdio.h>
 #include <Arduino.h>
 
@@ -79,5 +79,5 @@ private:
 };
 
 extern SoftSPIClass SPI;
-
+#endif
 #endif

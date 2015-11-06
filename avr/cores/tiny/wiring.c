@@ -97,6 +97,7 @@
 #define FRACT_INC ((MICROSECONDS_PER_MILLIS_OVERFLOW % 1000) >> 3)
 #define FRACT_MAX (1000 >> 3)
 
+#ifndef NO_MILLIS
 volatile unsigned long millis_timer_overflow_count = 0;
 volatile unsigned long millis_timer_millis = 0;
 static unsigned char millis_timer_fract = 0;
@@ -275,6 +276,15 @@ void delay(unsigned long ms)
   }
 }
 
+#else
+// delay() implementation without millis or micros
+void delay(unsigned int ms)
+{
+  while(ms--){
+    delayMicroseconds(1000);
+  }
+}
+#endif
 /* Delay for the given number of microseconds.  Assumes a 1, 8, 12, 16, 20 or 24 MHz clock. */
 void delayMicroseconds(unsigned int us)
 {
@@ -422,6 +432,7 @@ void delayMicroseconds(unsigned int us)
 }
 
 #if INITIALIZE_SECONDARY_TIMERS
+#ifndef NO_TONE
 static void initToneTimerInternal(void)
 {
   // Timer is processor clock divided by ToneTimer_Prescale_Index
@@ -461,8 +472,10 @@ static void initToneTimerInternal(void)
   TCCR1B |= (ToneTimer_Prescale_Index << CS10); //set the clock
   #endif
 }
+#endif
  #endif
 
+#ifndef NO_TONE
 void initToneTimer(void)
 {
   // Ensure the timer is in the same state as power-up
@@ -552,6 +565,8 @@ void initToneTimer(void)
     initToneTimerInternal();
   #endif
 }
+#endif
+
 #if F_CPU > 12000000L
   // above 12mhz, prescale by 128, the highest prescaler available
   #define ADC_ARDUINO_PRESCALER   B111
@@ -578,6 +593,7 @@ void initToneTimer(void)
 void init(void)
 {
 
+#ifndef NO_MILLIS
   // In case the bootloader left our millis timer in a bad way
   #if defined( HAVE_BOOTLOADER ) && HAVE_BOOTLOADER
   // Ensure the timer is in the same state as power-up
@@ -735,9 +751,11 @@ void init(void)
   #elif (TIMER_TO_USE_FOR_MILLIS == 1)
   TCCR1B = (TCCR1B & ~((1<<CS12)|(1<<CS11)|(1<<CS10))) | (MillisTimer_Prescale_Index << CS10);
   #endif
+#endif  
   // this needs to be called before setup() or some functions won't work there
   sei();
   
+#ifndef NO_MILLIS  
   // Enable the overlow interrupt (this is the basic system tic-toc for millis)
   #if defined(TIMSK) && defined(TOIE0) && (TIMER_TO_USE_FOR_MILLIS == 0)
   sbi(TIMSK, TOIE0);
@@ -750,10 +768,13 @@ void init(void)
   #else
   #error Millis() Timer overflow interrupt not set correctly
   #endif
+#endif
   
   // Initialize the timer used for Tone
   #if INITIALIZE_SECONDARY_TIMERS
+  #ifndef NO_TONE  
     initToneTimerInternal();
+  #endif
   #endif
 
   // Initialize the ADC

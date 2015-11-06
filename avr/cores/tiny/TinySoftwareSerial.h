@@ -1,5 +1,5 @@
 
-#if USE_SOFTWARE_SERIAL 
+#if !defined(NO_SERIAL) && USE_SOFTWARE_SERIAL 
 #ifndef TinySoftwareSerial_h
 #define TinySoftwareSerial_h
 #include <inttypes.h>

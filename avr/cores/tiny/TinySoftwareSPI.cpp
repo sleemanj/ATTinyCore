@@ -9,7 +9,7 @@
  *
  * Currently, this runs at 125kHz on an 8MHz clock.
  */
-
+#ifndef NO_SPI
 #include "TinySoftwareSPI.h"
 #include "Arduino.h"
 
@@ -216,3 +216,4 @@ void SoftSPIClass::setClockDivider(uint8_t rate)
 }
 
 SoftSPIClass SPI;
+#endif

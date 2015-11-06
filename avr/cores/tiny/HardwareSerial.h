@@ -21,7 +21,7 @@
 #ifndef HardwareSerial_h
 #define HardwareSerial_h
 
-#if ( defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H) || defined(LINBRRH)) && !USE_SOFTWARE_SERIAL
+#if !defined(NO_SERIAL) && ( defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H) || defined(LINBRRH)) && !USE_SOFTWARE_SERIAL
 
 #include <inttypes.h>
 
@@ -66,13 +66,14 @@ class HardwareSerial : public Stream
     operator bool();
 };
 
-#endif
-
-#if (defined(UBRRH) || defined(UBRR0H) || defined(LINBRRH)) && !USE_SOFTWARE_SERIAL
+#if (defined(UBRRH) || defined(UBRR0H) || defined(LINBRRH))
   extern HardwareSerial Serial;
-#endif
-#if defined(UBRR1H)
+#elif defined(UBRR1H)
   extern HardwareSerial Serial1;
 #endif
+
+#endif
+
+
 
 #endif

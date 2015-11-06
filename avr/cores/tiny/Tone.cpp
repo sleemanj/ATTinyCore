@@ -33,7 +33,7 @@ Version Modified By Date     Comments
 0009	T Carpenter 12/08/06 Rewritten to remove requirement for all the wierd timer name creation macros.
 
 *************************************************/
-
+#ifndef NO_TONE
 #include <avr/interrupt.h>
 #include "Arduino.h"
 #include "wiring_private.h"
@@ -544,3 +544,5 @@ ISR(TIMER1_COMPA_vect)
     noTone( 255 );
   }
 }
+
+#endif
