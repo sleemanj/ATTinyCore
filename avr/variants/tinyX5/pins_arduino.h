@@ -112,14 +112,16 @@ static const uint8_t A3 = NUM_DIGITAL_PINS+3;
 
 #ifdef ARDUINO_MAIN
 
-// ATMEL ATTINY45 / ARDUINO
+// ATMEL ATTINYx5 / ARDUINO
 //
-//                           +-\/-+
-//  Ain0       (D  5)  PB5  1|    |8   VCC
-//  Ain3       (D  3)  PB3  2|    |7   PB2  (D  2)  INT0  Ain1
-//  PWM  Ain2  (D  4)  PB4  3|    |6   PB1  (D  1)        PWM (OC0B)
-//  OC1B               GND  4|    |5   PB0  (D  0)        PWM (OC0A)
-//                           +----+
+//                    +-\/-+
+//   A0 D5  ~RESET~  1|    |8   VCC
+//            A3 D3  2|    |7   D2 A1 INT0
+//       PWM  A2 D4  3|    |6   D1    PWM MISO RX*
+//              GND  4|    |5   D0    PWM MOSI TX*
+//                    +----+
+//
+// * Software Serial (not a hardware uart)
 
 // these arrays map port names (e.g. port B) to the
 // appropriate addresses for various functions (e.g. reading
