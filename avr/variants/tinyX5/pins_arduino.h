@@ -115,9 +115,9 @@ static const uint8_t A3 = NUM_DIGITAL_PINS+3;
 // ATMEL ATTINYx5 / ARDUINO
 //
 //                    +-\/-+
-//   A0 D5  ~RESET~  1|    |8   VCC
-//            A3 D3  2|    |7   D2 A1 INT0
-//       PWM  A2 D4  3|    |6   D1    PWM MISO RX*
+//  A0 D5   ~RESET~  1|    |8   VCC
+//  XTAL1     A3 D3  2|    |7   D2 A1 INT0
+//  XTAL2 PWM A2 D4  3|    |6   D1    PWM MISO RX*
 //              GND  4|    |5   D0    PWM MOSI TX*
 //                    +----+
 //
