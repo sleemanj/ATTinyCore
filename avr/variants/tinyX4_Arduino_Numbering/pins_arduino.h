@@ -119,12 +119,12 @@ static const uint8_t A7 = 7;
 //
 //                           +-\/-+
 //                     VCC  1|    |14  GND
-//             (D  0)  PB0  2|    |13  PA0  (D 10)        AREF
-//             (D  1)  PB1  3|    |12  PA1  (D  9) 
-//             (D 11)  PB3  4|    |11  PA2  (D  8) 
-//  PWM  INT0  (D  2)  PB2  5|    |10  PA3  (D  7) 
-//  PWM        (D  3)  PA7  6|    |9   PA4  (D  6) 
-//  PWM        (D  4)  PA6  7|    |8   PA5  (D  5)        PWM
+//            (D  10)  PB0  2|    |13  PA0  (D  0)        AREF
+//             (D  9)  PB1  3|    |12  PA1  (D  1) 
+//             (D 11)  PB3  4|    |11  PA2  (D  2) 
+//  PWM  INT0  (D  8)  PB2  5|    |10  PA3  (D  3) 
+//  PWM        (D  7)  PA7  6|    |9   PA4  (D  4) 
+//  PWM        (D  6)  PA6  7|    |8   PA5  (D  5)        PWM
 //                           +----+
 
 // these arrays map port names (e.g. port B) to the
