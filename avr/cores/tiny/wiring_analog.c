@@ -61,7 +61,7 @@ void analogReference(uint8_t mode)
 
 int analogRead(uint8_t pin)
 {
-  #if defined( NUM_DIGITAL_PINS )
+  #if defined( NUM_DIGITAL_PINS ) && ! ( defined(ANALOG_PINS_ARE_ADC_NUMBERS) && ANALOG_PINS_ARE_ADC_NUMBERS )
   if ( pin >= NUM_DIGITAL_PINS ) pin -= NUM_DIGITAL_PINS; // allow for channel or pin numbers
   #endif
   
