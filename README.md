@@ -33,7 +33,25 @@ External crystal (all except x8 series):
 * 6 MHz
 * 4 MHz
 
+Pin Mappings
+============
 
+This section incomplete, see pins_arduino.h in the specific [variant folder](avr/variants) for more.
+
+### ATtinyX4 
+ 
+ Two styles of numbering are available, the New Style which follows that of David Mellis' [Hi-Low Tech](http://highlowtech.org/?p=1695) distribution, this has the digital pin numbering co-inciding with the analog pin numbering.
+ 
+ ![New Style ATtinyX4 Arduino Pin Mapping](avr/variants/tinyX4_Arduino_Numbering/Pin_Mapping_ATtiny24_44_84.svg?raw=true)
+   
+And the old style which reverses the digital pin numbering.
+
+ ![Old Style ATtinyX4 Arduino Pin Mapping](avr/variants/tinyX4/Pin_Mapping_ATtiny24_44_84.svg?raw=true)
+
+### ATtinyX5
+
+ ![ATtinyX5 Arduino Pin Mapping](avr/variants/tinyX5_Arduino_Numbering/Pin_Mapping_ATtiny25_45_85.svg?raw=true)
+ 
 Board Manager Installation
 ============
 
