@@ -25,6 +25,9 @@
   Modified 14-10-2009 for attiny45 Saposoft
   Modified 20-11-2010 - B.Cook - Rewritten to use the various Veneers.
 */
+#include "Arduino.h"
+
+#ifndef USE_WIRING_LITE
 
 #include "wiring_private.h"
 
@@ -283,7 +286,7 @@ void delay(unsigned long ms)
 
 #else
 // delay() implementation without millis or micros
-void delay(unsigned int ms)
+void delay(unsigned long ms)
 {
   while(ms--){
     delayMicroseconds(1000);
@@ -793,3 +796,5 @@ void init(void)
   #endif
 }
 
+
+#endif

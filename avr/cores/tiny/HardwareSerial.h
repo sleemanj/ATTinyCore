@@ -21,7 +21,7 @@
 #ifndef HardwareSerial_h
 #define HardwareSerial_h
 
-#if !defined(NO_SERIAL) && ( defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H) || defined(LINBRRH)) && !USE_SOFTWARE_SERIAL
+#if (USE_SERIAL_TYPE == SERIAL_TYPE_HARDWARE) && ( defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H) || defined(LINBRRH))
 
 #include <inttypes.h>
 

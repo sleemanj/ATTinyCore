@@ -60,6 +60,9 @@ void pinMode(uint8_t pin, uint8_t mode)
 	}
 }
 
+// Variants may redefine this as a macro to save space 
+// see tiny13 for example.
+#ifndef turnOffPWM
 static void turnOffPWM(uint8_t timer)
 {
 	#if defined(TCCR0A) && defined(COM0A1)
@@ -114,6 +117,7 @@ static void turnOffPWM(uint8_t timer)
     }
 
 }
+#endif
 
 void digitalWrite(uint8_t pin, uint8_t val)
 {

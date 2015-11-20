@@ -22,6 +22,7 @@
 
 #include <stdlib.h>
 
+#define ARDUINO_CORE_PRINTABLE_SUPPORT
 class Print;
 
 /** The Printable class provides a way for new classes to allow themselves to be printed.

@@ -1,5 +1,5 @@
 
-#if !defined(NO_SERIAL) && USE_SOFTWARE_SERIAL 
+#if (USE_SERIAL_TYPE == SERIAL_TYPE_SOFTWARE)
 #ifndef TinySoftwareSerial_h
 #define TinySoftwareSerial_h
 #include <inttypes.h>
@@ -52,9 +52,7 @@ class TinySoftwareSerial : public Stream
     operator bool();
 };
 
-#if (!defined(UBRRH) && !defined(UBRR0H)) || USE_SOFTWARE_SERIAL
-  extern TinySoftwareSerial Serial;
-#endif
+extern TinySoftwareSerial Serial;
 
 //extern void putch(uint8_t);
 #endif

@@ -98,9 +98,6 @@ typedef unsigned int word;
 typedef uint8_t boolean;
 typedef uint8_t byte;
 
-#ifndef NO_TONE
-void initToneTimer(void);
-#endif
 void init(void);
 
 void pinMode(uint8_t, uint8_t);
@@ -117,7 +114,7 @@ void delay(unsigned long);
 void delayMicroseconds(unsigned int us);
 unsigned long pulseIn(uint8_t pin, uint8_t state, unsigned long timeout);
 #else
-void delay(unsigned int ms);
+void delay(unsigned long);
 void delayMicroseconds(unsigned int us);
 #endif
 
@@ -171,11 +168,40 @@ extern const uint8_t PROGMEM digital_pin_to_timer_PGM[];
 #define TIMER1B 4
 #define TIMER1D 5
 
+#define SERIAL_TYPE_NONE      0x00
+#define SERIAL_TYPE_HARDWARE  0x01
+#define SERIAL_TYPE_SOFTWARE  0x02
+#define SERIAL_TYPE_TX_ONLY   0x04
+
 #include "pins_arduino.h"
 
-#ifndef USE_SOFTWARE_SERIAL
-//Default to hardware serial.
-#define USE_SOFTWARE_SERIAL 0
+/*=============================================================================
+ * We have different types of serial capability. 
+ * 
+ * SERIAL_TYPE_HARDWARE : Chip has hardware uart, use it.
+ * SERIAL_TYPE_SOFTWARE : Use a software serial (TinySoftwareSerial) instead
+ * SERIAL_TYPE_TX_ONLY  : For very small size chips, use a transmit 
+ *    only serial implementation.  Note that this has a fixed-at-compile-time
+ *    baud rate, which you can set by defining BAUD_RATE.
+ * SERIAL_TYPE_NONE     : No serial at all.  Note that if you don't use the 
+ *    `Serial` object that the compiler should optimise it away even if you 
+ *    don't set SERIAL_TYPE_NONE, so it's probably not too useful.
+ * 
+ * The USE_SOFTWARE_SERIAL define (set in some variants) is deprecated,  
+ *   better to set USE_SERIAL_TYPE to one of the values above specifically.
+ *===========================================================================*/
+ 
+#if (!defined(USE_SERIAL_TYPE)) && defined(USE_SOFTWARE_SERIAL) && USE_SOFTWARE_SERIAL
+  #define USE_SERIAL_TYPE       SERIAL_TYPE_SOFTWARE
+#elif !defined(USE_SERIAL_TYPE)
+  #define USE_SERIAL_TYPE       SERIAL_TYPE_HARDWARE  
+#endif
+
+#undef USE_SOFTWARE_SERIAL
+#if USE_SERIAL_TYPE == SERIAL_TYPE_SOFTWARE
+  #define USE_SOFTWARE_SERIAL 1
+#else
+  #define USE_SOFTWARE_SERIAL 0
 #endif
 
 /*=============================================================================
@@ -232,8 +258,14 @@ extern const uint8_t PROGMEM digital_pin_to_timer_PGM[];
 #ifdef __cplusplus
 #include "WCharacter.h"
 #include "WString.h"
-#include "HardwareSerial.h"
-#include "TinySoftwareSerial.h"
+
+#if USE_SERIAL_TYPE    == SERIAL_TYPE_HARDWARE
+  #include "HardwareSerial.h"
+#elif USE_SERIAL_TYPE == SERIAL_TYPE_SOFTWARE
+  #include "TinySoftwareSerial.h"
+#elif USE_SERIAL_TYPE == SERIAL_TYPE_TX_ONLY
+  #include "BasicSerial.h"
+#endif
 
 uint16_t makeWord(uint16_t w);
 uint16_t makeWord(byte h, byte l);
@@ -243,6 +275,7 @@ uint16_t makeWord(byte h, byte l);
 unsigned long pulseIn(uint8_t pin, uint8_t state, unsigned long timeout = 1000000L);
 
 #ifndef NO_TONE
+void initToneTimer(void);
 void tone(uint8_t _pin, unsigned int frequency, unsigned long duration = 0);
 void noTone(uint8_t _pin = 255);
 #endif

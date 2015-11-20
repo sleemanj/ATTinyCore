@@ -30,7 +30,7 @@
 
 // this next line disables the entire HardwareSerial.cpp,
 // this is so I can support Attiny series and any other chip without a uart
-#if !defined(NO_SERIAL) && ( defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H) || defined(LINBRRH)) && !USE_SOFTWARE_SERIAL
+#if (USE_SERIAL_TYPE == SERIAL_TYPE_HARDWARE) && ( defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H) || defined(LINBRRH))
 
 #include "HardwareSerial.h"
 
@@ -404,6 +404,4 @@ HardwareSerial::operator bool() {
   HardwareSerial Serial1(&rx_buffer1, &tx_buffer1, &UBRR1H, &UBRR1L, &UCSR1A, &UCSR1B, &UDR1, RXEN1, TXEN1, RXCIE1, UDRE1, U2X1);
 #endif
 
-#elif !USE_SOFTWARE_SERIAL
-#warning There is no Hardware UART, and Sofware Serial is not enabled. There will be no serial port.
 #endif // whole file

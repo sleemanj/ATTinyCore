@@ -28,7 +28,7 @@
 #include "Arduino.h"
 #include "wiring_private.h"
 
-#if !defined(NO_SERIAL) && USE_SOFTWARE_SERIAL 
+#if (USE_SERIAL_TYPE == SERIAL_TYPE_SOFTWARE)
 #include "TinySoftwareSerial.h"
 
 // Define constants and variables for buffering incoming serial data.  We're

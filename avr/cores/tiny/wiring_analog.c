@@ -113,6 +113,14 @@ void analogWrite(uint8_t pin, int val)
   }
   else
   {
+    
+#ifdef turnOnPWM
+    // Some variants (see tiny13) define a turnOnPWM macro which reduces code size
+    turnOnPWM( digitalPinToTimer(pin), val );
+#else   
+    // This really should be a function callled turnOnPWM similar to how turnOffPWM 
+    // was done found in wiring_digital.c, but sake of minimising the diff, I'll just 
+    // leave it here. -- J.Sleeman 2015
     uint8_t timer = digitalPinToTimer(pin);
 	#if defined(TCCR0A) && defined(COM0A1)
 	if( timer == TIMER0A){
@@ -209,6 +217,6 @@ void analogWrite(uint8_t pin, int val)
         digitalWrite(pin, HIGH);
       }
     }
-
+#endif
   }
 }

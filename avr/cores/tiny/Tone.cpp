@@ -33,12 +33,12 @@ Version Modified By Date     Comments
 0009	T Carpenter 12/08/06 Rewritten to remove requirement for all the wierd timer name creation macros.
 
 *************************************************/
-#ifndef NO_TONE
 #include <avr/interrupt.h>
 #include "Arduino.h"
 #include "wiring_private.h"
 #include "pins_arduino.h"
 
+#ifndef NO_TONE
 // timerx_toggle_count:
 //  > 0 - duration specified
 //  = 0 - stopped
