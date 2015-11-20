@@ -248,11 +248,21 @@ void delayMicroseconds(unsigned int us)
 
 void init(){  
 #ifndef NO_MILLIS
-  //Setup timer interrupt and PWM pins
+  // Start timer0 running, setup the millis() interrupt to run
   TCCR0B |= _BV(CS00);
   TCCR0A |= _BV(WGM00)|_BV(WGM01);
   TIMSK0 |= 2;
   TCNT0=0;   
+#else
+  #ifndef turnOnPWM
+  // Enabled fast PWM on the timer (not connected to the pin, that happens in 
+  // analogWrite()
+  //
+  // if there is a turnOnPWM(t,v) macro, then we don't need to do this, because
+  // turnOnPWM() should ensure it has been done when it does that
+  TCCR0B |= _BV(CS00);
+  TCCR0A |= _BV(WGM00)|_BV(WGM01);
+  #endif
 #endif
   
   sei();

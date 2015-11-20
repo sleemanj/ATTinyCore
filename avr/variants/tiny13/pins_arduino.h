@@ -26,7 +26,8 @@
 #define Pins_Arduino_h
 
 #define USE_SOFTWARE_SPI 1
-#define USE_WIRING_LITE  1
+#define USE_WIRING_LITE  0
+#define PRINT_BIN_OCT_HEX_BASES_ONLY 1
 
 #include <avr/pgmspace.h>
 
@@ -41,14 +42,22 @@
 #define MISO 1
 #define SCK  2
 
-static const uint8_t SDA = 0;
-static const uint8_t SCL = 2;
+#define SDA ((uint8_t) 0)
+#define SCL ((uint8_t) 2)
+
+//static const uint8_t SDA = 0;
+//static const uint8_t SCL = 2;
 
 #define ANALOG_PINS_ARE_ADC_NUMBERS 1
-static const uint8_t A0 = 0;
-static const uint8_t A1 = 1;
-static const uint8_t A2 = 2;
-static const uint8_t A3 = 3;
+#define A0 ((uint8_t) 0)
+#define A1 ((uint8_t) 1)
+#define A2 ((uint8_t) 2)
+#define A3 ((uint8_t) 3)
+
+//static const uint8_t A0 = 0;
+//static const uint8_t A1 = 1;
+//static const uint8_t A2 = 2;
+//static const uint8_t A3 = 3;
 
 
 //----------------------------------------------------------
@@ -63,7 +72,7 @@ static const uint8_t A3 = 3;
 
 
 //Choosing not to initialise saves power and flash. 1 = initialise.
-#define INITIALIZE_ANALOG_TO_DIGITAL_CONVERTER    0
+#define INITIALIZE_ANALOG_TO_DIGITAL_CONVERTER    1
 #define INITIALIZE_SECONDARY_TIMERS               1
 
 //  Tiny13 only has one timer, we wont have tone() functions then
@@ -145,8 +154,31 @@ static const uint8_t A3 = 3;
 #undef portModeRegister
 #define portModeRegister(P) ( (volatile uint8_t *)(&DDRB))
 
+
+// PWM On/Off
+//  for t13 this is simple since we only have 1 timer anyway
+//  so doing it in macros, it uses less code space
+//
+//  For others, you might want to do something like
+//  
+//     #define turnOnPWM(t,v)  ( _turnOnPWM(t,v) )
+//     void _turnOnPWM(uint8_t t, uint8_t v);
+//
+//     #define turnOffPWM(t) ( _turnOffPWM(t) )
+//     void _turnOffPWM(uint8_t t);
+//
+//  and then create your _turnOnPWM function in pins_arduino.c
+
+
+// For clarity our turnOnPWM() macro below uses turnOnPWMTimer() as part of it, to
+// ensure that the timer is actually running before the pin is connected to it.
+// other variants would probably roll this into their _turnOnPWM() function in 
+// pins_arduino.c
+#define turnOnPWMTimer(t) ( (  TCCR0B |= _BV(CS00) ) && ( TCCR0A |= _BV(WGM00)|_BV(WGM01) ) )
+//                          (Set Clksrc No Prescale) && ( Fast PWM Mode )
+
 #define turnOffPWM(t)  ( ( t==TIMER0A ) ? ( TCCR0A &= ~0B11000000 ) : ( TCCR0A &= ~0B00110000 ) )
-#define turnOnPWM(t,v) ( ( t==TIMER0A ) ? ( ( TCCR0A |= 0B11000000 ) && ( OCR0A = v ) ) : ( ( TCCR0A |= 0B00110000 ) && ( OCR0B = v ) ) )
+#define turnOnPWM(t,v) ( turnOnPWMTimer(t) && ( t==TIMER0A ) ? ( ( TCCR0A |= 0B11000000 ) && ( OCR0A = v ) ) : ( ( TCCR0A |= 0B00110000 ) && ( OCR0B = v ) ) )
 
 #ifdef ARDUINO_MAIN
 /*

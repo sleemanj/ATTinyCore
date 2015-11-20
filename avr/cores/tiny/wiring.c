@@ -759,6 +759,18 @@ void init(void)
   #elif (TIMER_TO_USE_FOR_MILLIS == 1)
   TCCR1B = (TCCR1B & ~((1<<CS12)|(1<<CS11)|(1<<CS10))) | (MillisTimer_Prescale_Index << CS10);
   #endif
+#elif !defined(turnOnPWMTimer)
+  // pins_arduino does not have a define for turning on pwm timers, and because
+  // we have not actually turned on (Fast PWM Mode) or set the clock source
+  // because not using millis, then PWM (analogWrite()) won't work unless we 
+  // fix that now
+  //
+  // if pins_arduino has defined it, we'll leave it up to it to do so as required
+  // see tiny13/pins_arduino.h and tiny13/pins_arduino.c for a better way forward!
+  #if defined(TCCR0B) && defined(CS00) && defined(TCCR0A) && defined(WGM00) && defined(WGM01)
+    TCCR0B |= _BV(CS00);
+    TCCR0A |= _BV(WGM00)|_BV(WGM01);
+  #endif
 #endif  
   // this needs to be called before setup() or some functions won't work there
   sei();

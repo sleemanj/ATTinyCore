@@ -118,9 +118,19 @@ void analogWrite(uint8_t pin, int val)
     // Some variants (see tiny13) define a turnOnPWM macro which reduces code size
     turnOnPWM( digitalPinToTimer(pin), val );
 #else   
-    // This really should be a function callled turnOnPWM similar to how turnOffPWM 
-    // was done found in wiring_digital.c, but sake of minimising the diff, I'll just 
-    // leave it here. -- J.Sleeman 2015
+
+    // All this defined() logic is silly trying to overly generalise wiring_analog.h
+    // to cater for different variants; instead see variants/tiny13/pins_arduino.c for a 
+    // better way of doing this for variants in future - in other words, you should ask
+    // the variant to turn on pwm for itself, not try and figure out how to turn on pwm
+    // for any given variant by looking at what is and isn't defined.  Crazyness.
+    // 
+    // In short, you should #define turnOnPWM(t, v) ( _turnOnPWM(t,v) )
+    // in pins_arduino.h, and create pins_arduino.c to define the _turnOnPWM() function
+    // (where t is the timer (eg TIMER0A) and v is the value 0-255)
+		//
+    // Do similar for turnOffPWM(t) by the way!
+
     uint8_t timer = digitalPinToTimer(pin);
 	#if defined(TCCR0A) && defined(COM0A1)
 	if( timer == TIMER0A){
