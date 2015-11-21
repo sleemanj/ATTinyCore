@@ -25,9 +25,35 @@
 #ifndef Pins_Arduino_h
 #define Pins_Arduino_h
 
-#define USE_SOFTWARE_SPI 1
-#define USE_WIRING_LITE  0
-#define PRINT_BIN_OCT_HEX_BASES_ONLY 1
+// We will use the lite version of wiring.c
+//  - this is better for the tiny13
+#define USE_WIRING_LITE  1
+
+// The tiny13 is very ram limited, so restrict the Print class
+//  (and things so derived, like Serial) to only be able to 
+//  print at most an int, rather than a long
+//
+// Also we have no chance to use arbitrary bases, while it 
+// will happily fit in the flash, the SRAM will be exhausted
+// the second you try and do anything with it, leading
+// to a crash, or reset, or other randomness.
+//
+// Since Print.h defines BIN, OCT, DEC and HEX as the defaults
+// we will leave all these commented out here, just including
+// them in case you want to force-override
+//
+// You might use for example 
+//    build.extra_flags=-DPRINT_USE_BASE_BIN -DPRINT_USE_BASE_DEC
+// in your boards.txt
+//
+
+
+#define PRINT_MAX_INT_TYPE  PRINT_INT_TYPE_INT
+//#define PRINT_USE_BASE_BIN
+//#define PRINT_USE_BASE_OCT
+//#define PRINT_USE_BASE_DEC
+//#define PRINT_USE_BASE_HEX
+//#define PRINT_USE_BASE_ARBITRARY
 
 #include <avr/pgmspace.h>
 
