@@ -23,7 +23,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
-
+#include <avr/pgmspace.h>
 #include "Arduino.h"
 #include "Print.h"
 
@@ -335,13 +335,11 @@ size_t Print::println(const Printable& x)
 //
 // When you only have 64 bytes of ram in the first place, that doesn't end well.
 //
-// This version, which I wrote with the inspiration of especially EEVBlog
-// forum user "TassiloH" 
+// This produces smaller flash and sram, even though it looks bigger with all these lookup tables
+// the reduction in the number of assembly instructions more than makes up for it.
 //
-//  http://www.eevblog.com/forum/microcontrollers/memory-efficient-int-to-chars-without-division-(bitshift-ok)-for-binary-bases/msg804586/#msg804586
-//
-// does not use a buffer, it has configurable maximum int type (see Print.h)
-// and it doesn't use division.
+// Credit goes to EEVBlog User "Kalvin" 
+//  http://www.eevblog.com/forum/microcontrollers/memory-efficient-int-to-chars-without-division-(bitshift-ok)-for-binary-bases/msg805172/#msg805172
 //
 // The only downside is that it can't do arbitrary bases, just 2, 8, 16 and 10
 //
@@ -355,47 +353,72 @@ size_t Print::println(const Printable& x)
 // if you define PRINT_USE_BASE_ARBITRARY then this function will not be used
 // it will suck your ram, but you can use arbitrary bases.
 
+
 size_t Print::printNumber(UNSIGNED_PRINT_INT_TYPE n, uint8_t base)
 {
-  UNSIGNED_PRINT_INT_TYPE dValue;
-
-  // dValue needs to be set to the higest, err, exponent, is that
-  // the word I'm looking for, of the base that fits in the integer
-  // type we are handling.
-  //
-  // For example, let's say our integer type is "byte"
-  // and our base is "10"
-  //   10^0 = 1, that fits in a byte
-  //   10^1 = 10, that fits in a byte
-  //   10^2 = 100, that fits in a byte
-  //   10^3 = 1999, that does NOT fit in a byte
-  // so we set dValue to 10^2 because that's the highest value
-  // that fits in a byte.
-  //
-  // So we can calculate this quite easily in exactly that fashion
-  // just see if we can do the "next" exponent without an overflow
-  // and that would be a good general solution.
-  //
-  // However multiply is not a hardware instruction in attiny
-  // so it's more expensive (significantly) to use that general
-  // solution, instead we use a switch on the base and select appropriate
-  // pre-calculated values.
-  //
-  // For what it's worth, here's the general solution...
-  //
-  // dValue = base;
-  // while(dValue * base > dValue) dValue *= base;
+    static const char digits[] PROGMEM = "0123456789ABCDEF";
     
-  switch(base)
-  {    
-    // "Promote" any unsupported base to the highest base that is supported,
-    // because we have the bases in this switch high -> low this will fall 
-    // through to the highest supported base
-    default:
-        
+    #if defined(PRINT_USE_BASE_BIN)    
+    static const UNSIGNED_PRINT_INT_TYPE base2[]  PROGMEM = 
+    {
+      #if PRINT_MAX_INT_TYPE == PRINT_INT_TYPE_LONG
+         0x80000000, 0x40000000, 0x20000000, 0x10000000,  0x800000, 0x400000, 0x200000, 0x100000, 0x80000, 0x40000, 0x20000, 0x10000,
+      #endif
+      #if (PRINT_MAX_INT_TYPE == PRINT_INT_TYPE_LONG) || (PRINT_MAX_INT_TYPE == PRINT_INT_TYPE_INT)
+        0x8000, 0x4000, 0x2000, 0x1000, 0x800, 0x400, 0x200, 0x100,
+      #endif
+        0x80, 0x40, 0x20, 0x10, 0x8, 0x4, 0x2, 0x1, 0     
+    };
+    #endif
+    #if defined(PRINT_USE_BASE_OCT)
+    static const UNSIGNED_PRINT_INT_TYPE base8[]  PROGMEM = 
+    {
+        #if PRINT_MAX_INT_TYPE == PRINT_INT_TYPE_LONG
+         010000000000, 01000000000, 0100000000, 010000000, 01000000,
+        #endif
+        #if (PRINT_MAX_INT_TYPE == PRINT_INT_TYPE_LONG) || (PRINT_MAX_INT_TYPE == PRINT_INT_TYPE_INT)
+         0100000, 010000,  01000,
+        #endif
+         0100, 010, 01,
+         0      
+    };
+    #endif
+    #if defined(PRINT_USE_BASE_DEC)
+    static const UNSIGNED_PRINT_INT_TYPE base10[] PROGMEM = 
+    {
+     #if PRINT_MAX_INT_TYPE == PRINT_INT_TYPE_LONG
+      1000000000,100000000,10000000,1000000,100000,
+     #endif
+     #if (PRINT_MAX_INT_TYPE == PRINT_INT_TYPE_LONG) || (PRINT_MAX_INT_TYPE == PRINT_INT_TYPE_INT) 
+      10000,  1000,   
+     #endif
+      100,    10,  1,  
+      0      
+    };
+    #endif
+    #if defined(PRINT_USE_BASE_HEX)
+    static const UNSIGNED_PRINT_INT_TYPE base16[] PROGMEM = 
+    {
+     #if PRINT_MAX_INT_TYPE == PRINT_INT_TYPE_LONG
+        0x10000000, 0x1000000,         
+          0x100000,  0x010000,
+     #endif
+     #if (PRINT_MAX_INT_TYPE == PRINT_INT_TYPE_LONG) || (PRINT_MAX_INT_TYPE == PRINT_INT_TYPE_INT)       
+            0x1000,    0x0100, 
+     #endif
+              0x10,      0x01,
+                            0
+    };
+    #endif
+
+    UNSIGNED_PRINT_INT_TYPE const * bt;
+    uint8_t leadingzero = 0;
+    switch(base)
+    {
+      default: 
         #if defined(PRINT_USE_BASE_HEX)
         write('x');
-        base = 16;
+        base = 16;        
         #elif defined(PRINT_USE_BASE_DEC)
         write('d');
         base = 10;
@@ -406,158 +429,43 @@ size_t Print::printNumber(UNSIGNED_PRINT_INT_TYPE n, uint8_t base)
         write('b');
         base = 2;
         #endif
-                    
-    #ifdef PRINT_USE_BASE_HEX
-    case 16:          
-      #if PRINT_MAX_INT_TYPE   == PRINT_INT_TYPE_LONG
-        dValue = 268435456;
-      #elif PRINT_MAX_INT_TYPE == PRINT_INT_TYPE_INT
-        // MAX  = 0xFFFF
-        // STRT = 0x1000 = 4096      
-        dValue = 4096;
-      #elif PRINT_MAX_INT_TYPE == PRINT_INT_TYPE_BYTE
-        dValue = 16;
-      #else
-        #error Unknown PRINT_MAX_INT_TYPE
-      #endif
-      break;
-    #endif
     
-    #ifdef PRINT_USE_BASE_DEC
-    case 10:
-      #if PRINT_MAX_INT_TYPE   == PRINT_INT_TYPE_LONG
-        dValue = 1000000000;
-      #elif PRINT_MAX_INT_TYPE == PRINT_INT_TYPE_INT
-        // MAX  = 65535
-        // STRT = 10000 = 10000
-        dValue = 10000;        
-      #elif PRINT_MAX_INT_TYPE == PRINT_INT_TYPE_BYTE
-        dValue = 100;
-      #else
-        #error Unknown PRINT_MAX_INT_TYPE
-      #endif
-      break;
-    #endif
-      
-    #ifdef PRINT_USE_BASE_OCT        
-    case 8:            
-      #if PRINT_MAX_INT_TYPE   == PRINT_INT_TYPE_LONG
-        dValue = 1073741824;
-      #elif PRINT_MAX_INT_TYPE == PRINT_INT_TYPE_INT
-        // MAX  = o177777
-        // STRT = o100000 = 32768
-        // coincidentally the same as base2
-        dValue = 32768;     
-      #elif PRINT_MAX_INT_TYPE == PRINT_INT_TYPE_BYTE
-        dValue = 64;
-      #else
-        #error Unknown PRINT_MAX_INT_TYPE
-      #endif
-      break;
-    #endif
-      
-    #ifdef PRINT_USE_BASE_BIN        
-    case 2:
-      #if PRINT_MAX_INT_TYPE   == PRINT_INT_TYPE_LONG
-        //dValue = 0b10000000000000000000000000000000;
-        dValue = 0x80000000;
-      #elif PRINT_MAX_INT_TYPE == PRINT_INT_TYPE_INT
-        //MAX  = 0b1111111111111111
-        //STRT = 0b1000000000000000 = 32768
-        dValue = 32768;  
-      #elif PRINT_MAX_INT_TYPE == PRINT_INT_TYPE_BYTE
-        dValue = 128;
-      #else
-        #error Unknown PRINT_MAX_INT_TYPE
-      #endif
-      break;      
-    #endif            
-  }
-     
-  uint8_t digit = (1 << 7); // Top bit indicates if have seen the msd or not, 0 = seen, 1 = not
-  while(dValue)
-  {
-    while(n >= dValue)
-    {
-      n -= dValue;
-      digit++;
-    }
-    
-    // If the top bit is zero, or the bottom bits are greater than 0
-    // then we have a digit to print (top bit zero means we have seen 
-    // the MSD and skipped the leading zeros)
-    if(!(digit & (1 << 7)) || (digit & ~(1<<7)) )
-    {      
-      digit = digit & ~(1<<7); // Clears the top bit for us and gives the actual number
-      write(digit < 10 ? digit + '0' : digit + 'A' - 10);      
-      digit = 0; // this should not be required, since we clear the 
-                 // digit's bits right after this if block as you can see below;
-                 // but some strangeness happens with this, the flash usage
-                 // actually goes down when we set the digit to zero here
-                 // even though we also have to set it below.  Nuts.
-    }
-    digit &= (1 << 7);      // Clear bottom 7 bits for the next go around
-    
-    switch(base)
-    {
-      // The next dValue is the current dValue divided by the base
-      // example base 16
-      //   0x1000 divide by 16 (0x10) = 0x100
-      //   instead of dividing by 16 we shift out 4 bits, because
-      //     0b0001000000000000 = 0x1000 
-      //  divided by 0x10      
-      //     0b000000100000000
-      //  you can see that is the same as a 4 bit shift 
-      //  of course that's only true for binary bases (2, 4, 8, 16, etc...)
-      //
-      // For base 10 instead of dividing we use a lookup, because division
-      // is too expensive for flash
-      //
-      // Note that we are guaranteed to have a valid base here, because
-      // we forced it to one in the first switch above.
-            
-      #ifdef PRINT_USE_BASE_BIN
-      case 2:  dValue >>= 1; break;
-      #endif
-      
-      #ifdef PRINT_USE_BASE_OCT
-      case 8:  dValue >>= 3; break;
-      #endif
-      
       #ifdef PRINT_USE_BASE_HEX
-      case 16: dValue >>= 4; break;
+        case 16: bt = base16; break;
       #endif
-      
       #ifdef PRINT_USE_BASE_DEC
-      case 10:         
-        switch(dValue)
-        {
-          #if PRINT_MAX_INT_TYPE == PRINT_INT_TYPE_LONG
-          case 1000000000: dValue = 100000000; break;
-          case 100000000:  dValue = 10000000; break;
-          case 10000000:   dValue = 1000000; break;
-          case 1000000:    dValue = 100000; break;
-          case 100000:     dValue = 10000; break;          
-          #endif
-          
-          #if PRINT_MAX_INT_TYPE == PRINT_INT_TYPE_LONG || PRINT_MAX_INT_TYPE == PRINT_INT_TYPE_INT
-          case 10000: dValue = 1000; break;
-          case 1000:  dValue = 100;  break;          
-          #endif
-          
-          #if PRINT_MAX_INT_TYPE == PRINT_INT_TYPE_LONG || PRINT_MAX_INT_TYPE == PRINT_INT_TYPE_INT || PRINT_MAX_INT_TYPE == PRINT_INT_TYPE_BYTE
-          case 100:   dValue = 10;   break;
-          case 10:    dValue = 1;    break;
-          #endif
-          default:    dValue = 0;    break;          
-        }
-        break;
-     #endif
+        case 10: bt = base10; break;
+      #endif
+      #ifdef PRINT_USE_BASE_OCT
+        case 8:  bt = base8;  break;
+      #endif
+      #ifdef PRINT_USE_BASE_BIN
+        case 2:  bt = base2;  break;
+      #endif    
     }
-  }
-  
-  return 1;
+    
+    // Reuse base for counting the digits since we don't need it any more.
+    base = 0;
+    do
+    {
+        UNSIGNED_PRINT_INT_TYPE b = pgm_read_word(&*bt++);
+        uint8_t digit = 0;
+        while (n >= b)
+        {
+            digit++;
+            n = n - b;
+        }
+        leadingzero = leadingzero ? leadingzero : digit;
+        if (b == 1 || leadingzero)
+        {
+            ++base;
+            write(pgm_read_word(&digits[digit]));          
+        }
+    }
+    while (pgm_read_word(&*bt));       
+    return base;
 }
+
 
 #else
 
