@@ -68,10 +68,10 @@
      inkscape:snap-bbox-midpoints="true"
      showguides="true"
      inkscape:guide-bbox="true"
-     inkscape:window-width="1652"
-     inkscape:window-height="1030"
-     inkscape:window-x="25"
-     inkscape:window-y="-3"
+     inkscape:window-width="1680"
+     inkscape:window-height="1003"
+     inkscape:window-x="1677"
+     inkscape:window-y="24"
      inkscape:window-maximized="1"
      fit-margin-top="4"
      fit-margin-left="4"
@@ -180,7 +180,7 @@
          style="fill:none;stroke:#000000;stroke-width:3.54330707;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
       <path
          transform="translate(-181.77165,-358.22835)"
-         d="m 486,539.36218 a 9,9 0 1 1 -18,0 9,9 0 1 1 18,0 z"
+         d="m 486,539.36218 c 0,4.97057 -4.02944,9 -9,9 -4.97056,0 -9,-4.02943 -9,-9 0,-4.97056 4.02944,-9 9,-9 4.97056,0 9,4.02944 9,9 z"
          sodipodi:ry="9"
          sodipodi:rx="9"
          sodipodi:cy="539.36218"
@@ -421,17 +421,6 @@
          id="tspan4054-0"
          x="584.99316"
          y="656.0575">~</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:28px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans Mono;-inkscape-font-specification:Bitstream Vera Sans Mono"
-       x="584.99316"
-       y="611.0575"
-       id="text4052-6"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         id="tspan4054-5"
-         x="584.99316"
-         y="611.0575">~</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:28px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans Mono;-inkscape-font-specification:Bitstream Vera Sans Mono"
