@@ -171,7 +171,7 @@ extern const uint8_t PROGMEM digital_pin_to_timer_PGM[];
 #define SERIAL_TYPE_NONE      0x00
 #define SERIAL_TYPE_HARDWARE  0x01
 #define SERIAL_TYPE_SOFTWARE  0x02
-#define SERIAL_TYPE_TX_ONLY   0x04
+#define SERIAL_TYPE_HALF_DUPLEX 0x04
 
 #include "pins_arduino.h"
 
@@ -180,8 +180,8 @@ extern const uint8_t PROGMEM digital_pin_to_timer_PGM[];
  * 
  * SERIAL_TYPE_HARDWARE : Chip has hardware uart, use it.
  * SERIAL_TYPE_SOFTWARE : Use a software serial (TinySoftwareSerial) instead
- * SERIAL_TYPE_TX_ONLY  : For very small size chips, use a transmit 
- *    only serial implementation.  Note that this has a fixed-at-compile-time
+ * SERIAL_TYPE_HALF_DUPLEX  : For very small size chips, use a half duplex
+ *    bufferless implementation.  Note that this has a fixed-at-compile-time
  *    baud rate, which you can set by defining BAUD_RATE.
  * SERIAL_TYPE_NONE     : No serial at all.  Note that if you don't use the 
  *    `Serial` object that the compiler should optimise it away even if you 
@@ -189,6 +189,13 @@ extern const uint8_t PROGMEM digital_pin_to_timer_PGM[];
  * 
  * The USE_SOFTWARE_SERIAL define (set in some variants) is deprecated,  
  *   better to set USE_SERIAL_TYPE to one of the values above specifically.
+ * 
+ * For SERIAL_TYPE_HALF_DUPLEX there are two additional defines you can make
+ *   SERIAL_TYPE_HALF_DUPLEX_DISABLE_READ
+ *   SERIAL_TYPE_HALF_DUPLEX_DISABLE_WRITE
+ * which do as you expect and serve to reduce flash usage if you don't need
+ * those functions (they are not optimised out if you don't use Serial
+ * at all because they are declared as virtual by Stream)
  *===========================================================================*/
  
 #if (!defined(USE_SERIAL_TYPE)) && defined(USE_SOFTWARE_SERIAL) && USE_SOFTWARE_SERIAL
@@ -263,8 +270,8 @@ extern const uint8_t PROGMEM digital_pin_to_timer_PGM[];
   #include "HardwareSerial.h"
 #elif USE_SERIAL_TYPE == SERIAL_TYPE_SOFTWARE
   #include "TinySoftwareSerial.h"
-#elif USE_SERIAL_TYPE == SERIAL_TYPE_TX_ONLY
-  #include "BasicSerial.h"
+#elif USE_SERIAL_TYPE == SERIAL_TYPE_HALF_DUPLEX
+  #include "HalfDuplexSerial.h"
 #endif
 
 uint16_t makeWord(uint16_t w);

@@ -47,7 +47,6 @@
 // in your boards.txt
 //
 
-
 #define PRINT_MAX_INT_TYPE  PRINT_INT_TYPE_INT
 //#define PRINT_USE_BASE_BIN
 //#define PRINT_USE_BASE_OCT
@@ -55,49 +54,13 @@
 //#define PRINT_USE_BASE_HEX
 //#define PRINT_USE_BASE_ARBITRARY
 
-#include <avr/pgmspace.h>
-
-#define NUM_DIGITAL_PINS            6
-#define NUM_ANALOG_INPUTS           4
-#define analogInputToDigitalPin(p)  (((p) == 0) ? 5 : (((p) == 1) ? 2 : (((p) == 2) ? 4 :(((p) == 3) ? 3 : -1))))
-
-#define digitalPinHasPWM(p)         ((p) == 0 || (p) == 1)
-
-#define SS   3
-#define MOSI 0
-#define MISO 1
-#define SCK  2
-
-#define SDA ((uint8_t) 0)
-#define SCL ((uint8_t) 2)
-
-//static const uint8_t SDA = 0;
-//static const uint8_t SCL = 2;
-
-#define ANALOG_PINS_ARE_ADC_NUMBERS 1
-#define A0 ((uint8_t) 0)
-#define A1 ((uint8_t) 1)
-#define A2 ((uint8_t) 2)
-#define A3 ((uint8_t) 3)
-
-//static const uint8_t A0 = 0;
-//static const uint8_t A1 = 1;
-//static const uint8_t A2 = 2;
-//static const uint8_t A3 = 3;
-
-
-//----------------------------------------------------------
-//----------------------------------------------------------
-//Core Configuration (used to be in core_build_options.h)
-
 //If Software Serial communications doesn't work, run the TinyTuner sketch provided with the core to give you a calibrated OSCCAL value.
 //Change the value here with the tuned value. By default this option uses the default value which the compiler will optimise out. 
 #define TUNED_OSCCAL_VALUE                        OSCCAL
 //e.g
 //#define TUNED_OSCCAL_VALUE                        0x57
 
-
-//Choosing not to initialise saves power and flash. 1 = initialise.
+// These won't have much if any effect on the tiny13
 #define INITIALIZE_ANALOG_TO_DIGITAL_CONVERTER    1
 #define INITIALIZE_SECONDARY_TIMERS               1
 
@@ -105,11 +68,27 @@
 #define TIMER_TO_USE_FOR_MILLIS                   0
 #define NO_TONE                                   1
 
-/*
-  Where to put the software serial? (Arduino Digital pin numbers)
-*/
-//WARNING, if using software, TX is on AIN0, RX is on AIN1. Comparator is favoured to use its interrupt for the RX pin.
-#define USE_SERIAL_TYPE              SERIAL_TYPE_TX_ONLY
+// Serial Port Configuration
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//  we have 3 options for serial, hardware, software and half_duplex 
+//  hardware and software are self explanitory, half_duplex is 
+//  a very small memory/flash usage routine without any buffering
+//  or interrupts really intended for sending or receiving minimal stuff
+//  for helping with debugging.  
+//
+//  For half_duplex we also have the option to disable the *standard*
+//  read() and/or write() functions in order to save space, however
+//  even if disabled, you can use some alternative functions such
+//  as read_byte() and write_byte() which can be optimized out if 
+//  not used.
+//
+
+// #define USE_SERIAL_TYPE           SERIAL_TYPE_HARDWARE
+// #define USE_SERIAL_TYPE           SERIAL_TYPE_SOFTWARE
+#define USE_SERIAL_TYPE              SERIAL_TYPE_HALF_DUPLEX
+// #define HALF_DUPLEX_SERIAL_DISABLE_WRITE
+// #define HALF_DUPLEX_SERIAL_DISABLE_READ
+
 
 // The below would be used if we instead had
 // #define USE_SERIAL_TYPE SERIAL_TYPE_SOFTWARE
@@ -121,67 +100,15 @@
 #define ANALOG_COMP_AIN0_BIT            0
 #define ANALOG_COMP_AIN1_BIT            1
 
-/*
-  Analog reference bit masks.
-*/
+// Analog reference bit masks.
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 #define DEFAULT (0)
 #define INTERNAL (1)
 #define INTERNAL1V1 INTERNAL
 
-//----------------------------------------------------------
-//----------------------------------------------------------
-//----------------------------------------------------------
-//----------------------------------------------------------
-
-
-#define digitalPinToPCICR(p)    (((p) >= 0 && (p) <= 5) ? (&GIMSK) : ((uint8_t *)NULL))
-#define digitalPinToPCICRbit(p) 5
-#define digitalPinToPCMSK(p)    (((p) >= 0 && (p) <= 5) ? (&PCMSK) : ((uint8_t *)NULL))
-#define digitalPinToPCMSKbit(p) (p)
-
-
-
-// ATMEL ATTINY13
-//
-//                    +-\/-+
-//  A0 D5   ~RESET~  1|    |8   VCC
-//  CLKI      A3 D3  2|    |7   D2 A1     SCK
-//            A2 D4  3|    |6   D1    PWM MISO RX* INT0
-//              GND  4|    |5   D0    PWM MOSI TX*
-//                    +----+
-//
-// * Software Serial (not a hardware uart)
-
-
-// The t13 is super small, we only have one port (PB) so we can simplify
-// everything to save wasting flash
-#undef  PB
-#define PB 0
-
-#undef PA
-#undef PC
-#undef PD
-
-#undef  digitalPinToPort
-#define digitalPinToPort(P) ( (uint16_t)&DDRB )
-
-#undef  digitalPinToBitMask
-#define digitalPinToBitMask(P) ( (_BV(P)) )
-
-#undef digitalPinToTimer
-#define digitalPinToTimer(P) ( ( P == 0 ) ? TIMER0A : ( (P == 1 ) ? TIMER0B : NOT_ON_TIMER ))
-
-#undef portOutputRegister
-#define portOutputRegister(P) ( (volatile uint8_t *)(&PORTB))
-
-#undef portInputRegister
-#define portInputRegister(P) ( (volatile uint8_t *)(&PINB))
-
-#undef portModeRegister
-#define portModeRegister(P) ( (volatile uint8_t *)(&DDRB))
-
-
 // PWM On/Off
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //  for t13 this is simple since we only have 1 timer anyway
 //  so doing it in macros, it uses less code space
 //
@@ -206,10 +133,100 @@
 #define turnOffPWM(t)  ( ( t==TIMER0A ) ? ( TCCR0A &= ~0B11000000 ) : ( TCCR0A &= ~0B00110000 ) )
 #define turnOnPWM(t,v) ( turnOnPWMTimer(t) && ( t==TIMER0A ) ? ( ( TCCR0A |= 0B11000000 ) && ( OCR0A = v ) ) : ( ( TCCR0A |= 0B00110000 ) && ( OCR0B = v ) ) )
 
+
+
+// Arduino Pin Numbering to Chip's PORT.PIN and ADC Numbers
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// ATMEL ATTINY13
+//
+//                    +-\/-+
+//  A0 D5   ~RESET~  1|    |8   VCC
+//  CLKI      A3 D3  2|    |7   D2 A1     SCK
+//            A2 D4  3|    |6   D1    PWM MISO RX* INT0
+//              GND  4|    |5   D0    PWM MOSI TX*
+//                    +----+
+//
+// * Software Serial (not a hardware uart)
+
+  
+#define NUM_DIGITAL_PINS            6
+#define NUM_ANALOG_INPUTS           4
+
+#define analogInputToDigitalPin(p)  (\
+  ((p) == 3) ? 3 : (\
+  ((p) == 1) ? 2 : (\
+  ((p) == 2) ? 4 : (\
+  ((p) == 0) ? 5 :  \
+-1 ))))
+
+#define digitalPinHasPWM(p)         ((p) == 0 || (p) == 1)
+
+// These are some convenient NAME => Arduino Digital Pin Number mappings
+#define SS   3
+#define MOSI 0
+#define MISO 1
+#define SCK  2
+#define SDA ((uint8_t) 0)
+#define SCL ((uint8_t) 2)
+
+// Analog Pin => ADC number, note that if  ANALOG_PINS_ARE_ADC_NUMBERS is not set
+// then you need to add NUM_DIGITAL_PINS to the ADC number and it will be 
+// subtracted when yo try to do analogRead() in order to get the ADC.
+#define ANALOG_PINS_ARE_ADC_NUMBERS 1
+#define A0 ((uint8_t) 0)
+#define A1 ((uint8_t) 1)
+#define A2 ((uint8_t) 2)
+#define A3 ((uint8_t) 3)
+
+// Pin Change Interrupt (PCI) Setup
+#define digitalPinToPCICR(p)    (((p) >= 0 && (p) <= 5) ? (&GIMSK) : ((uint8_t *)NULL))
+#define digitalPinToPCICRbit(p) 5
+#define digitalPinToPCMSK(p)    (((p) >= 0 && (p) <= 5) ? (&PCMSK) : ((uint8_t *)NULL))
+#define digitalPinToPCMSKbit(p) (p)
+
+
+// The t13 is super small, we only have one port (PB) so we can simplify
+// everything to save wasting flash
+#undef  PB
+#define PB 0
+
+// Just to make sure we do not have these defined since these ports 
+// do not exist on the t13
+#undef PA
+#undef PC
+#undef PD
+
+// Instead of the usual "arduino way" of using lookup tables, on the tiny13 
+// we are going to use macros to derive information about a pin/port
+// we can do this easily on the t13 because we only one port to worry about.
+// 
+// so we will undefine the standard "arduino way" and redefine our macros
+#undef  digitalPinToPort
+#define digitalPinToPort(P) ( (uint16_t)&DDRB )
+
+#undef  digitalPinToBitMask
+#define digitalPinToBitMask(P) ( (_BV(P)) )
+
+#undef digitalPinToTimer
+#define digitalPinToTimer(P) ( ( P == 0 ) ? TIMER0A : ( (P == 1 ) ? TIMER0B : NOT_ON_TIMER ))
+
+#undef portOutputRegister
+#define portOutputRegister(P) ( (volatile uint8_t *)(&PORTB))
+
+#undef portInputRegister
+#define portInputRegister(P) ( (volatile uint8_t *)(&PINB))
+
+#undef portModeRegister
+#define portModeRegister(P) ( (volatile uint8_t *)(&DDRB))
+
+
 #ifdef ARDUINO_MAIN
 /*
  * With the above redefined macros, these are therefore not necessary.
- 
+
+ #include <avr/pgmspace.h>
+
 const uint16_t PROGMEM port_to_mode_PGM[] = 
 {
   NOT_A_PORT,
