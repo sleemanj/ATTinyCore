@@ -42,15 +42,18 @@ This section incomplete, see pins_arduino.h in the specific [variant folder](avr
  
  Two styles of numbering are available, the New Style which follows that of David Mellis' [Hi-Low Tech](http://highlowtech.org/?p=1695) distribution, this has the digital pin numbering co-inciding with the analog pin numbering.
  
- [New Style ATtinyX4 Arduino Pin Mapping](avr/variants/tinyX4_Arduino_Numbering/Pin_Mapping_ATtiny24_44_84.svg)
+ **New Style**
+ ![New Style ATtinyX4 Arduino Pin Mapping](https://cdn.rawgit.com/sleemanj/ATTinyCore/master/avr/variants/tinyX4_Arduino_Numbering/Pin_Mapping_ATtiny24_44_84.svg)
+ 
    
 And the old style which reverses the digital pin numbering so that A0 is D10, A1 is D9 etc.
 
- [Old Style ATtinyX4 Arduino Pin Mapping](avr/variants/tinyX4/Pin_Mapping_ATtiny24_44_84.svg)
+ **Old Style**
+ ![Old Style ATtinyX4 Arduino Pin Mapping](https://cdn.rawgit.com/sleemanj/ATTinyCore/master/avr/variants/tinyX4/Pin_Mapping_ATtiny24_44_84.svg)
 
 ### ATtinyX5
 
- [ATtinyX5 Arduino Pin Mapping](avr/variants/tinyX5/Pin_Mapping_ATtiny25_45_85.svg)
+ ![ATtinyX5 Arduino Pin Mapping](https://cdn.rawgit.com/sleemanj/ATTinyCore/master/avr/variants/tinyX5/Pin_Mapping_ATtiny25_45_85.svg)
  
 Board Manager Installation
 ============
