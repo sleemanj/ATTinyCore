@@ -15,6 +15,7 @@ As of 3/17/2016, my ATTiny Modern core has been merged into this one! It is not 
 This core supports the following processors:
 
 * ATtiny2313, 4313 (Working)
+* ATtiny13 (probably working, lightly tested)
 * ATtiny24, 44, 84 (Working)
 * ATtiny25, 45, 85 (Working)
 * ATtiny261, 461, 861 (probably working, lightly tested)
@@ -123,6 +124,9 @@ Pin Mapping
 
 This section incomplete, see pins_arduino.h in the specific [variant folder](avr/variants) for more.
 
+### ATtiny13
+ ![ATtiny13 Arduino Pin Mapping](https://cdn.rawgit.com/sleemanj/ATTinyCore/master/avr/variants/tiny13/Pin_Mapping_ATtiny13.svg)
+ 
 ### ATtinyX4 
  
  Two styles of numbering are available, the New Style which follows that of David Mellis' [Hi-Low Tech](http://highlowtech.org/?p=1695) distribution, this has the digital pin numbering co-inciding with the analog pin numbering.
