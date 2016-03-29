@@ -401,6 +401,7 @@ attiny13.menu.bod.2v7.bootloader.high_fuses=0xFB
 attiny13.menu.bod.4v3=B.O.D. Enabled (4.3v)
 attiny13.menu.bod.4v3.bootloader.high_fuses=0xF9
 attiny13.build.variant=tiny13
+attiny13.build.extra_flags=-DNO_TONE
 
 attinyx5.name=ATtiny x5 series
 attinyx5.upload.maximum_size=8192
