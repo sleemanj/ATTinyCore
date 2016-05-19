@@ -3,14 +3,11 @@
 menu.chip=Chip
 menu.clock=Clock
 menu.bod=B.O.D.
+menu.vcc=Voltage
 menu.pinmapping=Pin Mapping
 menu.INITIALIZE_SECONDARY_TIMERS=Initialize Secondary Timers
+menu.TimerClockSource=Timer 1 Clock
 
-
-
-menu.chip=Chip
-menu.clock=Clock
-menu.bod=B.O.D.
 attinyx41.name=ATtinyx41 
 attinyx41.upload.tool=avrdude
 attinyx41.bootloader.tool=avrdude
@@ -318,11 +315,11 @@ attiny828.build.mcu=attiny828
 attiny828.build.core=tinymodern
 attiny828.build.board=AVR_ATTINY828
 attiny828.menu.clock.8internal=8 MHz (internal)
-attiny828.menu.clock.8internal.bootloader.low_fuses=0xE2
+attiny828.menu.clock.8internal.bootloader.low_fuses=0xEE
 attiny828.menu.clock.8internal.build.f_cpu=8000000L
 attiny828.menu.clock.8internal.bootloader.file=empty/empty_all.hex
 attiny828.menu.clock.1internal=1 MHz (internal)
-attiny828.menu.clock.1internal.bootloader.low_fuses=0x62
+attiny828.menu.clock.1internal.bootloader.low_fuses=0x6E
 attiny828.menu.clock.1internal.build.f_cpu=1000000L
 attiny828.menu.clock.1internal.bootloader.file=empty/empty_all.hex
 attiny828.menu.bod.disable=Disabled
@@ -350,9 +347,12 @@ attiny828opti.bootloader.lock_bits=0x3F
 attiny828opti.build.mcu=attiny828
 attiny828opti.build.core=tinymodern
 attiny828opti.build.board=AVR_ATTINY828
-attiny828opti.bootloader.low_fuses=0xE2
+attiny828opti.bootloader.low_fuses=0xEE
 attiny828opti.build.f_cpu=8000000L
-attiny828opti.bootloader.file=optiboot/optiboot_attiny828at8.hex
+attiny828opti.menu.vcc.3v3=Under 4.0 V
+attiny828opti.menu.vcc.3v3.bootloader.file=optiboot/optiboot_attiny828at8.hex
+attiny828opti.menu.vcc.5v=Over 4.0 V
+attiny828opti.menu.vcc.5v.bootloader.file=optiboot/optiboot_attiny828at8_5v.hex
 attiny828opti.menu.bod.disable=Disabled
 attiny828opti.menu.bod.disable.bootloader.extended_fuses=0xFA
 attiny828opti.menu.bod.disable.bootloader.high_fuses=0xD7
@@ -413,6 +413,11 @@ attinyx5.bootloader.lock_bits=0xFF
 attinyx5.build.core=tiny
 attinyx5.build.board=AVR_ATTINYX5
 attinyx5.bootloader.extended_fuses=0xFF
+attinyx5.menu.TimerClockSource.default=CPU
+attinyx5.menu.TimerClockSource.pll=64MHz
+attinyx5.menu.TimerClockSource.pll.build.extra_flags=-DPLLTIMER1
+attinyx5.menu.TimerClockSource.lowpll=32MHz
+attinyx5.menu.TimerClockSource.lowpll.build.extra_flags=-DLOWPLLTIMER1
 attinyx5.menu.chip.85=ATtiny85
 attinyx5.menu.chip.85.build.mcu=attiny85
 attinyx5.menu.chip.85.upload.maximum_size=8192
@@ -553,6 +558,11 @@ attinyx61.bootloader.unlock_bits=0x03
 attinyx61.bootloader.lock_bits=0x03
 attinyx61.build.mcu=attiny861
 attinyx61.build.core=tiny
+attinyx61.menu.TimerClockSource.default=CPU
+attinyx61.menu.TimerClockSource.pll=64MHz
+attinyx61.menu.TimerClockSource.pll.build.extra_flags=-DPLLTIMER1
+attinyx61.menu.TimerClockSource.lowpll=32MHz
+attinyx61.menu.TimerClockSource.lowpll.build.extra_flags=-DLOWPLLTIMER1
 attinyx61.menu.chip.861=ATtiny861
 attinyx61.menu.chip.861.build.mcu=attiny861
 attinyx61.menu.chip.861.upload.maximum_size=8192
@@ -611,6 +621,97 @@ attinyx61.menu.bod.2v7.bootloader.high_fuses=0xD5
 attinyx61.menu.bod.4v3=B.O.D. Enabled (4.3v)
 attinyx61.menu.bod.4v3.bootloader.high_fuses=0xD4
 attinyx61.build.variant=tinyX61
+
+
+attiny167opti.name=ATtiny167 (Optiboot)
+attiny167opti.upload.maximum_data_size=512
+attiny167opti.upload.protocol=arduino
+attiny167opti.upload.tool=avrdude
+attiny167opti.build.board=AVR_ATTINYX7
+attiny167opti.bootloader.tool=avrdude
+attiny167opti.bootloader.unlock_bits=0xFF
+attiny167opti.bootloader.lock_bits=0xFF
+attiny167opti.build.core=tiny
+attiny167opti.bootloader.extended_fuses=0xFE
+attiny167opti.build.mcu=attiny167
+attiny167opti.upload.maximum_size=15744
+attiny167opti.menu.clock.8internal=8 MHz (internal)
+attiny167opti.menu.clock.8internal.bootloader.low_fuses=0xE2
+attiny167opti.menu.clock.8internal.build.f_cpu=8000000L
+attiny167opti.menu.clock.8internal.bootloader.file=optiboot/optiboot_attiny167at8.hex
+attiny167opti.menu.clock.8internal.upload.speed=57600
+attiny167opti.menu.clock.16external=16 MHz (external)
+attiny167opti.menu.clock.16external.bootloader.low_fuses=0xFF
+attiny167opti.menu.clock.16external.build.f_cpu=16000000L
+attiny167opti.menu.clock.16external.bootloader.file=optiboot/optiboot_attiny167at16.hex
+attiny167opti.menu.clock.16external.upload.speed=115200
+attiny167opti.menu.clock.12external=12 MHz (external)
+attiny167opti.menu.clock.12external.bootloader.low_fuses=0xFF
+attiny167opti.menu.clock.12external.build.f_cpu=12000000L
+attiny167opti.menu.clock.12external.bootloader.file=optiboot/optiboot_attiny167at12.hex
+attiny167opti.menu.clock.12external.upload.speed=115200
+attiny167opti.menu.clock.8external=8 MHz (external)
+attiny167opti.menu.clock.8external.bootloader.low_fuses=0xFF
+attiny167opti.menu.clock.8external.build.f_cpu=8000000L
+attiny167opti.menu.clock.8external.bootloader.file=optiboot/optiboot_attiny167at8.hex
+attiny167opti.menu.clock.8external.upload.speed=57600
+attiny167opti.menu.bod.disable=B.O.D. Disabled
+attiny167opti.menu.bod.disable.bootloader.high_fuses=0xD7
+attiny167opti.menu.bod.1v8=B.O.D. Enabled (1.8v)
+attiny167opti.menu.bod.1v8.bootloader.high_fuses=0xD6
+attiny167opti.menu.bod.2v7=B.O.D. Enabled (2.7v)
+attiny167opti.menu.bod.2v7.bootloader.high_fuses=0xD5
+attiny167opti.menu.bod.4v3=B.O.D. Enabled (4.3v)
+attiny167opti.menu.bod.4v3.bootloader.high_fuses=0xD4
+attiny167opti.menu.pinmapping.new=New style (down each side)
+attiny167opti.menu.pinmapping.new.build.variant=tinyX7_New
+attiny167opti.menu.pinmapping.old=Old style (SCL on 13)
+attiny167opti.menu.pinmapping.old.build.variant=tinyX7
+
+attiny87opti.name=ATtiny87 (Optiboot)
+attiny87opti.upload.maximum_data_size=512
+attiny87opti.upload.protocol=arduino
+attiny87opti.upload.tool=avrdude
+attiny87opti.build.board=AVR_ATTINYX7
+attiny87opti.bootloader.tool=avrdude
+attiny87opti.bootloader.unlock_bits=0xFF
+attiny87opti.bootloader.lock_bits=0xFF
+attiny87opti.build.core=tiny
+attiny87opti.bootloader.extended_fuses=0xFE
+attiny87opti.build.mcu=attiny87
+attiny87opti.upload.maximum_size=7552
+attiny87opti.menu.clock.8internal=8 MHz (internal)
+attiny87opti.menu.clock.8internal.bootloader.low_fuses=0xE2
+attiny87opti.menu.clock.8internal.build.f_cpu=8000000L
+attiny87opti.menu.clock.8internal.bootloader.file=optiboot/optiboot_attiny87at8.hex
+attiny87opti.menu.clock.8internal.upload.speed=57600
+attiny87opti.menu.clock.16external=16 MHz (external)
+attiny87opti.menu.clock.16external.bootloader.low_fuses=0xFF
+attiny87opti.menu.clock.16external.build.f_cpu=16000000L
+attiny87opti.menu.clock.16external.bootloader.file=optiboot/optiboot_attiny87at16.hex
+attiny87opti.menu.clock.16external.upload.speed=115200
+attiny87opti.menu.clock.12external=12 MHz (external)
+attiny87opti.menu.clock.12external.bootloader.low_fuses=0xFF
+attiny87opti.menu.clock.12external.build.f_cpu=12000000L
+attiny87opti.menu.clock.12external.bootloader.file=optiboot/optiboot_attiny167at12.hex
+attiny87opti.menu.clock.12external.upload.speed=115200
+attiny87opti.menu.clock.8external=8 MHz (external)
+attiny87opti.menu.clock.8external.bootloader.low_fuses=0xFF
+attiny87opti.menu.clock.8external.build.f_cpu=8000000L
+attiny87opti.menu.clock.8external.bootloader.file=optiboot/optiboot_attiny87at8.hex
+attiny87opti.menu.clock.8external.upload.speed=57600
+attiny87opti.menu.bod.disable=B.O.D. Disabled
+attiny87opti.menu.bod.disable.bootloader.high_fuses=0xD7
+attiny87opti.menu.bod.1v8=B.O.D. Enabled (1.8v)
+attiny87opti.menu.bod.1v8.bootloader.high_fuses=0xD6
+attiny87opti.menu.bod.2v7=B.O.D. Enabled (2.7v)
+attiny87opti.menu.bod.2v7.bootloader.high_fuses=0xD5
+attiny87opti.menu.bod.4v3=B.O.D. Enabled (4.3v)
+attiny87opti.menu.bod.4v3.bootloader.high_fuses=0xD4
+attiny87opti.menu.pinmapping.new=New style (down each side)
+attiny87opti.menu.pinmapping.new.build.variant=tinyX7_New
+attiny87opti.menu.pinmapping.old=Old style (SCL on 13)
+attiny87opti.menu.pinmapping.old.build.variant=tinyX7
 
 attinyx7.name=ATtiny x7 series
 attinyx7.upload.maximum_data_size=512
@@ -777,145 +878,4 @@ attinyx313.menu.INITIALIZE_SECONDARY_TIMERS.0=no
 attinyx313.menu.INITIALIZE_SECONDARY_TIMERS.1=yes
 attinyx313.menu.INITIALIZE_SECONDARY_TIMERS.1.build.extra_flags=-DINITIALIZE_SECONDARY_TIMERS=1
 attinyx313.build.variant=tinyX313
-
-
- 
-###########################################################################
-
-# BOARDS BELOW HERE ARE UNTESTED AND MAY NOT WORK #
-
-
-
-#attiny861at18.name=ATtiny861 @ 18.432 MHz  (external oscillator; BOD disabled)
-
-#attiny861at18.upload..tool=avrdude
-
-#attiny861at18.upload.maximum_size=8192
-
-# Default clock (slowly rising power; long delay to clock; 1 MHz internal)
-# Int. RC Osc. 8 MHz divided by 8; Start-up time PWRDWN/RESET: 6 CK/14 CK + 64 ms; [CKSEL=0010 SUT=10]; default value
-# Brown-out detection disabled; [BODLEVEL=111]
-
-#attiny861at18.bootloader.tool=avrdude
-#attiny861at18.bootloader.low_fuses=0xA0
-#attiny861at18.bootloader.high_fuses=0xD7
-#attiny861at18.bootloader.extended_fuses=0x00
-#attiny861at18.bootloader.path=empty
-#attiny861at18.bootloader.file=empty861at8.hex
-
-#attiny861at18.build.mcu=attiny861
-#attiny861at18.build.f_cpu=18432000L
-#attiny861at18.build.core=tiny
-#attiny861at18.build.variant=tinyX61
-
-###########################################################################
-
-
-#attiny167_20.name=Optiboot ATtiny167 @ 20 MHz  (external oscillator; BOD enabled)
-
-#attiny167_20.upload.tool=avrdude
-#attiny167_20.upload.speed=57600
-#attiny167_20.upload.maximum_size=15808
-
-# Default clock (slowly rising power; long delay to clock; 8 MHz internal)
-# Int. RC Osc. 8 MHz; Start-up time PWRDWN/RESET: 6 CK/14 CK + 64 ms; [CKSEL=0010 SUT=10]; default value
-# Brown-out detection disabled; [BODLEVEL=111]
-# Preserve EEPROM memory through the Chip Erase cycle; [EESAVE=0]
-# Self-Programming Enabled; [SELFPRGEN=0]
-
-#attiny167_20.bootloader.tool=avrdude
-#attiny167_20.bootloader.low_fuses=0xA0
-#attiny167_20.bootloader.high_fuses=0xDF
-#attiny167_20.bootloader.extended_fuses=0xFE
-#attiny167_20.bootloader.file=optiboot/optiboot_attiny167.hex
-
-#attiny167_20.build.mcu=attiny167
-#attiny167_20.build.f_cpu=20000000L
-#attiny167_20.build.core=tiny
-#attiny167_20.build.variant=tinyX7 
- 
-###########################################################################
-
-#attiny84_12.name=Optiboot ATtiny84 @ 12 MHz  (external osc)
-
-#attiny84_12.upload.tool=avrdude
-#attiny84_12.upload.speed=19200
-#bootloader takes up last 9 pages, so there is a limit on the max size.
-#attiny84_12.upload.maximum_size=7616
-
-#attiny84_12.bootloader.tool=avrdude
-#attiny84_12.bootloader.low_fuses=0xE0
-#attiny84_12.bootloader.high_fuses=0xD7
-#attiny84_12.bootloader.extended_fuses=0xFE
-#attiny84_12.bootloader.path=optiboot
-#attiny84_12.bootloader.file=optiboot_attiny84_12.hex
-
-#attiny84_12.build.mcu=attiny84
-#attiny84_12.build.f_cpu=12000000L
-#attiny84_12.build.core=tiny
-#attiny84_12.build.variant=tinyX4optiboot
- 
-###########################################################################
-#attiny84.name=Optiboot ATtiny84 @ 8 MHz  (internal osc)
-
-#attiny84.upload.tool=avrdude
-#attiny84.upload.speed=19200
-#bootloader takes up last 9 pages, so there is a limit on the max size.
-#attiny84.upload.maximum_size=7616
-
-#attiny84.bootloader.tool=avrdude
-#attiny84.bootloader.low_fuses=0xE2
-#attiny84.bootloader.high_fuses=0xD7
-#attiny84.bootloader.extended_fuses=0xFE
-#attiny84.bootloader.path=optiboot
-#attiny84.bootloader.file=optiboot_attiny84.hex
-
-#attiny84.build.mcu=attiny84
-#attiny84.build.f_cpu=8000000L
-#attiny84.build.core=tiny
-#attiny84.build.variant=tinyX4optiboot
- 
-###########################################################################
-
-#attiny84nr.name=Optiboot ATtiny84 @ 8 MHz  (NO RESET!)
-
-#attiny84nr.upload.tool=avrdude
-#attiny84nr.upload.speed=19200
-#bootloader takes up last 9 pages, so there is a limit on the max size.
-#attiny84nr.upload.maximum_size=7616
-
-#attiny84nr.bootloader.tool=avrdude
-#attiny84nr.bootloader.low_fuses=0xE2
-#attiny84nr.bootloader.high_fuses=0x57
-#attiny84nr.bootloader.extended_fuses=0xFE
-#attiny84nr.bootloader.path=optiboot
-#attiny84nr.bootloader.file=optiboot_attiny84.hex
-
-#attiny84nr.build.mcu=attiny84
-#attiny84nr.build.f_cpu=8000000L
-#attiny84nr.build.core=tiny
-#attiny84nr.build.variant=tinyX4optiboot
- 
-###########################################################################
-
-#attiny85.name=Optiboot ATtiny85 @ 8 MHz  (internal osc)
-
-#attiny85.upload.tool=avrdude
-#attiny85.upload.speed=19200
-#bootloader takes up last 9 pages, so there is a limit on the max size.
-#attiny85.upload.maximum_size=7616
-
-#attiny85.bootloader.tool=avrdude
-#attiny85.bootloader.low_fuses=0xE2
-#attiny85.bootloader.high_fuses=0xD7
-#attiny85.bootloader.extended_fuses=0xFE
-#attiny85.bootloader.path=optiboot
-#attiny85.bootloader.file=optiboot_attiny85.hex#
-
-#attiny85.build.mcu=attiny85
-#attiny85.build.f_cpu=8000000L
-#attiny85.build.core=tiny
-#attiny85.build.variant=tinyX5optiboot
-
-
 

@@ -51,7 +51,9 @@ void analogReference(uint8_t mode)
 #define ADMUX_REFS_MASK (0x01)
 #endif
 
-#if defined(MUX4)
+#if defined(MUX5)
+#define ADMUX_MUX_MASK (0x3f)
+#elif defined(MUX4)
 #define ADMUX_MUX_MASK (0x1f)
 #elif defined(MUX3)
 #define ADMUX_MUX_MASK (0x0f)
@@ -61,7 +63,9 @@ void analogReference(uint8_t mode)
 
 int analogRead(uint8_t pin)
 {
-  #if defined( NUM_DIGITAL_PINS ) && ! ( defined(ANALOG_PINS_ARE_ADC_NUMBERS) && ANALOG_PINS_ARE_ADC_NUMBERS )
+  // @SpenceKonde called it ANALOG_PINS_SEPARATE in his fork after I had called the same thing ANALOG_PINS_ARE_ADC_NUMBERS in mine, 
+  //  keeping both for simplicity.
+  #if defined( NUM_DIGITAL_PINS ) && ! ( defined(ANALOG_PINS_ARE_ADC_NUMBERS) && ANALOG_PINS_ARE_ADC_NUMBERS ) && ! defined(ANALOG_PINS_SEPARATE)
   if ( pin >= NUM_DIGITAL_PINS ) pin -= NUM_DIGITAL_PINS; // allow for channel or pin numbers
   #endif
   
