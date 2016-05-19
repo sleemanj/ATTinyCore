@@ -152,7 +152,7 @@ class HalfDuplexSerial : public Stream
      * 
      * This is non blocking and returns 0 for no-data-read (OR if the data read was 0)
      *    it is therefore convenient for reading a character into a character array                        
-     *    if(i>=sizeof(buf)-1 || !(buf[i++]=read_nbz())) break; 
+     *    if(i>=sizeof(buf)-1 || !(buf[i++]=read_char())) break; 
      * (you can insert a retry-timeout in the loop too for that matter)
      * remember if reading multiple characters, there is NO buffer, there is NO 
      * handshaking, so your loop better be very tight or you will miss characters

@@ -1,3 +1,8 @@
+# Wondering about the need for this file?  See:
+#
+#   https://github.com/MCUdude/MightyCore/pull/14
+#   https://github.com/arduino/Arduino/issues/2886
+
 
 avrisp.name=AVR ISP (ATtiny)
 avrisp.communication=serial
