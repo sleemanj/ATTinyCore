@@ -27,7 +27,8 @@
 
 // Public Methods //////////////////////////////////////////////////////////////
 
-void HalfDuplexSerial::begin(long baud)
+/*
+void HalfDuplexSerial::begin(const uint8_t baud)
 {
 
 }
@@ -36,17 +37,22 @@ void HalfDuplexSerial::end()
 {
   // We can not end
 }
+void HalfDuplexSerial::flush()
+{
+  // Nothing to do here
+}
+*/
 
 int HalfDuplexSerial::available(void)
 {
-  // There is never anything available, we are TX only
+  // There is never anything available, we have no buffer
   return 0;
 }
 
 
 int HalfDuplexSerial::peek(void)
 {
-  // TX only
+  // We have no buffer, no peeking
   return -1;
 }
 
@@ -116,10 +122,6 @@ size_t HalfDuplexSerial::write_byte(uint8_t ch)
   return 1;  
 }
 
-void HalfDuplexSerial::flush()
-{
-  // Nothing to do here
-}
 
 HalfDuplexSerial::operator bool() {
   // ??

@@ -110,11 +110,11 @@ asm (
 class HalfDuplexSerial : public Stream
 {
   public:
-    void begin(long);   // Does NOTHING, you have no need to call this, here only for compatability
-    void end();         // Does NOTHING, you have no need to call this, here only for compatability
-    int available(void);// As we do not have a buffer, this always returns 0
-    int peek(void);     // As we do not have a buffer, this always returns -1
-    void    flush(void); // Does NOTHING, you have no need to call this, here only for compatability    
+    void begin(const uint32_t) { }   // Does NOTHING, you have no need to call this, here only for compatability
+    void end() { }                   // Does NOTHING, you have no need to call this, here only for compatability
+    int available(void) ;   // As we do not have a buffer, this always returns 0
+    int peek(void)      ;   // As we do not have a buffer, this always returns -1
+    void    flush(void) { }          // Does NOTHING, you have no need to call this, here only for compatability    
     operator bool();    // Always returns true
     
     // Because we define our own write(uint8_t) (which incidentally is the case for EVERYTHING deriving 
