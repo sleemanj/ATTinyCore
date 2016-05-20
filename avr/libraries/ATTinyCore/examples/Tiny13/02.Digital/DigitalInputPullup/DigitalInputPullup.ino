@@ -22,7 +22,7 @@ void setup()
 void loop() 
 {  
   // Note inverted logic so the LED is on when you press button
-  if(!digitalRead(buttonPin) == HIGH) 
+  if(digitalRead(buttonPin) == LOW) 
   {
     digitalWrite(ledPin, HIGH);
   }
