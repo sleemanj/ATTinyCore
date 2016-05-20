@@ -27,7 +27,7 @@ void _turnOnPWM(uint8_t t, uint8_t v)
    ( (  TCCR0B |= _BV(CS00) ) && ( TCCR0A |= _BV(WGM00)|_BV(WGM01) ) );
    
    // Ensure that the appropriate pin is connected to the given timer
-   ( ( t==TIMER0A ) ? ( ( TCCR0A |= 0B11000000 ) && ( OCR0A = v ) ) : ( ( TCCR0A |= 0B00110000 ) && ( OCR0B = v ) ) );
+   ( ( t==TIMER0A ) ? ( ( TCCR0A |= 0B10000000 ) && ( OCR0A = v ) ) : ( ( TCCR0A |= 0B00100000 ) && ( OCR0B = v ) ) );
 }
 
 void _turnOffPWM(uint8_t t)
