@@ -51,6 +51,25 @@ long random(long howsmall, long howbig)
   return random(diff) + howsmall;
 }
 
+// #FIXME: There must be a better way to see the PRNG that doesn't 
+//         cost us much.  I'd be happy with just a random pre-generated
+//         seed at compile time, but there's no way to to that in Gcc 
+//         macros it seems.
+static unsigned int tiny_random_seed = 1;
+
+void     tiny_srandom(unsigned int newseed)
+{
+  tiny_random_seed = newseed;
+}
+
+unsigned int tiny_random()
+{  
+  tiny_random_seed ^= (tiny_random_seed << 13);
+  tiny_random_seed ^= (tiny_random_seed >> 9);
+  tiny_random_seed ^= (tiny_random_seed << 7);
+  return tiny_random_seed-1;
+}
+
 long map(long x, long in_min, long in_max, long out_min, long out_max)
 {
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;

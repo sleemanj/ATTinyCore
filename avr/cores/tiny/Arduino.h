@@ -295,6 +295,8 @@ long random(long, long);
 void randomSeed(unsigned int);
 long map(long, long, long, long, long);
 
+void     tiny_srandom(unsigned int);
+unsigned int tiny_random();
 #endif
 
 /*=============================================================================
