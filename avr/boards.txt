@@ -7,6 +7,8 @@ menu.vcc=Voltage
 menu.pinmapping=Pin Mapping
 menu.INITIALIZE_SECONDARY_TIMERS=Initialize Secondary Timers
 menu.TimerClockSource=Timer 1 Clock
+menu.print=Print Support
+menu.serial=Serial Support
 
 attinyx41.name=ATtinyx41 
 attinyx41.upload.tool=avrdude
@@ -402,6 +404,46 @@ attiny13.menu.bod.4v3=B.O.D. Enabled (4.3v)
 attiny13.menu.bod.4v3.bootloader.high_fuses=0xF9
 attiny13.build.variant=tiny13
 attiny13.build.extra_flags=-DNO_TONE
+
+
+# Serial Menu
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+attiny13.menu.serial.HalfDuplexRW=Half Duplex, Read+Write
+attiny13.menu.serial.HalfDuplexRW.build.custom_flags.serial.use_serial_type=-DUSE_SERIAL_TYPE=SERIAL_TYPE_HALF_DUPLEX
+
+attiny13.menu.serial.HalfDuplexR=Half Duplex, Read Only
+attiny13.menu.serial.HalfDuplexR.build.custom_flags.serial.use_serial_type=-DUSE_SERIAL_TYPE=SERIAL_TYPE_HALF_DUPLEX -DHALF_DUPLEX_SERIAL_DISABLE_WRITE
+
+attiny13.menu.serial.HalfDuplexW=Half Duplex, Write (Print) Only
+attiny13.menu.serial.HalfDuplexW.build.custom_flags.serial.use_serial_type=-DUSE_SERIAL_TYPE=SERIAL_TYPE_HALF_DUPLEX -DHALF_DUPLEX_SERIAL_DISABLE_READ
+
+
+# Print Menu
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+attiny13_diy.menu.print.BinHexDec=Bin, Hex, Dec Supported
+attiny13_diy.menu.print.BinHexDec.build.custom_flags.print.use_base=-DPRINT_USE_BASE_BIN -DPRINT_USE_BASE_DEC -DPRINT_USE_BASE_HEX
+
+attiny13_diy.menu.print.Arbitrary=Full Support For Arbitrary Bases (Biggest)
+attiny13_diy.menu.print.Arbitrary.build.custom_flags.print.use_base=-DPRINT_USE_BASE_ARBITRARY
+
+attiny13_diy.menu.print.BinHexDecOct=Bin, Hex, Dec, Oct Supported
+attiny13_diy.menu.print.BinHexDecOct.build.custom_flags.print.use_base=-DPRINT_USE_BASE_BIN -DPRINT_USE_BASE_DEC -DPRINT_USE_BASE_HEX -DPRINT_USE_BASE_OCT
+
+attiny13_diy.menu.print.Dec=Dec Only Supported
+attiny13_diy.menu.print.Dec.build.custom_flags.print.use_base=-DPRINT_USE_BASE_DEC
+
+attiny13_diy.menu.print.Hex=Hex Only Supported
+attiny13_diy.menu.print.Hex.build.custom_flags.print.use_base=-DPRINT_USE_BASE_HEX
+
+attiny13_diy.menu.print.Oct=Oct Only Supported
+attiny13_diy.menu.print.Oct.build.custom_flags.print.use_base=-DPRINT_USE_BASE_OCT
+
+attiny13_diy.menu.print.Bin=Bin Only Supported (Smallest)
+attiny13_diy.menu.print.Bin.build.custom_flags.print.use_base=-DPRINT_USE_BASE_BIN
+
+
 
 attinyx5.name=ATtiny x5 series
 attinyx5.upload.maximum_size=8192
