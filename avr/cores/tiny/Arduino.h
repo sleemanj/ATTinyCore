@@ -109,17 +109,8 @@ int analogRead(uint8_t);
 void analogReference(uint8_t mode);
 void analogWrite(uint8_t, int);
 
-#ifndef NO_MILLIS
-unsigned long millis(void);
-unsigned long micros(void);
-void delay(unsigned long);
-void delayMicroseconds(unsigned int us);
-unsigned long pulseIn(uint8_t pin, uint8_t state, unsigned long timeout);
-#else
-void delay(unsigned long);
-void delayMicroseconds(unsigned int us);
-#endif
 
+unsigned long pulseIn(uint8_t pin, uint8_t state, unsigned long timeout);
 void shiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder, uint8_t val);
 uint8_t shiftIn(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder);
 
@@ -176,6 +167,17 @@ extern const uint8_t PROGMEM digital_pin_to_timer_PGM[];
 #define SERIAL_TYPE_HALF_DUPLEX 0x04
 
 #include "pins_arduino.h"
+
+#ifndef USE_NEW_MILLIS
+#ifndef NO_MILLIS
+unsigned long millis(void);
+unsigned long micros(void);
+#endif
+void delay(unsigned long);
+void delayMicroseconds(unsigned int us);
+#else
+  #include "MillisMicrosDelay.h"
+#endif
 
 /*=============================================================================
  * We have different types of serial capability. 

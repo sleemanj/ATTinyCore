@@ -27,7 +27,7 @@
 */
 #include "Arduino.h"
 
-#ifndef USE_WIRING_LITE
+#if !(defined(USE_WIRING_LITE) && USE_WIRING_LITE )
 
 #include "wiring_private.h"
 

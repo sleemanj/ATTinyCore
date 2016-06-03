@@ -1,6 +1,9 @@
 #include "Arduino.h"
 
-/** In the ATTiny13, the below functions are not used, because pins_arduino.h 
+/**
+ * turnOnPWM(), turnOffPWM() 
+ * 
+ * In the ATTiny13, the below functions are not used, because pins_arduino.h 
  *  defines macros to perform the action.
  * 
  * If you use the tiny13 variant to base a new variant on, note that in 
@@ -34,4 +37,59 @@ void _turnOffPWM(uint8_t t)
 {
   // Disconnect the pin from the timer
   ( ( t==TIMER0A ) ? ( TCCR0A &= ~0B11000000 ) : ( TCCR0A &= ~0B00110000 ) );  
+}
+
+
+/** 
+ * millis()/micros() Overflow Timer, and turnOnMillis(), turnOffMillis()
+ * 
+ * The overflow counter (ovrf, implemented in MillisMicrosDelay.c) 
+ * is incremented by our overflow timer, it is up to us to do this 
+ * incrementing, as we are the file which knows how to operate the timers
+ * on this particular chip!
+ * 
+ */
+
+#if defined(USE_NEW_MILLIS) && USE_NEW_MILLIS
+extern volatile MillisMicrosTime_t ovrf;
+ 
+ISR(TIM0_OVF_vect)
+{
+  ovrf++; //Increment counter every 256 clock cycles  
+}
+#endif
+
+// In order to save bytes for the tiny13 the following function has been rolled
+// directly into the turnOnMillis() macro in pins_arduino.h, in other variants
+// you might want to have your turnOnMillis() macro call a function instead
+// if it's more complicated.
+void _turnOnMillis(uint8_t prescale)
+{
+  // Start timer0 running, setup the millis() interrupt to run
+  switch(prescale)
+  {
+    case 1:
+      TCCR0B |= _BV(CS00);              // Timer On, No Prescale
+      break;
+      
+    case 8:
+      TCCR0B |= _BV(CS01);              // Timer On, /8 Prescale
+      break;
+      
+    case 64:
+      TCCR0B |= _BV(CS01) | _BV(CS00);  // Timer On, /64 Prescale
+      break;
+  }
+  
+  TCCR0A |= _BV(WGM00)|_BV(WGM01);  // Fast PWM Mode
+  TIMSK0 |= _BV(TOIE0);             // Enable Timer Overfow Interrupt 0
+  TCNT0=0;                          // Start From Zero
+}
+
+// This is unlikely to be used by much (if anything), it's really just for completeness.
+void _turnOffMillis()
+{
+  // Stop timer0 running, disable the interrupt
+  TCCR0B &= ~_BV(CS00);  // Stop Timer  
+  TIMSK0 &= ~_BV(TOIE0); // Disable Timer Overflow Interrupt 0  
 }

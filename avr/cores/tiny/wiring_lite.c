@@ -1,32 +1,50 @@
 /*
- * This is a "lite" version of wiring, using parts from core13 (especially millis() implementation) and parts from
- * the normal wiring.
+ * This is a "lite" version of wiring.c  Perhaps one day this will be better termed
+ * a "better" version of wiring.
  * 
- * The code usage is considerably less than a standard wiring, but I think that accuracy of timing may be
- * somewhat iffy, lucky then that most people don't need accurate timing.
+ * In essence, chip specific code has been ripped out and must be implemented
+ * by the variant through macros and/or functions in pins_arduino.h/c
  * 
- * I havn't genericized the timer names etc, this "lite" wiring is probably only really useful
- * for tiny13 users anyway.
+ * In short,
+ *   #define USE_WIRING_LITE 1
+ *   #define USE_NEW_MILLIS  1
+ *   #define turnOnMillis(prescaleValue)  ( ...whatever is required... )
+ *   #define turnOnPWM(timerNumber,value) ( ...whatever is required... )
  * 
-*** Core13 ***
-Arduino core designed for Attiny13 and similar devices.
-NO WARRANTEE OR GUARANTEES!
-Written by John "smeezekitty" 
-You are free to use, redistribute and modify at will EXCEPT IF MARKED OTHERWISE IN A PARTICULAR SOURCE FILE!
-Version 0.20
-*/
+ * For initial development testing and comparison some old code is still
+ * remaining here so you can set USE_NEW_MILLIS = 0 for the moment
+ * to use the old millis code.
+ * 
+ * millis(), micros(), delay() and delayMicroseconds() have been split off
+ * into MillisMicrosDelay.h/c with more accurate implementation and
+ * smaller code size (if you accept a given level of error).
+ * 
+ * James Sleeman <james@gogo.co.nz>, http://sparks.gogo.co.nz/
+ * 
+ */
 
 #include "Arduino.h"
 
-#ifdef USE_WIRING_LITE
+#if defined(USE_WIRING_LITE) && USE_WIRING_LITE
 #include "wiring_private.h"
 
+#if defined(USE_NEW_MILLIS) && USE_NEW_MILLIS
+#include "MillisMicrosDelay.h"
+#else
 #ifndef NO_MILLIS
 #include <avr/interrupt.h>
 volatile unsigned long ovrf=0;
 ISR(TIM0_OVF_vect){
   ovrf++; //Increment counter every 256 clock cycles
 }
+// This is the original millis code from "core13"
+// as you can see, it includes a bunch of non-binary-friendly
+// integer divisions, and further more, they are not accurate
+// divisions.
+//
+// Example, take 9.6MHz, this will produce 37500 overflows
+//  per second (9600000 / 256 = 37500), 37.5 per millisecond
+//  but millis() just goes ahead and rounds that to 37
 unsigned long millis(){
   unsigned long x;
   asm("cli"); 
@@ -47,7 +65,7 @@ unsigned long millis(){
   x = ovrf / 31;
   #elif F_CPU == 9600000
   x = ovrf / 37;
-    #elif F_CPU == 10000000
+  #elif F_CPU == 10000000
   x = ovrf / 39;
   #elif F_CPU == 12000000
   x = ovrf / 47;
@@ -245,14 +263,19 @@ void delayMicroseconds(unsigned int us)
   // return = 4 cycles
 }
 
+#endif
 
 void init(){  
 #ifndef NO_MILLIS
+  #if (!defined(turnOnMillis) || !(defined(USE_NEW_MILLIS) && USE_NEW_MILLIS))
   // Start timer0 running, setup the millis() interrupt to run
   TCCR0B |= _BV(CS00);
   TCCR0A |= _BV(WGM00)|_BV(WGM01);
   TIMSK0 |= 2;
   TCNT0=0;   
+  #else
+    turnOnMillis(MILLIS_TIMER_PRESCALE);
+  #endif
 #else
   #ifndef turnOnPWM
   // Enabled fast PWM on the timer (not connected to the pin, that happens in 
@@ -267,6 +290,8 @@ void init(){
   
   sei();
   
+// TODO: Tidy this away in variant code, not in the core.
+#if defined(INITIALIZE_ANALOG_TO_DIGITAL_CONVERTER) && INITIALIZE_ANALOG_TO_DIGITAL_CONVERTER  
   ADMUX=0;
   //Set up ADC clock depending on F_CPU
   #if F_CPU == 128000
@@ -276,5 +301,6 @@ void init(){
   #else
   ADCSRA |= _BV(ADEN) | _BV(ADPS1) | _BV(ADPS0) | _BV(ADPS2);
   #endif
+#endif  
 }
 #endif

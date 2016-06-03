@@ -28,6 +28,7 @@
 // We will use the lite version of wiring.c
 //  - this is better for the tiny13
 #define USE_WIRING_LITE  1
+#define USE_NEW_MILLIS   1
 
 // The tiny13 is very ram limited, so restrict the Print class
 //  (and things so derived, like Serial) to only be able to 
@@ -54,18 +55,12 @@
 //#define PRINT_USE_BASE_HEX
 //#define PRINT_USE_BASE_ARBITRARY
 
-//If Software Serial communications doesn't work, run the TinyTuner sketch provided with the core to give you a calibrated OSCCAL value.
-//Change the value here with the tuned value. By default this option uses the default value which the compiler will optimise out. 
-#define TUNED_OSCCAL_VALUE                        OSCCAL
-//e.g
-//#define TUNED_OSCCAL_VALUE                        0x57
-
-// These won't have much if any effect on the tiny13
-#define INITIALIZE_ANALOG_TO_DIGITAL_CONVERTER    1
-#define INITIALIZE_SECONDARY_TIMERS               1
+// TODO: Make this automatic on analogRead()?
+#ifndef INITIALIZE_ANALOG_TO_DIGITAL_CONVERTER
+  #define INITIALIZE_ANALOG_TO_DIGITAL_CONVERTER    1
+#endif
 
 //  Tiny13 only has one timer, we wont have tone() functions then
-#define TIMER_TO_USE_FOR_MILLIS                   0
 #define NO_TONE                                   1
 
 // Serial Port Configuration
@@ -127,13 +122,45 @@
 // ensure that the timer is actually running before the pin is connected to it.
 // other variants would probably roll this into their _turnOnPWM() function in 
 // pins_arduino.c
+#ifdef NO_MILLIS
 #define turnOnPWMTimer(t) ( (  TCCR0B |= _BV(CS00) ) && ( TCCR0A |= _BV(WGM00)|_BV(WGM01) ) )
 //                          (Set Clksrc No Prescale) && ( Fast PWM Mode )
+#else
+// If millis() is enabled, then the timer is already running (we only have one)
+#define turnOnPWMTimer(t) ( 1 )
+#endif
 
 #define turnOffPWM(t)  ( ( t==TIMER0A ) ? ( TCCR0A &= ~0B11000000 ) : ( TCCR0A &= ~0B00110000 ) )
 #define turnOnPWM(t,v) ( turnOnPWMTimer(t) && ( t==TIMER0A ) ? ( ( TCCR0A |= 0B10000000 ) && ( OCR0A = v ) ) : ( ( TCCR0A |= 0B00100000 ) && ( OCR0B = v ) ) )
 
+// millis()/micros() Timer On/Off
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// 
+// If the macros are not defined, a default implementation may be implemented
+// if the macros are defined, then they will be used.
+//
+// Your macro may call a function which you can implement in pins_arduino.c
+// or as I have done here for the t13, just do it directly in the macro to
+// save some bytes of flash.  This "function" is only called once normally and
+// not by users.
 
+//#define turnOnMillis(prescale)  ( _turnOnMillis(prescale)  )
+#define turnOffMillis()         ( _turnOffMillis() )
+void _turnOnMillis(uint8_t prescale);
+void _turnOffMillis();
+
+#define turnOnMillis(PRESCALE)                                                      \
+{                                                                                   \
+  TCCR0A |= _BV(WGM00)|_BV(WGM01);  /* Fast PWM Mode */                             \
+  TIMSK0 |= _BV(TOIE0);             /* Enable Timer Overfow Interrupt 0 */          \
+  switch(PRESCALE)                                                                  \
+  {                                                                                 \
+    case 1: TCCR0B |= _BV(CS00); break;               /* Timer On, No Prescale  */  \
+    case 8: TCCR0B |= _BV(CS01); break;               /* Timer On, /8 Prescale  */  \
+    case 64: TCCR0B |= _BV(CS01) | _BV(CS00); break;  /* Timer On, /64 Prescale */  \
+  }                                                                                 \
+  TCNT0=0;                          /* Start From Zero */                           \
+}
 
 // Arduino Pin Numbering to Chip's PORT.PIN and ADC Numbers
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
