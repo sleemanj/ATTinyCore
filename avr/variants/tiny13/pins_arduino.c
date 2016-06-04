@@ -50,7 +50,7 @@ void _turnOffPWM(uint8_t t)
  * 
  */
 
-#if defined(USE_NEW_MILLIS) && USE_NEW_MILLIS
+#if !(defined(NO_MILLIS) && NO_MILLIS) && defined(USE_NEW_MILLIS) && USE_NEW_MILLIS
 extern volatile MillisMicrosTime_t ovrf;
  
 ISR(TIM0_OVF_vect)
