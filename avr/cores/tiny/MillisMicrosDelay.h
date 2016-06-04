@@ -153,17 +153,20 @@ typedef uint16_t DelayMicrosecondsTime_t;
 //  at a maximum and you have millis() available for delay() to use (or don't use delay()).
 
 void delay(DelayTime_t);
-void delayMicroseconds(DelayMicrosecondsTime_t);
+void delayMicrosecondsWithoutMillisInterruptAdjustment(DelayMicrosecondsTime_t);
+void delayMicrosecondsAdjustedForMillisInterrupt(DelayMicrosecondsTime_t);
 
 #ifdef NO_MILLIS
   // If the millis interrupt handler isn't being used at all
-  // then our special adjusted delayMicroseconds is no use to us
-  // in case you use it anyway we alias it to delayMicroseconds
-  #define delayMicrosecondsAdjustedForMillisInterrupt delayMicroseconds
+  // then we do not need to adjust for it in delayMicroseconds
+  #define delayMicroseconds delayMicrosecondsWithoutMillisInterruptAdjustment  
+#else
+  // Conversely if we do have millis() running then we are probably
+  // best to use our adjusted one instead of the normal one
+  #define delayMicroseconds delayMicrosecondsAdjustedForMillisInterrupt  
 #endif
 
 #ifndef NO_MILLIS
-void delayMicrosecondsAdjustedForMillisInterrupt(DelayMicrosecondsTime_t);
 MillisMicrosTime_t millis();
 MillisMicrosTime_t micros();
   

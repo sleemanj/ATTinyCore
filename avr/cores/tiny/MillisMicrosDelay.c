@@ -870,6 +870,10 @@ MillisMicrosTime_t micros()
 
 void delay(DelayTime_t ms)
 {
+  while(ms--){
+    delayMicroseconds(1000); 
+  }
+#if 0
 #ifdef NO_MILLIS
   while(ms--){
     delayMicroseconds(1000); 
@@ -884,23 +888,18 @@ void delay(DelayTime_t ms)
   //
   // Anyway, we can't use delayMicroseconds() for this if millis() is available
   // or the delay will be quite inaccurate.
-  //
-  // TODO: I don't like that this costs 4 bytes.  I wonder if there would be
-  //       any real harm in reducing ovrf, ms, and the return from millis
-  //       to 16 bit, overflows would be much more frequent of course, but,
-  //       you have to be able to handle them anyway, right, as long
-  //       as you have a second up your sleeve it should b
   
   MillisMicrosTime_t current = millis();
   while(millis() - current < ms);
   return;
+#endif
 #endif
 }
 
 // For clock-counting/sim/debug you might want to add
 //   __attribute__ ((noinline)) 
 // so it's easier to see what's going on in the decompilation
-void delayMicroseconds(DelayMicrosecondsTime_t us)
+void delayMicrosecondsWithoutMillisInterruptAdjustment(DelayMicrosecondsTime_t us)
 {
   // This is pretty much the standard Arduino delayMicroseconds() however I have 
   // recalculated all the numbers for improved consistency and accuracy, and 
@@ -1350,7 +1349,6 @@ void delayMicroseconds(DelayMicrosecondsTime_t us)
   // return = 4 cycles
 }
 
-#ifndef NO_MILLIS
 void delayMicrosecondsAdjustedForMillisInterrupt(DelayMicrosecondsTime_t us)
 {
 #if MILLIS_TIMER_PRESCALE == 1
@@ -2564,6 +2562,5 @@ void delayMicrosecondsAdjustedForMillisInterrupt(DelayMicrosecondsTime_t us)
   );
   // return = 4 cycles
 }
-#endif
 
 #endif
