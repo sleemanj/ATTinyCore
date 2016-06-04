@@ -9,6 +9,7 @@ menu.INITIALIZE_SECONDARY_TIMERS=Initialize Secondary Timers
 menu.TimerClockSource=Timer 1 Clock
 menu.print=Print Support
 menu.serial=Serial Support
+menu.millis_ppm=Millis Accuracy
 
 attinyx41.name=ATtinyx41 
 attinyx41.upload.tool=avrdude
@@ -422,26 +423,60 @@ attiny13.menu.serial.HalfDuplexW.build.custom_flags.serial.use_serial_type=-DUSE
 # Print Menu
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-attiny13_diy.menu.print.BinHexDec=Bin, Hex, Dec Supported
-attiny13_diy.menu.print.BinHexDec.build.custom_flags.print.use_base=-DPRINT_USE_BASE_BIN -DPRINT_USE_BASE_DEC -DPRINT_USE_BASE_HEX
+attiny13.menu.print.BinHexDec=Bin, Hex, Dec Supported
+attiny13.menu.print.BinHexDec.build.custom_flags.print.use_base=-DPRINT_USE_BASE_BIN -DPRINT_USE_BASE_DEC -DPRINT_USE_BASE_HEX
 
-attiny13_diy.menu.print.Arbitrary=Full Support For Arbitrary Bases (Biggest)
-attiny13_diy.menu.print.Arbitrary.build.custom_flags.print.use_base=-DPRINT_USE_BASE_ARBITRARY
+# The tiny13 doesn't have enough RAM to do Arbitrary Bases
+# attiny13.menu.print.Arbitrary=Full Support For Arbitrary Bases (Biggest)
+# attiny13.menu.print.Arbitrary.build.custom_flags.print.use_base=-DPRINT_USE_BASE_ARBITRARY
 
-attiny13_diy.menu.print.BinHexDecOct=Bin, Hex, Dec, Oct Supported
-attiny13_diy.menu.print.BinHexDecOct.build.custom_flags.print.use_base=-DPRINT_USE_BASE_BIN -DPRINT_USE_BASE_DEC -DPRINT_USE_BASE_HEX -DPRINT_USE_BASE_OCT
+attiny13.menu.print.BinHexDecOct=Bin, Hex, Dec, Oct Supported
+attiny13.menu.print.BinHexDecOct.build.custom_flags.print.use_base=-DPRINT_USE_BASE_BIN -DPRINT_USE_BASE_DEC -DPRINT_USE_BASE_HEX -DPRINT_USE_BASE_OCT
 
-attiny13_diy.menu.print.Dec=Dec Only Supported
-attiny13_diy.menu.print.Dec.build.custom_flags.print.use_base=-DPRINT_USE_BASE_DEC
+attiny13.menu.print.Dec=Dec Only Supported
+attiny13.menu.print.Dec.build.custom_flags.print.use_base=-DPRINT_USE_BASE_DEC
 
-attiny13_diy.menu.print.Hex=Hex Only Supported
-attiny13_diy.menu.print.Hex.build.custom_flags.print.use_base=-DPRINT_USE_BASE_HEX
+attiny13.menu.print.Hex=Hex Only Supported
+attiny13.menu.print.Hex.build.custom_flags.print.use_base=-DPRINT_USE_BASE_HEX
 
-attiny13_diy.menu.print.Oct=Oct Only Supported
-attiny13_diy.menu.print.Oct.build.custom_flags.print.use_base=-DPRINT_USE_BASE_OCT
+attiny13.menu.print.Oct=Oct Only Supported
+attiny13.menu.print.Oct.build.custom_flags.print.use_base=-DPRINT_USE_BASE_OCT
 
-attiny13_diy.menu.print.Bin=Bin Only Supported (Smallest)
-attiny13_diy.menu.print.Bin.build.custom_flags.print.use_base=-DPRINT_USE_BASE_BIN
+attiny13.menu.print.Bin=Bin Only Supported (Smallest)
+attiny13.menu.print.Bin.build.custom_flags.print.use_base=-DPRINT_USE_BASE_BIN
+
+
+# Millis Accuracy (tiny13 only currently)
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+attiny13.menu.milis_ppm.1p6=Better Or Equal 1.666% Error (Default)
+attiny13.menu.milis_ppm.1p6.build.custom_flags.milis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=16666UL
+
+attiny13.menu.milis_ppm.50p=Better Or Equal 50% Error (Lowest Code Use)
+attiny13.menu.milis_ppm.50p.build.custom_flags.milis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=500000UL
+
+attiny13.menu.milis_ppm.25p=Better Or Equal 25% Error
+attiny13.menu.milis_ppm.25p.build.custom_flags.milis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=250000UL
+
+attiny13.menu.milis_ppm.10p=Better Or Equal 10% Error
+attiny13.menu.milis_ppm.10p.build.custom_flags.milis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=100000UL
+
+attiny13.menu.milis_ppm.5p=Better Or Equal 5% Error
+attiny13.menu.milis_ppm.5p.build.custom_flags.milis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=50000UL
+
+attiny13.menu.milis_ppm.2p5=Better Or Equal 2.5% Error
+attiny13.menu.milis_ppm.2p5.build.custom_flags.milis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=25000UL
+
+attiny13.menu.milis_ppm.1p=Better Or Equal 1% Error
+attiny13.menu.milis_ppm.1p.build.custom_flags.milis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=10000UL
+
+attiny13.menu.milis_ppm.0p5=Better Or Equal 0.5% Error
+attiny13.menu.milis_ppm.0p5.build.custom_flags.milis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=5000UL
+
+attiny13.menu.milis_ppm.0p25=Better Or Equal 0.25% Error
+attiny13.menu.milis_ppm.0p25.build.custom_flags.milis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=2500UL
+
+attiny13.menu.milis_ppm.0p1=Better Or Equal 0.1% Error (Highest Code Use)
+attiny13.menu.milis_ppm.0p1.build.custom_flags.milis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=1000UL
 
 
 
