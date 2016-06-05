@@ -90,6 +90,6 @@ void _turnOnMillis(uint8_t prescale)
 void _turnOffMillis()
 {
   // Stop timer0 running, disable the interrupt
-  TCCR0B &= ~_BV(CS00);  // Stop Timer  
+  TCCR0B &= ~(_BV(CS00)|_BV(CS01));  // Stop Timer  
   TIMSK0 &= ~_BV(TOIE0); // Disable Timer Overflow Interrupt 0  
 }

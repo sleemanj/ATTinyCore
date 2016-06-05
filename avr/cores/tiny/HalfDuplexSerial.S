@@ -28,6 +28,7 @@
 ; AVR305 has 1 cycle of jitter per bit, this has none
 .global TxByte
 TxByte:
+  cli
   sbi UART_Port-1, UART_Tx    ; set Tx line to output
   cbi UART_Port, UART_Tx      ; start bit
   in r0, UART_Port
@@ -44,6 +45,7 @@ TxDelay:
   ror r24             ; 2-byte shift register
   out UART_Port, r0
   brne TxLoop
+  sei
   ret
 
   
@@ -58,6 +60,9 @@ RxByte:
   sbic UART_Port-2, UART_Rx   ; wait for start edge  
   rjmp RxByte    
 GotStartBit:
+  push r16
+  in r16, SREG; Save status register 
+  cli ; Clear interrupts - if we allow interrupts here (eg for millis) we lose bits
   ldi r24, 0x80         ; bit shift counter
   ldi delayArg, RXSTART     ; 1.5 bit delay
 RxBit:
@@ -70,6 +75,8 @@ RxBit:
     nop                             ; match 7-cycle Tx loop
   brcc RxBit
   ; fall into delay for stop bit
+  out SREG, r16 ; Return status register, this enables interrupts again
+  pop r16
 
 ; delay (3 cycle * delayArg) -1 + 4 cycles (ret instruction)
 Delay3Cycle:
@@ -85,12 +92,12 @@ Delay3Cycle:
 ; Non-Blocking RX Byte with zero return
 RxByteNBZeroReturn:
   sbic UART_Port-2, UART_Rx   ; wait for start edge
-  rjmp NoWaitRxZeroReturn     ; if no start, drop iyt with a zero return
+  rjmp NoWaitRxZeroReturn     ; if no start, drop out with a zero return
   rjmp GotStartBit            ; otherwise read the byte in
    
 RxByteNBNegOneReturn:
   sbic UART_Port-2, UART_Rx   ; wait for start edge
-  rjmp NoWaitRxNegOneReturn   ; if no start, drop iyt with a zero return
+  rjmp NoWaitRxNegOneReturn   ; if no start, drop out with a zero return
   ldi r25, 0x00               ; this routine will return an int, 
                               ; because Serial.write() does normally return -1 when no data is read
                               ; since we are returning data set the upper byte of the int to zero

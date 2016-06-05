@@ -409,16 +409,17 @@ attiny13.build.extra_flags=-DNO_TONE
 
 # Serial Menu
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 attiny13.menu.serial.HalfDuplexRW=Half Duplex, Read+Write
 attiny13.menu.serial.HalfDuplexRW.build.custom_flags.serial.use_serial_type=-DUSE_SERIAL_TYPE=SERIAL_TYPE_HALF_DUPLEX
 
-attiny13.menu.serial.HalfDuplexR=Half Duplex, Read Only
-attiny13.menu.serial.HalfDuplexR.build.custom_flags.serial.use_serial_type=-DUSE_SERIAL_TYPE=SERIAL_TYPE_HALF_DUPLEX -DHALF_DUPLEX_SERIAL_DISABLE_WRITE
+attiny13.menu.serial.HalfDuplexRWStream=Half Duplex, Read+Write Inherits Stream
+attiny13.menu.serial.HalfDuplexRWStream.build.custom_flags.serial.use_serial_type=-DUSE_SERIAL_TYPE=SERIAL_TYPE_HALF_DUPLEX -DHALFDUPLEXSERIAL_INHERIT_FROM=Stream
 
-attiny13.menu.serial.HalfDuplexW=Half Duplex, Write (Print) Only
-attiny13.menu.serial.HalfDuplexW.build.custom_flags.serial.use_serial_type=-DUSE_SERIAL_TYPE=SERIAL_TYPE_HALF_DUPLEX -DHALF_DUPLEX_SERIAL_DISABLE_READ
+attiny13.menu.serial.HalfDuplexRStream=Half Duplex, Read Only Inherits Stream
+attiny13.menu.serial.HalfDuplexRStream.build.custom_flags.serial.use_serial_type=-DUSE_SERIAL_TYPE=SERIAL_TYPE_HALF_DUPLEX -DHALF_DUPLEX_SERIAL_DISABLE_WRITE -DHALFDUPLEXSERIAL_INHERIT_FROM=Stream
 
+attiny13.menu.serial.HalfDuplexWStream=Half Duplex, Write Only Inherits Stream
+attiny13.menu.serial.HalfDuplexWStream.build.custom_flags.serial.use_serial_type=-DUSE_SERIAL_TYPE=SERIAL_TYPE_HALF_DUPLEX -DHALF_DUPLEX_SERIAL_DISABLE_READ
 
 # Print Menu
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -79,6 +79,7 @@ char HalfDuplexSerial::read_char(void)
 
 char HalfDuplexSerial::read_char_blocking(void)
 {
+  cli();
   return RxByte();  
 }
 
@@ -95,10 +96,15 @@ void HalfDuplexSerial::read_str(char buf[], uint8_t length)
   // and corrupted bytes.
   //
   // The usefulness of this routine is questionable at best.
+  //
+  // Interrupts are disabled during the entire read
+  uint8_t zSREG = SREG;
+  cli();
   do
   {    
     while( (!(buf[i] = RxByteNBZeroReturn())) && --t);    
   } while((++i < (length-1)) && t);
+  SREG=zSREG; // Put back interrupts again
   
   // i ends up as the index of the next character to read
   // this is at most length-1 so we can simply set i to be 
@@ -109,7 +115,7 @@ void HalfDuplexSerial::read_str(char buf[], uint8_t length)
 
 size_t HalfDuplexSerial::write(uint8_t ch)
 {      
-  #ifndef HALF_DUPLEX_SERIAL_DISABLE_WRITE
+  #ifndef HALF_DUPLEX_SERIAL_DISABLE_WRITE  
   TxByte(ch);
   #endif
   return 1;  

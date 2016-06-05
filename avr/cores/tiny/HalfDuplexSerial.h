@@ -106,8 +106,11 @@ asm (
     );
 }
 
+#ifndef HALFDUPLEXSERIAL_INHERIT_FROM 
+  #define HALFDUPLEXSERIAL_INHERIT_FROM Print
+#endif
 
-class HalfDuplexSerial : public Stream
+class HalfDuplexSerial : public HALFDUPLEXSERIAL_INHERIT_FROM
 {
   public:
     void begin(const uint32_t) { }   // Does NOTHING, you have no need to call this, here only for compatability
