@@ -40,6 +40,7 @@ void pinMode(uint8_t pin, uint8_t mode)
 	reg = portModeRegister(port);
 	out = portOutputRegister(port);
 
+#if 0
 	if (mode == INPUT) { 
 		uint8_t oldSREG = SREG;
                 cli();
@@ -58,6 +59,40 @@ void pinMode(uint8_t pin, uint8_t mode)
 		*reg |= bit;
 		SREG = oldSREG;
 	}
+#else
+  // The above is the standard Arduino code, note that it
+  // disables/enables interrupts in each case separately
+  // I expect (benefit of the doubt) this was intentional
+  // to avoid having interrupts disabled longer than strictly
+  // necessary however we are talking about a couple of 
+  // comparisons it's not really a big deal and saves 4 bytes 
+  // of flash not to do it which I think is a bigger win 
+  // for Tiny processors.
+  //
+  // The reasoning for disabling them at all is here:
+  //   https://github.com/arduino/Arduino/issues/146
+  // in short, yes it's necessary.
+  uint8_t oldSREG = SREG;
+  cli();
+  switch(mode)
+  {
+    case INPUT:
+      *reg &= ~bit; // Set to input
+      *out &= ~bit; // Disable pullup
+      break;
+      
+    case INPUT_PULLUP:
+      *reg &= ~bit; // Set to input
+      *out |= bit;  // Enable pullup
+      break;
+      
+    case OUTPUT:
+    default    :
+      *reg |= bit;  // Set to output
+      break;
+  }
+  SREG = oldSREG;
+#endif
 }
 
 // Variants may redefine this as a macro to save space 
@@ -134,6 +169,7 @@ void digitalWrite(uint8_t pin, uint8_t val)
 
 	out = portOutputRegister(port);
 
+#if 0
 	if (val == LOW) {
 		uint8_t oldSREG = SREG;
     cli();
@@ -145,6 +181,34 @@ void digitalWrite(uint8_t pin, uint8_t val)
 		*out |= bit;
 		SREG = oldSREG;
 	}
+#else
+  // The above is the standard Arduino code, note that it
+  // disables/enables interrupts in each case separately
+  // I expect (benefit of the doubt) this was intentional
+  // to avoid having interrupts disabled longer than strictly
+  // necessary however we are talking about a single comparison 
+  // it's not really a big deal and saves 8 bytes 
+  // of flash not to do it which I think is a bigger win 
+  // for Tiny processors.
+  //
+  // The reasoning for disabling them at all is here:
+  //   https://github.com/arduino/Arduino/issues/146
+  // in short, yes it's necessary.
+  uint8_t oldSREG = SREG;
+  cli();
+  switch(val)
+  {
+    case LOW:
+      *out &= ~bit; // Write LOW
+      break;
+    
+    case HIGH:
+    default  :
+      *out |= bit; // Write HIGH
+      break;
+  }
+  SREG = oldSREG;
+#endif
 }
 
 int digitalRead(uint8_t pin)
