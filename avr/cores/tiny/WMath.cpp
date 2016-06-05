@@ -51,7 +51,7 @@ long random(long howsmall, long howbig)
   return random(diff) + howsmall;
 }
 
-// #FIXME: There must be a better way to see the PRNG that doesn't 
+// #FIXME: There must be a better way to seed the PRNG that doesn't 
 //         cost us much.  I'd be happy with just a random pre-generated
 //         seed at compile time, but there's no way to to that in Gcc 
 //         macros it seems.
