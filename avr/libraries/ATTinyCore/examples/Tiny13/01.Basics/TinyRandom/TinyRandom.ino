@@ -1,14 +1,22 @@
 /*
-  Read Digital Pin, Output To Serial
+  Generate random numbers and print to Serial
   ------------------------------------------------------------------------------
   
   [ See pinout: https://goo.gl/ijL0of ]
   
-  Reads a digital input on pin 2, prints the result to the serial monitor
+  The tiny13 is too small to use the stdlb random number generator
+  so instead is provided a simplistic 16bit XOR random number generator.
 
-  [ BUTTON_PIN ] +-> [ BUTTON ] -> [ Vcc ]
-                 |
-                 \-> [10k Resistor] -> [ Gnd ]
+  The random numbers are not particularly great in a statistical sense, 
+  but it's enough to introduce some randomness in your life.
+
+  The tiny_random() function will return numbers from 0 to 65534 inclusive
+
+  The implementation is from here:
+  http://www.arklyffe.com/main/2010/08/29/xorshift-pseudorandom-number-generator/
+  (modified to subtract 1 from the result to get it rooted to zero).
+
+  It's implemented in the WMath.cpp in this core.
      
   Recommended Settings For This Sketch
   ------------------------------------------------------------------------------
@@ -45,29 +53,19 @@
   
 */
 
-const uint8_t BUTTON_PIN = 2;
-
-
 void setup() 
-{                       
-  Serial.begin(57600);         // NOTICE the baud rate specified is ignored on the T13
-                               //  Instead it is hard coded as follows...
-                               //  Processors at 9.6MHz ==> 57600
-                               //  Processors at 4.8 and 1.2MHz ==> 9600
-  
-  pinMode(BUTTON_PIN, INPUT);  // Not strictly necessary because it will be an INPUT already at boot
-                               // but for clarity we will include it anyway.  If you are short on space
-                               // think about what the chip state is initially to see if you can
-                               // omit things like this.
+{
+  Serial.begin(57600); // NOTICE the baud rate specified is ignored on the T13
+                       //  Instead it is hard coded as follows...
+                       //  Processors at 9.6MHz ==> 57600
+                       //  Processors at 4.8 and 1.2MHz ==> 9600
+
+  // Seed the generator
+  tiny_srandom(analogRead(3));  
 }
 
 void loop() 
-{  
-  uint8_t buttonState = digitalRead(BUTTON_PIN);
-   
-  Serial.println(buttonState);
-  delay(100);      
+{
+  Serial.println(tiny_random());
+  delay(10);
 }
-
-
-

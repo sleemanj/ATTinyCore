@@ -1,17 +1,15 @@
 /*
-  Read Digital Pin, Output To Serial
+  Print menu to Serial, read selection from Serial
   ------------------------------------------------------------------------------
   
   [ See pinout: https://goo.gl/ijL0of ]
   
-  Reads a digital input on pin 2, prints the result to the serial monitor
-
-  [ BUTTON_PIN ] +-> [ BUTTON ] -> [ Vcc ]
-                 |
-                 \-> [10k Resistor] -> [ Gnd ]
-     
+  Gives you some options, allows you to pick from them by sending a single
+  character.  Blocks until you choose.
+       
   Recommended Settings For This Sketch
   ------------------------------------------------------------------------------
+  (* indicates non default)
   
   Tools > Board                 : ATTiny13
   Tools > Processor Version     : ATTiny13
@@ -45,29 +43,43 @@
   
 */
 
-const uint8_t BUTTON_PIN = 2;
-
-
 void setup() 
-{                       
-  Serial.begin(57600);         // NOTICE the baud rate specified is ignored on the T13
-                               //  Instead it is hard coded as follows...
-                               //  Processors at 9.6MHz ==> 57600
-                               //  Processors at 4.8 and 1.2MHz ==> 9600
-  
-  pinMode(BUTTON_PIN, INPUT);  // Not strictly necessary because it will be an INPUT already at boot
-                               // but for clarity we will include it anyway.  If you are short on space
-                               // think about what the chip state is initially to see if you can
-                               // omit things like this.
+{
+  Serial.begin(57600); // NOTICE the baud rate specified is ignored on the T13
+                       //  Instead it is hard coded as follows...
+                       //  Processors at 9.6MHz ==> 57600
+                       //  Processors at 4.8 and 1.2MHz ==> 9600
 }
 
 void loop() 
-{  
-  uint8_t buttonState = digitalRead(BUTTON_PIN);
-   
-  Serial.println(buttonState);
-  delay(100);      
+{
+  
+  Serial.println(F("\n~~ Tiny Menu ~~\n"));  
+  Serial.println(F("1. Say Hello"));
+  Serial.println(F("2. Say Goodbye"));
+  Serial.println(F("3. Sing"));
+  Serial.println(F("4. Jack"));
+  
+  switch(Serial.read_char_blocking())
+  {
+    case '1':
+      Serial.println(F(">> Hello"));
+      break;
+    case '2':
+      Serial.println(F(">> Goodbye"));
+      break;
+    case '3':
+      Serial.println(F(">> Daisy, daisy, give me your answer do."));
+      break;
+    case '4':
+      for(uint8_t x = 0; x < 100; x++)
+      {
+        Serial.println(F("All work and no play makes Jack a dull boy."));       
+      }
+      break;
+    default:
+      Serial.println(F("* Unkown Command *"));
+      break;
+  }
+  delay(1000);
 }
-
-
-

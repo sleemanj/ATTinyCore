@@ -1,36 +1,71 @@
- /*
-  For ATTiny13 Arduino Pinout: https://goo.gl/ijL0of  
-
+/*
+  Press button, toggle LED.
+  ------------------------------------------------------------------------------
+  
+  [ See pinout: https://goo.gl/ijL0of ]
+  
   Toggles a light emitting diode(LED) connected to digital
-  pin 2, each time you press a pushbutton attached to pin 3 while using the
+  pin 1, each time you press a pushbutton attached to pin 2 while using the
   internal pullup to save an external resistor and implementing de-bouncing
   to combat switch bounce.
 
   LED changes state when you release the button (rising edge).
 
-  NB Since the T13 is very constrained in flash/ram this is probably
-     overkill, and you might just slap a capacitor on your button pin
-     to ground.
-     
-     Alternatively, see StateChangeDetection example for simple delay()
-     based debounce then you can choose the Smallest Core Size without
-     millis()
+  NB: Since the T13 is very constrained in flash/ram this is probably
+      impractical, and you might just slap a capacitor on your button pin
+      to ground.
+      
+      Alternatively, see StateChangeDetection example for simple delay()
+      based debounce then you can choose the Smallest Core Size without
+      millis()
 
   [ LED_PIN ]    -> [Resistor 240R]   -> [LED] -> [Ground]
   [ BUTTON_PIN ] -> [ Button ]     -> [Gnd]
+     
+  Recommended Settings For This Sketch
+  ------------------------------------------------------------------------------
+  
+  Tools > Board                 : ATTiny13
+  Tools > Processor Version     : ATTiny13
+  Tools > Use Bootloader        : No (ISP Programmer Upload)
+  Tools > Processor Speed       : 9.6MHz Internal Oscillator
+  Tools > Millis, Tone Support  : Millis Available, No Tone
+  Tools > Millis Accuracy       : 1.666%
+  Tools > Print Support         : Bin, Hex, Dec Supported
+  Tools > Serial Support        : Half Duplex, Read+Write
+     
+  Serial Reminder
+  ------------------------------------------------------------------------------
+  The Baud Rate is IGNORED on the Tiny13 due to using a simplified serial.
+  
+  The actual Baud Rate used is dependant on the Processor Speed.
+  
+  9.6MHz will be 57600 Baud
+  4.8MHz will be 9600 Baud
+  1.2MHz will be 9600 Baud
+  
+  Pinout
+  ------------------------------------------------------------------------------
+  For ATTiny13 Arduino Pinout: https://goo.gl/ijL0of  
 
- */
+  You don't have much flash or ram to work with.  Remember to think about data type sizes!
 
+  Running short on memory, try this tool to help you track down optimisable areas:
+    http://sparks.gogo.co.nz/avr-ram-use.html
+  
+  Good Luck With Your Itsy Bitsy Teeny Weeny AVR Arduineee
+  
+*/
 
-const uint8_t buttonPin = 3;       // the number of the pushbutton pin
-const uint8_t ledPin = 2;         // the number of the LED pin
-const uint8_t debounceDelay = 50;  // milliseconds the button must be in a stable state   
+const uint8_t buttonPin = 2;        // the number of the pushbutton pin
+const uint8_t ledPin = 1;           // the number of the LED pin
+const uint8_t debounceDelay = 100;  // milliseconds the button must be in a stable state   
 
 uint8_t ledState = LOW;             // the current state of the output pin
 uint8_t buttonState     = HIGH;     // the current reading from the input pin,  initial value = default (pullup, so high)
 uint8_t lastButtonState = HIGH;     // the previous reading from the input pin, initial value = default (pullup, so high)
 
-uint32_t lastDebounceTime = 0;     // the last time the output pin was toggled
+uint32_t lastDebounceTime = 0;      // the last time the output pin was toggled
 uint8_t count = 0;
 
 void setup() 

@@ -1,17 +1,21 @@
 /*
-  Read Digital Pin, Output To Serial
+  Read string from Serial, Print string to Serial
   ------------------------------------------------------------------------------
   
   [ See pinout: https://goo.gl/ijL0of ]
   
-  Reads a digital input on pin 2, prints the result to the serial monitor
+  Asks your name, says hello.  Not very exciting, but anyway.
 
-  [ BUTTON_PIN ] +-> [ BUTTON ] -> [ Vcc ]
-                 |
-                 \-> [10k Resistor] -> [ Gnd ]
-     
+  There is an important note here with regard to reading strings over 
+  Serial on the Tiny13.  Because of a lack of hardware serial support
+  interrupts are disabled for the ENTIRE READ of the string.  That means that
+  millis() will "lose time" for the period you are reading the string.
+
+  Just bear that in mind.
+       
   Recommended Settings For This Sketch
   ------------------------------------------------------------------------------
+  (* indicates non default)
   
   Tools > Board                 : ATTiny13
   Tools > Processor Version     : ATTiny13
@@ -45,29 +49,23 @@
   
 */
 
-const uint8_t BUTTON_PIN = 2;
-
-
 void setup() 
-{                       
-  Serial.begin(57600);         // NOTICE the baud rate specified is ignored on the T13
-                               //  Instead it is hard coded as follows...
-                               //  Processors at 9.6MHz ==> 57600
-                               //  Processors at 4.8 and 1.2MHz ==> 9600
-  
-  pinMode(BUTTON_PIN, INPUT);  // Not strictly necessary because it will be an INPUT already at boot
-                               // but for clarity we will include it anyway.  If you are short on space
-                               // think about what the chip state is initially to see if you can
-                               // omit things like this.
+{
+  Serial.begin(57600); // NOTICE the baud rate specified is ignored on the T13
+                       //  Instead it is hard coded as follows...
+                       //  Processors at 9.6MHz ==> 57600
+                       //  Processors at 4.8 and 1.2MHz ==> 9600
 }
 
 void loop() 
-{  
-  uint8_t buttonState = digitalRead(BUTTON_PIN);
-   
-  Serial.println(buttonState);
-  delay(100);      
+{    
+  Serial.println(F("What is your name traveller?"));  
+  char buf[10];
+  do
+  {    
+    Serial.read_str(buf, sizeof(buf));   
+  } while(!buf[0]);
+  
+  Serial.print(F("Nice to meet you "));
+  Serial.println(buf);
 }
-
-
-
