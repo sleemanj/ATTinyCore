@@ -124,17 +124,16 @@ This section incomplete, see pins_arduino.h in the specific [variant folder](avr
  ![ATtiny13 Arduino Pin Mapping](https://cdn.rawgit.com/sleemanj/ArduinoOrientedChipPinoutCreator/master/13.jpg)
  
 ### ATtinyX4 
+
+Two styles of numbering are available, the New Style which follows that of David Mellis' [Hi-Low Tech](http://highlowtech.org/?p=1695) distribution, this has the digital pin numbering co-inciding with the analog pin numbering.
  
- Two styles of numbering are available, the New Style which follows that of David Mellis' [Hi-Low Tech](http://highlowtech.org/?p=1695) distribution, this has the digital pin numbering co-inciding with the analog pin numbering.
- 
- **New Style**
+**New Style**
  ![New Style ATtinyX4 Arduino Pin Mapping](https://cdn.rawgit.com/sleemanj/ArduinoOrientedChipPinoutCreator/master/x4.jpg)
- 
-   
+
 And the old style which reverses the digital pin numbering so that A0 is D10, A1 is D9 etc.
 
- **Old Style**
- ![Old Style ATtinyX4 Arduino Pin Mapping](https://cdn.rawgit.com/sleemanj/ATTinyCore/master/avr/variants/tinyX4/Pin_Mapping_ATtiny24_44_84.svg)
+**Old Style**
+ ![Old Style ATtinyX4 Arduino Pin Mapping](https://cdn.rawgit.com/sleemanj/ArduinoOrientedChipPinoutCreator/master/x4-alt.jpg)
 
 ### ATtinyX5
 
@@ -192,7 +191,7 @@ Note that two pin mappings are supported for some devices to retain backwards co
 
 Full pin mapping diagrams are planned for a future version see #50
 
-Note that analog pin numbers (ex A0 ) cannot be used with digitalWrite()/digitalRead()/analogWrite() - all pins have a digital pin number. Analog pin number should only be used for analogRead()
+Note that analog pin numbers (ex A0 ) cannot be used with digitalWrite()/digitalRead()/analogWrite()/pinMode() - all pins have a digital pin number. Analog pin number should only be used for analogRead()
 
 Hardware
 ============
