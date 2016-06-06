@@ -128,12 +128,14 @@ This section incomplete, see pins_arduino.h in the specific [variant folder](avr
 Two styles of numbering are available, the New Style which follows that of David Mellis' [Hi-Low Tech](http://highlowtech.org/?p=1695) distribution, this has the digital pin numbering co-inciding with the analog pin numbering.
  
 **New Style**
- ![New Style ATtinyX4 Arduino Pin Mapping](https://cdn.rawgit.com/sleemanj/ArduinoOrientedChipPinoutCreator/master/x4.jpg)
+
+![New Style ATtinyX4 Arduino Pin Mapping](https://cdn.rawgit.com/sleemanj/ArduinoOrientedChipPinoutCreator/master/x4.jpg)
 
 And the old style which reverses the digital pin numbering so that A0 is D10, A1 is D9 etc.
 
 **Old Style**
- ![Old Style ATtinyX4 Arduino Pin Mapping](https://cdn.rawgit.com/sleemanj/ArduinoOrientedChipPinoutCreator/master/x4-alt.jpg)
+
+![Old Style ATtinyX4 Arduino Pin Mapping](https://cdn.rawgit.com/sleemanj/ArduinoOrientedChipPinoutCreator/master/x4-alt.jpg)
 
 ### ATtinyX5
 
@@ -142,34 +144,12 @@ And the old style which reverses the digital pin numbering so that A0 is D10, A1
 
 ### ATtiny 441/841
 ![x41 pin mapping](http://drazzy.com/e/img/PinoutT841.jpg "Arduino Pin Mapping for ATTiny 841 and 441")
+
 ### ATtiny 1634
 ![1634 pin mapping](http://drazzy.com/e/img/PinoutT1634.jpg "Arduino Pin Mapping for ATTiny 1634")
 
 ### ATtiny 828
-
-```
-
-ATtiny 828 pin mapping. All pin numbers match ADC and PCINT numbers
-
-//             16*   26   24   14
-//          17    27   25   15
-//             PC0  PD2  PD0  PB6
-//          PC1  PD3  PD1   PB7
-//             _________________
-// 18 RX  PC2 | *               | PB5   13
-// 19 TX  PC3 |                 | PB4   12
-// 20 *   PC4 |                 | PB3   11
-//        VCC |                 | GND
-//        GND |                 | PB2   10
-// 21 *   PC5 |                 | PB1    9
-// 22 *   PC6 |                 | AVCC
-// 23     PC7 |_________________| PB0    8
-//           PA0  PA2  PA4  PA6 
-//              PA1  PA3  PA5  PA7
-//            0     2    4    6
-//               1     3    5    7
-
-```
+![828 Pin Mapping](https://rawgit.com/sleemanj/ArduinoOrientedChipPinoutCreator/master/tiny828.jpg)
 
 ### ATtiny 25/45/85
 ![x5 pin mapping](http://drazzy.com/e/img/PinoutT85.png "Arduino Pin Mapping for ATtiny x5 series")
