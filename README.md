@@ -121,14 +121,14 @@ Pin Mapping
 This section incomplete, see pins_arduino.h in the specific [variant folder](avr/variants) for more.
 
 ### ATtiny13
- ![ATtiny13 Arduino Pin Mapping](https://cdn.rawgit.com/sleemanj/ATTinyCore/master/avr/variants/tiny13/Pin_Mapping_ATtiny13.svg)
+ ![ATtiny13 Arduino Pin Mapping](https://cdn.rawgit.com/sleemanj/ArduinoOrientedChipPinoutCreator/master/13.jpg)
  
 ### ATtinyX4 
  
  Two styles of numbering are available, the New Style which follows that of David Mellis' [Hi-Low Tech](http://highlowtech.org/?p=1695) distribution, this has the digital pin numbering co-inciding with the analog pin numbering.
  
  **New Style**
- ![New Style ATtinyX4 Arduino Pin Mapping](https://cdn.rawgit.com/sleemanj/ATTinyCore/master/avr/variants/tinyX4_Arduino_Numbering/Pin_Mapping_ATtiny24_44_84.svg)
+ ![New Style ATtinyX4 Arduino Pin Mapping](https://cdn.rawgit.com/sleemanj/ArduinoOrientedChipPinoutCreator/master/x4.jpg)
  
    
 And the old style which reverses the digital pin numbering so that A0 is D10, A1 is D9 etc.
@@ -138,7 +138,7 @@ And the old style which reverses the digital pin numbering so that A0 is D10, A1
 
 ### ATtinyX5
 
- ![ATtinyX5 Arduino Pin Mapping](https://cdn.rawgit.com/sleemanj/ATTinyCore/master/avr/variants/tinyX5/Pin_Mapping_ATtiny25_45_85.svg)
+ ![ATtinyX5 Arduino Pin Mapping](https://cdn.rawgit.com/sleemanj/ArduinoOrientedChipPinoutCreator/master/x5.jpg)
  
 
 ### ATtiny 441/841
