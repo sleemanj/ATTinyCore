@@ -5,13 +5,18 @@
 // millis() and micros() are disabled entirely with NO_MILLIS
 #ifndef NO_MILLIS
 #include <avr/interrupt.h>
-/*
-volatile MillisMicrosTime_t ovrf=0;
 
-ISR(MILLIS_TIMER_OVERFLOW_VECTOR)
-{
-  ovrf++; //Increment counter every 256 clock cycles  
-}
+/*
+ * The overflow interrupt and incrementing of the counter is done
+ * by pins_arduino.c of the variant in usage, this is an example 
+ * of how you would do that in pins_arduino.c
+ 
+  extern volatile MillisMicrosTime_t ovrf;
+  
+  ISR(TIM0_OVF_vect)
+  {
+    ovrf++; //Increment counter every 256 clock cycles  
+  }
 */
 
 volatile MillisMicrosTime_t ovrf=0;
@@ -888,7 +893,7 @@ void delay(DelayTime_t ms)
   //
   // Anyway, we can't use delayMicroseconds() for this if millis() is available
   // or the delay will be quite inaccurate.
-  
+    
   MillisMicrosTime_t current = millis();
   while(millis() - current < ms);
   return;
