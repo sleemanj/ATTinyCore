@@ -58,7 +58,7 @@ build.custom_flags.serial.use_serial_type=
     #     -DUSE_SERIAL_TYPE=SERIAL_TYPE_HALF_DUPLEX -DHALF_DUPLEX_SERIAL_DISABLE_WRITE
     #     -DUSE_SERIAL_TYPE=SERIAL_TYPE_HALF_DUPLEX -DHALF_DUPLEX_SERIAL_DISABLE_READ
     
-build.custom_flags.milis_ppm=
+build.custom_flags.millis_ppm=
     #     -DACCEPTABLE_MILLIS_ERROR_PPM=1000UL
 
 # These can be overridden in platform.local.txt

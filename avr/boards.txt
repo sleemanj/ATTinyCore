@@ -449,35 +449,35 @@ attiny13.menu.print.Bin.build.custom_flags.print.use_base=-DPRINT_USE_BASE_BIN
 
 # Millis Accuracy (tiny13 only currently)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-attiny13.menu.milis_ppm.1p6=Better Or Equal 1.666% Error (Default)
-attiny13.menu.milis_ppm.1p6.build.custom_flags.milis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=16666UL
+attiny13.menu.millis_ppm.1p6=Better Or Equal 1.666% Error (Default)
+attiny13.menu.millis_ppm.1p6.build.custom_flags.millis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=16666UL
 
-attiny13.menu.milis_ppm.50p=Better Or Equal 50% Error (Lowest Code Use)
-attiny13.menu.milis_ppm.50p.build.custom_flags.milis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=500000UL
+attiny13.menu.millis_ppm.50p=Better Or Equal 50% Error (Lowest Code Use)
+attiny13.menu.millis_ppm.50p.build.custom_flags.millis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=500000UL
 
-attiny13.menu.milis_ppm.25p=Better Or Equal 25% Error
-attiny13.menu.milis_ppm.25p.build.custom_flags.milis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=250000UL
+attiny13.menu.millis_ppm.25p=Better Or Equal 25% Error
+attiny13.menu.millis_ppm.25p.build.custom_flags.millis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=250000UL
 
-attiny13.menu.milis_ppm.10p=Better Or Equal 10% Error
-attiny13.menu.milis_ppm.10p.build.custom_flags.milis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=100000UL
+attiny13.menu.millis_ppm.10p=Better Or Equal 10% Error
+attiny13.menu.millis_ppm.10p.build.custom_flags.millis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=100000UL
 
-attiny13.menu.milis_ppm.5p=Better Or Equal 5% Error
-attiny13.menu.milis_ppm.5p.build.custom_flags.milis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=50000UL
+attiny13.menu.millis_ppm.5p=Better Or Equal 5% Error
+attiny13.menu.millis_ppm.5p.build.custom_flags.millis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=50000UL
 
-attiny13.menu.milis_ppm.2p5=Better Or Equal 2.5% Error
-attiny13.menu.milis_ppm.2p5.build.custom_flags.milis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=25000UL
+attiny13.menu.millis_ppm.2p5=Better Or Equal 2.5% Error
+attiny13.menu.millis_ppm.2p5.build.custom_flags.millis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=25000UL
 
-attiny13.menu.milis_ppm.1p=Better Or Equal 1% Error
-attiny13.menu.milis_ppm.1p.build.custom_flags.milis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=10000UL
+attiny13.menu.millis_ppm.1p=Better Or Equal 1% Error
+attiny13.menu.millis_ppm.1p.build.custom_flags.millis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=10000UL
 
-attiny13.menu.milis_ppm.0p5=Better Or Equal 0.5% Error
-attiny13.menu.milis_ppm.0p5.build.custom_flags.milis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=5000UL
+attiny13.menu.millis_ppm.0p5=Better Or Equal 0.5% Error
+attiny13.menu.millis_ppm.0p5.build.custom_flags.millis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=5000UL
 
-attiny13.menu.milis_ppm.0p25=Better Or Equal 0.25% Error
-attiny13.menu.milis_ppm.0p25.build.custom_flags.milis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=2500UL
+attiny13.menu.millis_ppm.0p25=Better Or Equal 0.25% Error
+attiny13.menu.millis_ppm.0p25.build.custom_flags.millis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=2500UL
 
-attiny13.menu.milis_ppm.0p1=Better Or Equal 0.1% Error (Highest Code Use)
-attiny13.menu.milis_ppm.0p1.build.custom_flags.milis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=1000UL
+attiny13.menu.millis_ppm.0p1=Better Or Equal 0.1% Error (Highest Code Use)
+attiny13.menu.millis_ppm.0p1.build.custom_flags.millis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=1000UL
 
 
 
