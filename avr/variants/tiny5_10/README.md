@@ -1,4 +1,4 @@
-Special Considerations for the ATTiny 4/5/9/10 in Arduino
+Special Considerations for the ATTiny 4/5/9/10 in Arduino ATTinyCore
 -------------------------------------------------------------------------------
 
 ## Toolchain
