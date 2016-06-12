@@ -64,11 +64,16 @@ void analogReference(uint8_t mode)
 uint16_t _analogRead(uint8_t pin)
 {
   
+  #if defined(REFS0)
   #if defined(ADMUX)
   ADMUX = ((analog_reference & ADMUX_REFS_MASK) << REFS0) | ((pin & ADMUX_MUX_MASK) << MUX0); //select the channel and reference
   #if defined(REFS2)
   ADMUX |= (((analog_reference & 0x04) >> 2) << REFS2); //some have an extra reference bit in a weird position.
   #endif
+  #endif
+  #else
+    // Chips without any other reference than Vcc
+    ADMUX = pin;
   #endif
   
   #if defined(HAVE_ADC) && HAVE_ADC
@@ -77,8 +82,14 @@ uint16_t _analogRead(uint8_t pin)
   while(ADCSRA & (1<<ADSC)); //Wait for conversion to complete.
 
   uint8_t low = ADCL;
+#if defined(ADCH)  
   uint8_t high = ADCH;
   return (high << 8) | low;
+#else
+  // Some chips only have 8 bit ADC, because everything written mostly assumes 10 bit
+  // we will multiply by 4 before we return it
+  return low << 2;
+#endif
   #else
   return LOW;
   #endif
