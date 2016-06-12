@@ -9,6 +9,8 @@ ATTiny Core - 1634, x313, x4, x41, x5, x61, x7, x8 and 828 for Arduino 1.6.x
 This core supports the following processors - essentially every ATtiny processor that makes sense to use with Arduino:
 
 * ATtiny2313, 4313 (Working)
+* ATtiny5  (probably working, lightly tested) - [See Important Notes](avr/variants/tiny5_10/README.md]
+* ATtiny10 (probably working, lightly tested) - [See Important Notes](avr/variants/tiny5_10/README.md]
 * ATtiny13 (probably working, lightly tested)
 * ATtiny24, 44, 84 (Working)
 * ATtiny25, 45, 85 (Working)
@@ -18,6 +20,7 @@ This core supports the following processors - essentially every ATtiny processor
 * ATTiny441, 841 (With or without Optiboot bootloader)
 * ATTiny1634  (With or without Optiboot bootloader)
 * ATTiny828 (With or without Optiboot bootloader)
+
 
 **When uploading sketches via ISP, due to limitations of the Arduino IDE, you must select a programmer marked ATTiny from the programmers menu (or any other programmer added by an installed third party core) in order to upload properly to most parts.**
 

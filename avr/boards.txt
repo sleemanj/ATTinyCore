@@ -957,3 +957,114 @@ attinyx313.menu.INITIALIZE_SECONDARY_TIMERS.1=yes
 attinyx313.menu.INITIALIZE_SECONDARY_TIMERS.1.build.extra_flags=-DINITIALIZE_SECONDARY_TIMERS=1
 attinyx313.build.variant=tinyX313
 
+
+
+
+
+
+
+
+attiny5_diy.name=ATTiny5
+attiny5_diy.upload.maximum_size=512
+attiny5_diy.upload.maximum_data_size=32
+attiny5_diy.upload.tool=avrdude_noefuse
+attiny5_diy.bootloader.tool=avrdude_nobootloader_onefuse
+attiny5_diy.bootloader.unlock_bits=0xFF
+attiny5_diy.bootloader.lock_bits=0xFF
+attiny5_diy.build.core=tiny
+attiny5_diy.build.board=AVR_ATTINY5
+attiny5_diy.menu.chip.5=ATtiny13
+attiny5_diy.menu.chip.5.build.mcu=attiny5
+attiny5_diy.menu.chip.5.upload.maximum_size=512
+attiny5_diy.menu.chip.5.upload.maximum_data_size=32
+
+attiny5_diy.menu.clock.8MHz=8MHz
+attiny5_diy.menu.clock.8MHz.build.f_cpu=8000000L
+
+attiny5_diy.menu.clock.4MHz=4MHz
+attiny5_diy.menu.clock.4MHz.build.f_cpu=4000000L
+
+attiny5_diy.menu.clock.2MHz=2MHz
+attiny5_diy.menu.clock.2MHz.build.f_cpu=2000000L
+
+attiny5_diy.menu.clock.1MHz=1MHz
+attiny5_diy.menu.clock.1MHz.build.f_cpu=1000000L
+
+
+attiny5_diy.build.variant=tiny5_10
+attiny5_diy.build.extra_flags=-DNO_TONE
+
+
+# Serial Menu
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+attiny5_diy.menu.serial.HalfDuplexRW=Half Duplex, Read+Write
+attiny5_diy.menu.serial.HalfDuplexRW.build.custom_flags.serial.use_serial_type=-DUSE_SERIAL_TYPE=SERIAL_TYPE_HALF_DUPLEX
+
+attiny5_diy.menu.serial.HalfDuplexRWStream=Half Duplex, Read+Write Inherits Stream
+attiny5_diy.menu.serial.HalfDuplexRWStream.build.custom_flags.serial.use_serial_type=-DUSE_SERIAL_TYPE=SERIAL_TYPE_HALF_DUPLEX -DHALFDUPLEXSERIAL_INHERIT_FROM=Stream
+
+attiny5_diy.menu.serial.HalfDuplexRStream=Half Duplex, Read Only Inherits Stream
+attiny5_diy.menu.serial.HalfDuplexRStream.build.custom_flags.serial.use_serial_type=-DUSE_SERIAL_TYPE=SERIAL_TYPE_HALF_DUPLEX -DHALF_DUPLEX_SERIAL_DISABLE_WRITE -DHALFDUPLEXSERIAL_INHERIT_FROM=Stream
+
+attiny5_diy.menu.serial.HalfDuplexWStream=Half Duplex, Write Only Inherits Stream
+attiny5_diy.menu.serial.HalfDuplexWStream.build.custom_flags.serial.use_serial_type=-DUSE_SERIAL_TYPE=SERIAL_TYPE_HALF_DUPLEX -DHALF_DUPLEX_SERIAL_DISABLE_READ
+
+# Print Menu
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+attiny5_diy.menu.print.default=Bin Only Supported (Smallest)
+attiny5_diy.menu.print.default.build.custom_flags.print.use_base=-DPRINT_USE_BASE_BIN
+
+attiny5_diy.menu.print.Arbitrary=Full Support For Arbitrary Bases (Biggest)
+attiny5_diy.menu.print.Arbitrary.build.custom_flags.print.use_base=-DPRINT_USE_BASE_ARBITRARY
+
+attiny5_diy.menu.print.BinHexDecOct=Bin, Hex, Dec, Oct Supported
+attiny5_diy.menu.print.BinHexDecOct.build.custom_flags.print.use_base=-DPRINT_USE_BASE_BIN -DPRINT_USE_BASE_DEC -DPRINT_USE_BASE_HEX -DPRINT_USE_BASE_OCT
+
+attiny5_diy.menu.print.BinHexDec=Bin, Hex, Dec Supported
+attiny5_diy.menu.print.BinHexDec.build.custom_flags.print.use_base=-DPRINT_USE_BASE_BIN -DPRINT_USE_BASE_DEC -DPRINT_USE_BASE_HEX
+
+attiny5_diy.menu.print.Dec=Dec Only Supported
+attiny5_diy.menu.print.Dec.build.custom_flags.print.use_base=-DPRINT_USE_BASE_DEC
+
+attiny5_diy.menu.print.Hex=Hex Only Supported
+attiny5_diy.menu.print.Hex.build.custom_flags.print.use_base=-DPRINT_USE_BASE_HEX
+
+attiny5_diy.menu.print.Oct=Oct Only Supported
+attiny5_diy.menu.print.Oct.build.custom_flags.print.use_base=-DPRINT_USE_BASE_OCT
+
+attiny5_diy.menu.print.Bin=Bin Only Supported (Smallest)
+attiny5_diy.menu.print.Bin.build.custom_flags.print.use_base=-DPRINT_USE_BASE_BIN
+
+# Millis Accuracy (tiny13 only currently)
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+attiny5_diy.menu.millis_ppm.1p6=Better Or Equal 1.666% Error (Default)
+attiny5_diy.menu.millis_ppm.1p6.build.custom_flags.millis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=16666UL
+
+attiny5_diy.menu.millis_ppm.50p=Better Or Equal 50% Error (Lowest Code Use)
+attiny5_diy.menu.millis_ppm.50p.build.custom_flags.millis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=500000UL
+
+attiny5_diy.menu.millis_ppm.25p=Better Or Equal 25% Error
+attiny5_diy.menu.millis_ppm.25p.build.custom_flags.millis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=250000UL
+
+attiny5_diy.menu.millis_ppm.10p=Better Or Equal 10% Error
+attiny5_diy.menu.millis_ppm.10p.build.custom_flags.millis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=100000UL
+
+attiny5_diy.menu.millis_ppm.5p=Better Or Equal 5% Error
+attiny5_diy.menu.millis_ppm.5p.build.custom_flags.millis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=50000UL
+
+attiny5_diy.menu.millis_ppm.2p5=Better Or Equal 2.5% Error
+attiny5_diy.menu.millis_ppm.2p5.build.custom_flags.millis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=25000UL
+
+attiny5_diy.menu.millis_ppm.1p=Better Or Equal 1% Error
+attiny5_diy.menu.millis_ppm.1p.build.custom_flags.millis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=10000UL
+
+attiny5_diy.menu.millis_ppm.0p5=Better Or Equal 0.5% Error
+attiny5_diy.menu.millis_ppm.0p5.build.custom_flags.millis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=5000UL
+
+attiny5_diy.menu.millis_ppm.0p25=Better Or Equal 0.25% Error
+attiny5_diy.menu.millis_ppm.0p25.build.custom_flags.millis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=2500UL
+
+attiny5_diy.menu.millis_ppm.0p1=Better Or Equal 0.1% Error (Highest Code Use)
+attiny5_diy.menu.millis_ppm.0p1.build.custom_flags.millis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=1000UL
+
+
