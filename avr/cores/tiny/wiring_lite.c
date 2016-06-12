@@ -266,6 +266,9 @@ void delayMicroseconds(unsigned int us)
 #endif
 
 void init(){  
+#ifdef  setCPUFrequency
+  setCPUFrequency(F_CPU);
+#endif 
 #ifndef NO_MILLIS
   #if (!defined(turnOnMillis) || !(defined(USE_NEW_MILLIS) && USE_NEW_MILLIS))
   // Start timer0 running, setup the millis() interrupt to run
@@ -276,6 +279,7 @@ void init(){
   #else
     turnOnMillis(MILLIS_TIMER_PRESCALE);
   #endif
+  sei();
 #else
   #ifndef turnOnPWM
   // Enabled fast PWM on the timer (not connected to the pin, that happens in 
@@ -288,7 +292,6 @@ void init(){
   #endif
 #endif
   
-  sei();
   
 // TODO: Tidy this away in variant code, not in the core.
 #if defined(INITIALIZE_ANALOG_TO_DIGITAL_CONVERTER) && INITIALIZE_ANALOG_TO_DIGITAL_CONVERTER  
