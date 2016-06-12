@@ -8,6 +8,15 @@
  * if not used these should be optimized out automatically by the linker.
  */
 
+/* Notes:
+
+   ATtiny 4/5/9/10 Datasheet Page 17
+   " ATtiny4/5/9/10 implement only 16 registers. For reasons of compatibility the registers are numbered R16...R31, not R0...R15."
+   
+   https://gcc.gnu.org/wiki/avr-gcc
+   R18–R27, R30, R31
+   These GPRs are call clobbered. An ordinary function may use them without restoring the contents. Interrupt service routines (ISRs) must save and restore each register they use.
+ */
 /* needed for <avr/io.h> to give io constant addresses */
 #define __SFR_OFFSET 0
 #include <avr/io.h>
@@ -22,6 +31,8 @@
 
 #define delayArg r22
 
+// #define outRegister r0
+#define outRegister r18
 .extern TXDELAY
 .section .text.transmit,"ax",@progbits
 ; transmit byte contained in r24
@@ -31,7 +42,7 @@ TxByte:
   cli
   sbi UART_Port-1, UART_Tx    ; set Tx line to output
   cbi UART_Port, UART_Tx      ; start bit
-  in r0, UART_Port
+  in outRegister, UART_Port
   ldi r25, 7            ; stop bit & idle state
 TxLoop:
   ; 8 cycle loop + delay = 7 + 3*DelayArg
@@ -40,10 +51,10 @@ TxDelay:
     dec delayArg
   brne TxDelay
   bst r24, 0            ; store lsb in T
-  bld r0, UART_Tx
+  bld outRegister, UART_Tx
   lsr r25
   ror r24             ; 2-byte shift register
-  out UART_Port, r0
+  out UART_Port, outRegister
   brne TxLoop
   sei
   ret
