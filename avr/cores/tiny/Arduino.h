@@ -102,12 +102,7 @@ typedef uint8_t byte;
 
 void init(void);
 
-void pinMode(uint8_t, uint8_t);
-void digitalWrite(uint8_t, uint8_t);
-int digitalRead(uint8_t);
-int analogRead(uint8_t);
 void analogReference(uint8_t mode);
-void analogWrite(uint8_t, int);
 
 
 unsigned long pulseIn(uint8_t pin, uint8_t state, unsigned long timeout);
@@ -167,6 +162,229 @@ extern const uint8_t PROGMEM digital_pin_to_timer_PGM[];
 #define SERIAL_TYPE_HALF_DUPLEX 0x04
 
 #include "pins_arduino.h"
+void _pinMode(uint8_t, uint8_t); 
+#ifndef pinMode
+
+//  If the user calls pinMode(x, OUTPUT) where x is a compile time constant
+//  then ideally we want to have that optimize to simply sbi [port] [bit]
+
+//  This is the purpose of the static inlined pinMode definition.  
+//  it checks to see that the pin and mode are constant and output and if so
+//  then just sets the appropriate bit (it will optimize to an sbi)
+//  Otherwise it will fall-back to using _pinMode() which will work for 
+//  non-constant and for non-output.
+//
+//  For INPUT and INPUT_PULLUP we need to be able to disable and enable 
+//  interrupts because both DDR and PORT registers need to be manipulated
+//  atomically, this may wind up to be more costly than using 
+//  _pinMode() even though we get to use the sbi/cbi to do it
+//  if you are setting more than 2 or 3 pins to INPUT/INPUT_PULLUP
+//  but that doesn't seem THAT likely (given that INPUT is the default state
+//  anyway), but if you really need to, you can define OPTIMIZE_CONSTANT_PINMODE_INPUT 
+//  (before including Arduino.h, or in your pins_arduino.h) 0 to disable that from happening.
+
+#ifndef OPTIMIZE_CONSTANT_PINMODE_INPUT
+  #define OPTIMIZE_CONSTANT_PINMODE_INPUT 1
+#endif
+
+static inline void pinMode(uint8_t , uint8_t ) __attribute__((always_inline, unused));
+static inline void pinMode(uint8_t pin, uint8_t mode)
+{
+  // Pretty sure we can allow non-constant mode here without costing more flash than we
+  //  would use in falling through to _pinMode()
+  if(__builtin_constant_p(pin))// && __builtin_constant_p(mode))
+  {
+    if(digitalPinToPort(pin) == NOT_A_PIN)
+    {
+      return;
+      // NOP
+    }
+    else if(mode == OUTPUT)
+    {
+      ((void)(*((volatile uint8_t *)portModeRegister(digitalPinToPort(pin))) |= digitalPinToBitMask(pin)));
+      return;
+    }
+    #if OPTIMIZE_CONSTANT_PINMODE_INPUT
+    else if(mode == INPUT)
+    {
+      uint8_t oldSREG = SREG;
+      cli();
+      ((void)(*((volatile uint8_t *)portModeRegister(digitalPinToPort(pin)))   &= ~digitalPinToBitMask(pin)));
+      ((void)(*((volatile uint8_t *)portOutputRegister(digitalPinToPort(pin))) &= ~digitalPinToBitMask(pin)));    
+      SREG = oldSREG;
+      return;
+    }
+    else if(mode == INPUT_PULLUP)
+    {
+      uint8_t oldSREG = SREG;
+      cli();
+      ((void)(*((volatile uint8_t *)portModeRegister(digitalPinToPort(pin)))   &= ~digitalPinToBitMask(pin)));      
+      ((void)(*((volatile uint8_t *)portOutputRegister(digitalPinToPort(pin))) |= digitalPinToBitMask(pin)));    
+      SREG = oldSREG;
+      return;
+    }
+    #endif
+  }
+
+  _pinMode(pin,mode);  
+}
+#endif
+
+void _digitalWrite(uint8_t, uint8_t);
+#ifndef digitalWrite
+
+//  If the user calls digitalWrite(x, y) where x is a compile time constant
+//  then ideally we want to have that optimize to simply sbi [port] [bit]
+//  or cbi [port] [bit]
+//
+//  This is the purpose of the static inlined digitalWrite definition.  
+//  it checks to see that the pin and val are constant and if so
+//  then just fiddles the appropriate bit (it will optimize to an sbi/cbi)
+//  Otherwise it will fall-back to using _pinMode() which will work for 
+//  non-constant and for non-output.
+//
+// For pins which have a timer attached, you can optionally choose not 
+// to optimize that as it may be more space efficient not to, if you 
+// do more than a couple of digitalWrite([constant],....) for such
+// a timer attached pin.
+//
+// For non-constant pins, we fall through to the normal implementation 
+// as there is a fair overhead involved and interrupts have to be disabled
+// also.
+#ifndef OPTIMIZE_DIGITAL_WRITE_ON_TIMER
+  #define OPTIMIZE_DIGITAL_WRITE_ON_TIMER 1
+#endif
+
+static inline void digitalWrite(uint8_t , uint8_t ) __attribute__((always_inline, unused));
+static inline void digitalWrite(uint8_t pin, uint8_t val)
+{
+  // We can allow non-constant val I think, the comparison overhead below will probably be no worse than calling _digitalWrite
+  if(__builtin_constant_p(pin))// && __builtin_constant_p(val)) 
+  {
+    if(digitalPinToPort(pin) == NOT_A_PIN)
+    {
+      return;
+      // NOP
+    }
+    
+    // If on a timer, turn it off (or fall through if we don't optimize that)
+    if(digitalPinToTimer(pin) != NOT_ON_TIMER )
+    {
+      #if OPTIMIZE_DIGITAL_WRITE_ON_TIMER
+        turnOffPWM(digitalPinToTimer(pin));
+      #else
+        _digitalWrite(pin,val);
+        return;
+      #endif
+    }
+
+    if(val == HIGH)
+    {
+      ((void)(*((volatile uint8_t *)portOutputRegister(digitalPinToPort(pin))) |= digitalPinToBitMask(pin)));
+      return;
+    }
+    else // Can only be LOW here, no need to check
+    {
+      ((void)(*((volatile uint8_t *)portOutputRegister(digitalPinToPort(pin))) &= ~digitalPinToBitMask(pin)));
+      return;
+    }
+  }
+
+  _digitalWrite(pin,val);
+}
+#endif
+
+void _analogWrite(uint8_t, uint8_t);
+#ifndef analogWrite
+// This is broken out to an inline only because we need to do pinMode() due the fact
+// people don't use pinMode before analogWrite() owing to the fact that the Arduino
+// docs say...
+//
+//  "You do not need to call pinMode() to set the pin as an output before 
+//   calling analogWrite()."
+//
+// So every time you call analogWrite we have to do a pinMode for you, even if 
+// we had already done it, or you had done it yourself.  For crying out loud.
+static inline void analogWrite(uint8_t , uint8_t ) __attribute__((always_inline, unused));
+static inline void analogWrite(uint8_t pin, uint8_t val)
+{
+  pinMode(pin, OUTPUT);
+  _analogWrite(pin,val);
+}
+#endif
+
+
+uint8_t _digitalRead(uint8_t);
+#ifndef digitalRead
+
+// This static inline allows us primarily to optimize away some checks and 
+// code for constant pins.  it doesn't seem like much but in certain
+// situations it can save you well over 50 bytes, the only time it might
+// cost more to do it this way would be for pins which are on a timer
+// and then only if you are doing a lot of distinct 
+//   digitalRead([constnt pin on a timer])
+// which seems really quite unlikely, anyway if it is a problem then you 
+// can set OPTIMIZE_DIGITAL_READ_ON_TIMER 0
+
+#ifndef OPTIMIZE_DIGITAL_READ_ON_TIMER
+  #define OPTIMIZE_DIGITAL_READ_ON_TIMER 1
+#endif
+
+static inline uint8_t digitalRead(uint8_t ) __attribute__((always_inline, unused));
+static inline uint8_t digitalRead(uint8_t pin)
+{  
+  if(__builtin_constant_p(pin))
+  {
+    if(digitalPinToPort(pin) == NOT_A_PIN)
+    {
+      return LOW;
+    }
+    
+    // If on a timer, turn it off (or fall through if we don't optimize that)
+    if(digitalPinToTimer(pin) != NOT_ON_TIMER )
+    {
+      #if OPTIMIZE_DIGITAL_READ_ON_TIMER
+        turnOffPWM(digitalPinToTimer(pin));
+      #else
+        return _digitalRead(pin);        
+      #endif
+    }
+
+    return (*((volatile uint8_t *)portInputRegister(digitalPinToPort(pin))) & digitalPinToBitMask(pin)) ? HIGH : LOW;
+  }
+
+  return _digitalRead(pin);
+}
+#endif
+
+uint16_t _analogRead(uint8_t pin);
+#ifndef analogRead
+// analogRead() is almost always going to be getting a constant pin
+// (especially since we pretty much DEMAND that people pass Ax constants to it)
+// so by declaring some of the pin specific setup of doing an analogRead here
+// we can save some bytes when said constant pin doesn't need any setup
+// I think that this will be a net reduction in code for most purposes
+// and shouldn't have much effect otherwise.
+// Especially because some of this pin specific stuff is just sanity checking!
+static inline uint16_t analogRead(uint8_t ) __attribute__((always_inline, unused));
+static inline uint16_t analogRead(uint8_t pin)
+{
+  // @SpenceKonde called it ANALOG_PINS_SEPARATE in his fork after I had called the same thing ANALOG_PINS_ARE_ADC_NUMBERS in mine, 
+  //  keeping both for simplicity.
+  #if defined( NUM_DIGITAL_PINS ) && ! ( defined(ANALOG_PINS_ARE_ADC_NUMBERS) && ANALOG_PINS_ARE_ADC_NUMBERS ) && ! defined(ANALOG_PINS_SEPARATE)
+  if ( pin >= NUM_DIGITAL_PINS ) pin -= NUM_DIGITAL_PINS; // allow for channel or pin numbers
+  #endif
+  
+  // fix? Validate pin?
+  if(pin >= NUM_ANALOG_INPUTS) return 0; //Not a valid pin.
+  
+  #if !defined(ADCSRA) || NUM_ANALOG_INPUTS < 1
+  return digitalRead(analogInputToDigitalPin(pin)) ? 1023 : 0; //No ADC, so read as a digital pin instead.
+  #endif
+  
+  return _analogRead(pin);
+}
+#endif
 
 #ifndef USE_NEW_MILLIS
 #ifndef NO_MILLIS

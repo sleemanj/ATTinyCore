@@ -61,19 +61,8 @@ void analogReference(uint8_t mode)
 #define ADMUX_MUX_MASK (0x07)
 #endif
 
-int analogRead(uint8_t pin)
+uint16_t _analogRead(uint8_t pin)
 {
-  // @SpenceKonde called it ANALOG_PINS_SEPARATE in his fork after I had called the same thing ANALOG_PINS_ARE_ADC_NUMBERS in mine, 
-  //  keeping both for simplicity.
-  #if defined( NUM_DIGITAL_PINS ) && ! ( defined(ANALOG_PINS_ARE_ADC_NUMBERS) && ANALOG_PINS_ARE_ADC_NUMBERS ) && ! defined(ANALOG_PINS_SEPARATE)
-  if ( pin >= NUM_DIGITAL_PINS ) pin -= NUM_DIGITAL_PINS; // allow for channel or pin numbers
-  #endif
-  
-  // fix? Validate pin?
-  if(pin >= NUM_ANALOG_INPUTS) return 0; //Not a valid pin.
-  #ifndef ADCSRA
-  return digitalRead(analogInputToDigitalPin(pin)) ? 1023 : 0; //No ADC, so read as a digital pin instead.
-  #endif
   
   #if defined(ADMUX)
   ADMUX = ((analog_reference & ADMUX_REFS_MASK) << REFS0) | ((pin & ADMUX_MUX_MASK) << MUX0); //select the channel and reference
@@ -98,14 +87,31 @@ int analogRead(uint8_t pin)
 // hardware support.  These are defined in the appropriate
 // pins_*.c file.  For the rest of the pins, we default
 // to digital output.
-void analogWrite(uint8_t pin, int val)
+// Arduino core has val as int, but explicitly sets 255 as HIGH,
+// so what's the freaking point?!
+//
+// Good grief, they were even given a Pull Request that fixed it
+//   https://github.com/arduino/Arduino/pull/4625
+// and rejected because it breaks some obscure code somewhere 
+// maybe possibly if somebody is using a function pointer and
+// doesn't recompile.
+//
+// Seriously?!
+//
+// Well lucky for you I can do what I like, so you get to save
+// some bytes in ATTinyCore
+
+void _analogWrite(uint8_t pin, uint8_t val)
 {
   // We need to make sure the PWM output is enabled for those pins
   // that support it, as we turn it off when digitally reading or
   // writing with them.  Also, make sure the pin is in output mode
   // for consistenty with Wiring, which doesn't require a pinMode
   // call for the analog output pins.
-  pinMode(pin, OUTPUT);
+  // This is now done from static inline void analogWrite() 
+  // which is defined in Arduino.h, this allows us to use the
+  // optimized pinMode() for constant pins.
+  // pinMode(pin, OUTPUT);
 
   if (val <= 0)
   {

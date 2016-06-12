@@ -29,10 +29,10 @@
 #include "wiring_private.h"
 #include "pins_arduino.h"
 
-void pinMode(uint8_t pin, uint8_t mode)
+void _pinMode(uint8_t pin, uint8_t mode)
 {
-	uint8_t bit = digitalPinToBitMask(pin);
-	uint8_t port = digitalPinToPort(pin);
+  uint8_t port = digitalPinToPort(pin);
+	pin = digitalPinToBitMask(pin);
 	volatile uint8_t *reg, *out;
 
 	if (port == NOT_A_PIN) return;
@@ -77,18 +77,18 @@ void pinMode(uint8_t pin, uint8_t mode)
   switch(mode)
   {
     case INPUT:
-      *reg &= ~bit; // Set to input
-      *out &= ~bit; // Disable pullup
+      *reg &= ~pin; // Set to input
+      *out &= ~pin; // Disable pullup
       break;
       
     case INPUT_PULLUP:
-      *reg &= ~bit; // Set to input
-      *out |= bit;  // Enable pullup
+      *reg &= ~pin; // Set to input
+      *out |= pin;  // Enable pullup
       break;
       
     case OUTPUT:
     default    :
-      *reg |= bit;  // Set to output
+      *reg |= pin;  // Set to output
       break;
   }
   SREG = oldSREG;
@@ -154,7 +154,7 @@ static void turnOffPWM(uint8_t timer)
 }
 #endif
 
-void digitalWrite(uint8_t pin, uint8_t val)
+void _digitalWrite(uint8_t pin, uint8_t val)
 {
 	uint8_t timer = digitalPinToTimer(pin);
 	uint8_t bit = digitalPinToBitMask(pin);
@@ -211,7 +211,7 @@ void digitalWrite(uint8_t pin, uint8_t val)
 #endif
 }
 
-int digitalRead(uint8_t pin)
+uint8_t _digitalRead(uint8_t pin)
 {
 	uint8_t timer = digitalPinToTimer(pin);
 	uint8_t bit = digitalPinToBitMask(pin);
