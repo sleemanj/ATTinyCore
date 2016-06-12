@@ -141,6 +141,9 @@ extern const uint8_t PROGMEM digital_pin_to_timer_PGM[];
 #define portInputRegister(P) ( (volatile uint8_t *)( pgm_read_word( port_to_input_PGM + (P))) )
 #define portModeRegister(P) ( (volatile uint8_t *)( pgm_read_word( port_to_mode_PGM + (P))) )
 
+// Some ATTiny have separate pull up registers from the output register, but most don't
+// so if yours does, pins_arduino.h will do something useful here.
+#define pullupEnableRegister(P) portOutputRegister(P)
 #define NOT_A_PIN 0
 #define NOT_A_PORT 0
 
@@ -210,7 +213,7 @@ static inline void pinMode(uint8_t pin, uint8_t mode)
       uint8_t oldSREG = SREG;
       cli();
       ((void)(*((volatile uint8_t *)portModeRegister(digitalPinToPort(pin)))   &= ~digitalPinToBitMask(pin)));
-      ((void)(*((volatile uint8_t *)portOutputRegister(digitalPinToPort(pin))) &= ~digitalPinToBitMask(pin)));    
+      ((void)(*((volatile uint8_t *)pullupEnableRegister(digitalPinToPort(pin))) &= ~digitalPinToBitMask(pin)));    
       SREG = oldSREG;
       return;
     }
@@ -219,7 +222,7 @@ static inline void pinMode(uint8_t pin, uint8_t mode)
       uint8_t oldSREG = SREG;
       cli();
       ((void)(*((volatile uint8_t *)portModeRegister(digitalPinToPort(pin)))   &= ~digitalPinToBitMask(pin)));      
-      ((void)(*((volatile uint8_t *)portOutputRegister(digitalPinToPort(pin))) |= digitalPinToBitMask(pin)));    
+      ((void)(*((volatile uint8_t *)pullupEnableRegister(digitalPinToPort(pin))) |= digitalPinToBitMask(pin)));    
       SREG = oldSREG;
       return;
     }

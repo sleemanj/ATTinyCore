@@ -38,7 +38,7 @@ void _pinMode(uint8_t pin, uint8_t mode)
 	if (port == NOT_A_PIN) return;
 
 	reg = portModeRegister(port);
-	out = portOutputRegister(port);
+	out = pullupEnableRegister(port);
 
 #if 0
 	if (mode == INPUT) { 
