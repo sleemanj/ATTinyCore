@@ -94,10 +94,12 @@ uint16_t _analogRead(uint8_t pin)
   return LOW;
   #endif
 }
+
 // Right now, PWM output only works on the pins with
 // hardware support.  These are defined in the appropriate
 // pins_*.c file.  For the rest of the pins, we default
 // to digital output.
+
 // Arduino core has val as int, but explicitly sets 255 as HIGH,
 // so what's the freaking point?!
 //
@@ -124,6 +126,7 @@ void _analogWrite(uint8_t pin, uint8_t val)
   // optimized pinMode() for constant pins.
   // pinMode(pin, OUTPUT);
 
+#if ! (defined(ANALOG_WRITE_FLIPPED) && ANALOG_WRITE_FLIPPED)
   if (val <= 0)
   {
     digitalWrite(pin, LOW);
@@ -133,6 +136,25 @@ void _analogWrite(uint8_t pin, uint8_t val)
     digitalWrite(pin, HIGH);
   }
   else
+#else
+  // If we flip (invert) the PWM, so that 255 is Off and 0 is On,
+  // then we can do away with the special cases of val == 0
+  // and val == 255 which in the normal directionality have to 
+  // turn off the PWM and use digitalWrite.
+  // 
+  // We don't get fully "on" (max is about 99.5%), but that's less 
+  // of a problem than not getting fully "off" especially when using
+  // an LED which is probably the most common use case here.
+  //
+  // This saves us a bunch of space for something like the usual
+  // led fader since digitalWrite() can be totally optimized out.
+  //
+  // Of course, we don't want the user to know to do this, so 
+  // we take 0 = Off and 255 = On and flip that before passing
+  // it to the AVR which is expecting the flipped value.
+    
+  val = 255-val;
+#endif
   {
     
 #ifdef turnOnPWM
