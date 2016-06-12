@@ -123,6 +123,10 @@ Pin Mapping
 
 This section incomplete, see pins_arduino.h in the specific [variant folder](avr/variants) for more.
 
+### ATtiny5/10
+ ![ATtiny5/10 Arduino Pin Mapping](https://goo.gl/SKdLZP)
+
+
 ### ATtiny13
  ![ATtiny13 Arduino Pin Mapping](https://cdn.rawgit.com/sleemanj/ArduinoOrientedChipPinoutCreator/master/13.jpg)
  
