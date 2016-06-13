@@ -1,4 +1,4 @@
-Special Considerations for the ATTiny 4/5/9/10
+Special Considerations for the ATTiny 4/5/9/10 in Arduino ATTinyCore
 -------------------------------------------------------------------------------
 
 ## Toolchain
@@ -16,6 +16,20 @@ After downloading the toolchain open your Arduino installation path, and navigat
 Open the file you downloaded and copy the contents  (avr, bin, doc...) of the top level directory into your hardware/tools/avr/ diretcory overwriting any existing files, (seriously if you can't work this out, you are not ready for using a Tiny 4/5/9/10).
 
 You should be good to go then.
+
+## Uploading
+
+The 4/5/9/10 do not support uploading by serial, nor by SPI.  What they support is called "TPI".
+
+The current version of the ["official" USBAsp firmware](http://www.fischl.de/usbasp/) supports uploading via TPI, connect MOSI to TPIDATA (pin 1) and SCK to TPICLK (pin 2).  This is how I upload to the Tiny 4/5/9/10.
+
+Unfortunately the "auto clocking" firmware usually found on cheap chinese versions of the USBasp does not support TPI so you would have to re-flash one of those with the official firmware to get it to work.
+
+There is an [ArduinoISP type TPI uploader](http://junkplusarduino.blogspot.co.nz/p/attiny10-resources.html) but I have not tried it personally.
+
+## Burn Bootloader
+
+Nope, you don't need to do this on the 4/5/9/10, it won't do anything useful, these chips only have one fuse and the default settings are fine.
 
 ## Memory
 

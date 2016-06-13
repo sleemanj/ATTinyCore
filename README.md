@@ -9,8 +9,8 @@ ATTiny Core - 1634, x313, x4, x41, x5, x61, x7, x8 and 828 for Arduino 1.6.x
 This core supports the following processors - essentially every ATtiny processor that makes sense to use with Arduino:
 
 * ATtiny2313, 4313 (Working)
-* ATtiny5  (probably working, lightly tested) - [See Important Notes](avr/variants/tiny5_10/README.md]
-* ATtiny10 (probably working, lightly tested) - [See Important Notes](avr/variants/tiny5_10/README.md]
+* ATtiny5  (probably working, lightly tested) - [See Important Notes](avr/variants/tiny5_10/README.md)
+* ATtiny10 (probably working, lightly tested) - [See Important Notes](avr/variants/tiny5_10/README.md)
 * ATtiny13 (probably working, lightly tested)
 * ATtiny24, 44, 84 (Working)
 * ATtiny25, 45, 85 (Working)
@@ -122,6 +122,10 @@ Pin Mapping
 ============
 
 This section incomplete, see pins_arduino.h in the specific [variant folder](avr/variants) for more.
+
+### ATtiny5/10
+ ![ATtiny5/10 Arduino Pin Mapping](https://goo.gl/SKdLZP)
+
 
 ### ATtiny13
  ![ATtiny13 Arduino Pin Mapping](https://cdn.rawgit.com/sleemanj/ArduinoOrientedChipPinoutCreator/master/13.jpg)
