@@ -1346,11 +1346,19 @@ void delayMicrosecondsWithoutMillisInterruptAdjustment(DelayMicrosecondsTime_t u
 
 #endif
 
-  // busy wait
+#if ! ( defined( REDUCED_CORE_TINYAVR ) && REDUCED_CORE_TINYAVR )
+  // The 4/5/9/10 "Reduced Core" have problems with GCC compiling this    
   __asm__ __volatile__ (
     "1: sbiw %0,1" "\n\t" // 2 cycles
     "brne 1b" : "=w" (us) : "0" (us) // 2 cycles
   );
+#else
+  // However this is fine, and I think it maintains the same 4-clock-per-loop
+  // count.  The asm("") prevents the empty loop from being optimized out.
+  // This could probably be used instead of the above on other chips, but 
+  // leaving it just for the reduced core ones for now.  
+  while(us--) asm("");
+#endif
   // return = 4 cycles
 }
 
@@ -2560,11 +2568,19 @@ void delayMicrosecondsAdjustedForMillisInterrupt(DelayMicrosecondsTime_t us)
 
 #endif
 #endif
-    // busy wait
+#if ! ( defined( REDUCED_CORE_TINYAVR ) && REDUCED_CORE_TINYAVR )
+  // The 4/5/9/10 "Reduced Core" have problems with GCC compiling this    
   __asm__ __volatile__ (
     "1: sbiw %0,1" "\n\t" // 2 cycles
     "brne 1b" : "=w" (us) : "0" (us) // 2 cycles
   );
+#else
+  // However this is fine, and I think it maintains the same 4-clock-per-loop
+  // count.  The asm("") prevents the empty loop from being optimized out.
+  // This could probably be used instead of the above on other chips, but 
+  // leaving it just for the reduced core ones for now.  
+  while(us--) asm("");
+#endif
   // return = 4 cycles
 }
 
