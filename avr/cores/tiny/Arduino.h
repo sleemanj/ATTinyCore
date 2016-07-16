@@ -165,6 +165,11 @@ extern const uint8_t PROGMEM digital_pin_to_timer_PGM[];
 #define SERIAL_TYPE_HALF_DUPLEX 0x04
 
 #include "pins_arduino.h"
+
+#ifndef turnOffPWM
+ void turnOffPWM(uint8_t timer);
+#endif
+
 void _pinMode(uint8_t, uint8_t); 
 #ifndef pinMode
 
