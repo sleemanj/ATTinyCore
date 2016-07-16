@@ -72,12 +72,15 @@
 #if PRINT_MAX_INT_TYPE == PRINT_INT_TYPE_LONG  
   #define PRINT_INT_TYPE            int32_t  
   #define UNSIGNED_PRINT_INT_TYPE   uint32_t
+  #define PGM_READ_MAX_INT_TYPE(A)  pgm_read_dword(A)
 #elif PRINT_MAX_INT_TYPE == PRINT_INT_TYPE_INT
   #define PRINT_INT_TYPE            int16_t  
   #define UNSIGNED_PRINT_INT_TYPE   uint16_t
+  #define PGM_READ_MAX_INT_TYPE(A)  pgm_read_word(A)
 #elif PRINT_MAX_INT_TYPE == PRINT_INT_TYPE_BYTE
   #define PRINT_INT_TYPE            int8_t  
   #define UNSIGNED_PRINT_INT_TYPE   uint8_t
+  #define PGM_READ_MAX_INT_TYPE(A)  pgm_read_byte(A)
 #endif
 
 

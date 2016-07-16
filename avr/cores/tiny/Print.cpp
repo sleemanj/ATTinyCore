@@ -448,7 +448,7 @@ size_t Print::printNumber(UNSIGNED_PRINT_INT_TYPE n, uint8_t base)
     base = 0;
     do
     {
-        UNSIGNED_PRINT_INT_TYPE b = pgm_read_word(&*bt++);
+        UNSIGNED_PRINT_INT_TYPE b = PGM_READ_MAX_INT_TYPE(&*bt++);
         uint8_t digit = 0;
         while (n >= b)
         {
@@ -459,10 +459,10 @@ size_t Print::printNumber(UNSIGNED_PRINT_INT_TYPE n, uint8_t base)
         if (b == 1 || leadingzero)
         {
             ++base;
-            write(pgm_read_word(&digits[digit]));          
+            write(pgm_read_byte(&digits[digit]));          
         }
     }
-    while (pgm_read_word(&*bt));       
+    while (PGM_READ_MAX_INT_TYPE(&*bt));       
     return base;
 }
 
@@ -529,7 +529,7 @@ size_t Print::printFloat(double number, uint8_t digits)
 
   // Print the decimal point, but only if there are digits beyond
   if (digits > 0) {
-    n += print("."); 
+    n += print('.'); 
   }
 
   // Extract digits from the remainder one at a time
