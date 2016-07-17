@@ -71,7 +71,7 @@ void _tone(uint8_t pin, uint32_t frequency, uint32_t length)
   // Start with prescaling of 1, and if it doesn't fit, step up until we 
   // get one that does.
     
-  uint8_t   prescaleDivider = 1; // The divider increases by powers of 2
+  uint16_t  prescaleDivider = 1; // The divider increases by powers of 2
   uint8_t   prescaleBitMask = 1; // The bitmask only increments unitarily
 
   while(((F_CPU / prescaleDivider) / frequency) > 255)
