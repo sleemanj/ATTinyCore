@@ -38,7 +38,7 @@ Version Modified By Date     Comments
 #include "wiring_private.h"
 #include "pins_arduino.h"
 
-#ifndef NO_TONE
+#if !defined(tone) && !defined(NO_TONE)
 // timerx_toggle_count:
 //  > 0 - duration specified
 //  = 0 - stopped
