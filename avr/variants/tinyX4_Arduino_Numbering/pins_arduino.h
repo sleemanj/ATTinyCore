@@ -19,205 +19,219 @@
   Free Software Foundation, Inc., 59 Temple Place, Suite 330,
   Boston, MA  02111-1307  USA
 
-
-* Modified by tinyX4 to change the digital pin numbering to be be 
-* the same as David Mellis' arrangemnet http://highlowtech.org/?p=1695
-* this is a better arrangement.
+  $Id: wiring.h 249 2007-02-03 16:52:51Z mellis $
 */
 
 #ifndef Pins_Arduino_h
 #define Pins_Arduino_h
 
-#define ATTINYX4 1
-#define __AVR_ATtinyX4__
-#define USE_SOFTWARE_SPI 1
+// Initialisation Core Configuration
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+//  USE_WIRING_LITE will cause wiring_lite.c to be used instead of wiring.c
+//    this is a simpler, better system, but means more code is needed 
+//    for each variant (as it should be IMHO) so the variant can do the 
+//    chip specific stuff.
+//
+//  USE_NEW_MILLIS  will cause MillisMicrosDelay.c/h to be used, this is only
+//    possible with USE_WIRING_LITE, it produces better accuracy with less 
+//    code, and includes the extra feature of the REAL_MILLIS() macro.
+//
+#define USE_WIRING_LITE  1
+#define USE_NEW_MILLIS   1
 
-#include <avr/pgmspace.h>
+// TODO: Make this automatic on analogRead()?
+#ifndef INITIALIZE_ANALOG_TO_DIGITAL_CONVERTER
+  #define INITIALIZE_ANALOG_TO_DIGITAL_CONVERTER    1
+#endif
 
-#define NUM_DIGITAL_PINS            12
+// Print Support
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// The print library is pretty heavy, we can elect to shrink a bit.
+//
+// PRINT_MAX_INT_TYPE determins the maximum integer that can be
+//  printed.  PRINT_INT_TYPE_LONG; PRINT_INT_TYPE_INT; PRINT_INT_TYPE_BYTE
+// 
+// PRINT_USE_BASE_xxx defines if you can Print numbers in that base/
+//
+// Print.h defines BIN, OCT, DEC and HEX as the defaults
+// we will leave all these commented out here, just including
+// them in case you want to force-override
+//
+// You might use for example 
+//    build.extra_flags=-DPRINT_USE_BASE_BIN -DPRINT_USE_BASE_DEC
+// in your boards.txt
+
+#define PRINT_MAX_INT_TYPE  PRINT_INT_TYPE_LONG
+//#define PRINT_USE_BASE_BIN
+//#define PRINT_USE_BASE_OCT
+//#define PRINT_USE_BASE_DEC
+//#define PRINT_USE_BASE_HEX
+//#define PRINT_USE_BASE_ARBITRARY
+
+// Tone Support
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// This will cause the core's default tone() [and anything supporting it]
+// to go away and we will implement our own _tone() 
+#if defined( __cplusplus ) && !defined( NO_TONE )
+  // Note because we use default values for length and pin (as does the official
+  // Arduino implementation) this only work in __cplusplus
+  #define tone(...)   _tone(__VA_ARGS__)
+  #define noTone(...) _noTone(__VA_ARGS__)
+  void _tone(uint8_t pin, uint32_t frequency, uint32_t length = 0);
+  void _noTone(uint8_t pin = 0);
+#endif
+
+// Serial Port Configuration
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//  we have 3 options for serial, hardware, software and half_duplex 
+//  hardware and software are self explanitory, half_duplex is 
+//  a very small memory/flash usage routine without any buffering
+//  or interrupts really intended for sending or receiving minimal stuff
+//  for helping with debugging.  
+//
+//  For half_duplex we also have the option to disable the *standard*
+//  read() and/or write() functions in order to save space, however
+//  even if disabled, you can use some alternative functions such
+//  as read_byte() and write_byte() which can be optimized out if 
+//  not used.
+//
+
+// #define USE_SERIAL_TYPE           SERIAL_TYPE_HARDWARE
+#define USE_SERIAL_TYPE           SERIAL_TYPE_SOFTWARE
+// #define USE_SERIAL_TYPE              SERIAL_TYPE_HALF_DUPLEX
+// #define HALF_DUPLEX_SERIAL_DISABLE_WRITE
+// #define HALF_DUPLEX_SERIAL_DISABLE_READ
+
+
+// The below are used for SERIAL_TYPE_SOFTWARE
+// #define USE_SERIAL_TYPE SERIAL_TYPE_SOFTWARE
+// TX is on AIN0, RX is on AIN1
+#define ANALOG_COMP_DDR               DDRA
+#define ANALOG_COMP_PORT              PORTA
+#define ANALOG_COMP_PIN               PINA
+#define ANALOG_COMP_AIN0_BIT            1
+#define ANALOG_COMP_AIN1_BIT            2
+
+// Analog reference bit masks.
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#define DEFAULT     (0)           // VCC
+#define EXTERNAL    (1)           // External on AREF (PA0)
+#define INTERNAL    (2)           // Internal (1v1)
+#define INTERNAL1V1 (2)
+
+// PWM On/Off
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#define turnOnPWM(t,v)  ( _turnOnPWM(t,v) )
+void _turnOnPWM(uint8_t t, uint8_t v);
+
+#define turnOffPWM(t) ( _turnOffPWM(t) )
+void _turnOffPWM(uint8_t t);
+
+
+// millis()/micros() Timer On/Off
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ( Applicable only with  USE_WIRING_LITE )
+// If the macros are not defined, a default implementation may be implemented
+// if the macros are defined, then they will be used 
+//
+// Your macro may call a function which you can implement in pins_arduino.c
+// or as I have done here for the t13, just do it directly in the macro to
+// save some bytes of flash.  This "function" is only called once normally and
+// not by users.
+
+#define turnOnMillis(prescale)  ( _turnOnMillis(prescale)  )
+#define turnOffMillis()         ( _turnOffMillis() )
+void _turnOnMillis(uint8_t prescale);
+void _turnOffMillis();
+
+// Arduino Pin Numbering to Chip's PORT.PIN and ADC Numbers
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// See PinMapping.jpg
+
+#define NUM_DIGITAL_PINS            11
 #define NUM_ANALOG_INPUTS           8
+
 #define analogInputToDigitalPin(p)  (p)
 
 #define digitalPinHasPWM(p)         ((p) == 5 || (p) == 6 || (p) == 7 || (p) == 8)
 
-#define SS   3
-#define MOSI 6
-#define MISO 5
-#define SCK  4
+// These are some convenient NAME => Arduino Digital Pin Number mappings
+#define SS   ((uint8_t) 3)
+#define MOSI ((uint8_t) 6)
+#define MISO ((uint8_t) 5)
+#define SCK  ((uint8_t) 4)
+#define SDA  ((uint8_t) 6)
+#define SCL  ((uint8_t) 4)
 
-static const uint8_t SDA = 6;
-static const uint8_t SCL = 4;
-
-//Ax constants should not be used for digitalRead/digitalWrite/analogWrite functions, only analogRead().
+// Analog Pin => ADC number, note that if  ANALOG_PINS_ARE_ADC_NUMBERS is not set
+// then you need to add NUM_DIGITAL_PINS to the ADC number and it will be 
+// subtracted when yo try to do analogRead() in order to get the ADC.
 #define ANALOG_PINS_ARE_ADC_NUMBERS 1
-static const uint8_t A0 = 0;
-static const uint8_t A1 = 1;
-static const uint8_t A2 = 2;
-static const uint8_t A3 = 3;
-static const uint8_t A4 = 4;
-static const uint8_t A5 = 5;
-static const uint8_t A6 = 6;
-static const uint8_t A7 = 7;
+#define A0 ((uint8_t) 0)
+#define A1 ((uint8_t) 1)
+#define A2 ((uint8_t) 2)
+#define A3 ((uint8_t) 3)
+#define A4 ((uint8_t) 4)
+#define A5 ((uint8_t) 5)
+#define A6 ((uint8_t) 6)
+#define A7 ((uint8_t) 7)
 
+// Pin Change Interrupt (PCI) Setup
+#define digitalPinToPCICR(p)    ((p) <= 11) ? (&GIMSK) : ((uint8_t *)NULL))
+#define digitalPinToPCICRbit(p) (((p) < 8 ) ? (PCIE0) : (PCIE1))
+#define digitalPinToPCMSK(p)    (((p) < 8)  ? (&PCMSK0) : (&PCMSK1))
+#define digitalPinToPCMSKbit(p) ( \
+  ( (p < 8)   ? (p)    :\
+  ( (p == 8)  ? (10-8) :\
+  ( (p == 10) ? (8-8)  :\
+  ( (p-8) ))))          \
+)
 
-//----------------------------------------------------------
-//----------------------------------------------------------
-//Core Configuration (used to be in core_build_options.h)
+// The x4 has 2 ports
+//  we have to start from 1 because NOT_A_PIN and NOT_A_PORT are defined as 0 in Arduino.h
+//  annoyingly.
+#define PA 1
+#define PB 2
 
-//If Software Serial communications doesn't work, run the TinyTuner sketch provided with the core to give you a calibrated OSCCAL value.
-//Change the value here with the tuned value. By default this option uses the default value which the compiler will optimise out. 
-#define TUNED_OSCCAL_VALUE                        OSCCAL
-//e.g
-//#define TUNED_OSCCAL_VALUE                        0x57
+// Just to make sure we do not have these defined since these ports 
+// do not exist on the x4
+#undef PC
+#undef PD
 
-//Choosing not to initialise saves power and flash. 1 = initialise.
-#define INITIALIZE_ANALOG_TO_DIGITAL_CONVERTER    1
-#define INITIALIZE_SECONDARY_TIMERS               1
-/*
-  The old standby ... millis on Timer 0.
-*/
-#define TIMER_TO_USE_FOR_MILLIS                   0
+// Instead of the usual "arduino way" of using lookup tables stored in 
+// progmem, we will just use some macros.  Notice that little care is 
+// taken with regard to input validity, if you request an invalid
+// pin number, it's invalid, you'll get garbage at best.
+#undef  digitalPinToPort
+#define digitalPinToPort(P) ( (P<8) ? PA : PB  )
 
-/*
-  Where to put the software serial? (Arduino Digital pin numbers)
-*/
-//WARNING, if using software, TX is on AIN0, RX is on AIN1. Comparator is favoured to use its interrupt for the RX pin.
-#define USE_SOFTWARE_SERIAL						  1
-//Please define the port on which the analog comparator is found.
-#define ANALOG_COMP_DDR						 	  DDRA
-#define ANALOG_COMP_PORT						  PORTA
-#define ANALOG_COMP_PIN						 	  PINA
-#define ANALOG_COMP_AIN0_BIT					  1
-#define ANALOG_COMP_AIN1_BIT					  2
+#undef  digitalPinToBitMask
+#define digitalPinToBitMask(P) ( \
+  ( (P  < 8 ) ? (_BV(P)) :       \
+  ( (P == 8 ) ? (_BV(10-8)) :    \
+  ( (P == 10) ? (_BV(8-8)) :     \
+  ( (P-8) ))))                   \
+)
 
+#undef digitalPinToTimer
+#define digitalPinToTimer(P) ( \
+  ( (P == 5) ? TIMER1B  :      \
+  ( (P == 6) ? TIMER1A  :      \
+  ( (P == 7) ? TIMER0B  :      \
+  ( (P == 8) ? TIMER0A  :      \
+  ( ( NOT_ON_TIMER )    )))))  \
+)
 
-/*
-  Analog reference bit masks.
-*/
-// VCC used as analog reference, disconnected from PA0 (AREF)
-#define DEFAULT (0)
-// External voltage reference at PA0 (AREF) pin, internal reference turned off
-#define EXTERNAL (1)
-// Internal 1.1V voltage reference
-#define INTERNAL (2)
+#undef portOutputRegister
+#define portOutputRegister(P) ( (P==PA) ? (volatile uint8_t *)(&PORTA) :  (volatile uint8_t *)(&PORTB) )
 
-//----------------------------------------------------------
-//----------------------------------------------------------
-//----------------------------------------------------------
-//----------------------------------------------------------
+#undef portInputRegister
+#define portInputRegister(P)  ( (P==PA) ? (volatile uint8_t *)(&PINA)  :  (volatile uint8_t *)(&PINB)  )
 
-
-// PCICR = Pin Change Interrupt Control Register
-#define digitalPinToPCICR(p)    (((p) >= 0 && (p) <= 11) ? (&GIMSK) : ((uint8_t *)NULL))
-#define digitalPinToPCICRbit(p) ( ((p) <= 7) ? PCIE0 : PCIE1 )
-#define digitalPinToPCMSK(p)    ( ((p) <= 7) ? (&PCMSK0) : (((p) <= 10) ? (&PCMSK1) : ((uint8_t *)0)) )
-#define digitalPinToPCMSKbit(p) ( ((p) <= 7) ? (p) : (10 - (p)) )
-
-#ifdef ARDUINO_MAIN
-
-// ATMEL ATTINY84 / ARDUINO
-//
-//                           +-\/-+
-//                     VCC  1|    |14  GND
-//            (D  10)  PB0  2|    |13  PA0  (D  0)        AREF
-//             (D  9)  PB1  3|    |12  PA1  (D  1) 
-//             (D 11)  PB3  4|    |11  PA2  (D  2) 
-//  PWM  INT0  (D  8)  PB2  5|    |10  PA3  (D  3) 
-//  PWM        (D  7)  PA7  6|    |9   PA4  (D  4) 
-//  PWM        (D  6)  PA6  7|    |8   PA5  (D  5)        PWM
-//                           +----+
-
-// these arrays map port names (e.g. port B) to the
-// appropriate addresses for various functions (e.g. reading
-// and writing)
-//
-// NB: this seems wasteful, especially always having the first byte
-//  be pointless.  Why didn't the PA define in Arduino.h start with 
-//   #define PA 0
-//  I wonder.  Seems silly.
-
-const uint16_t PROGMEM port_to_mode_PGM[] = 
-{
-  NOT_A_PORT,
-  (uint16_t)&DDRA,
-  (uint16_t)&DDRB,
-};
-
-const uint16_t PROGMEM port_to_output_PGM[] = 
-{
-  NOT_A_PORT,
-  (uint16_t)&PORTA,
-  (uint16_t)&PORTB,
-};
-
-const uint16_t PROGMEM port_to_input_PGM[] = 
-{
-  NOT_A_PORT,
-  (uint16_t)&PINA,
-  (uint16_t)&PINB,
-};
-
-const uint8_t PROGMEM digital_pin_to_port_PGM[] = 
-{
-  PA, /* 0 */
-  PA,
-  PA,
-  PA,
-  PA,
-  PA,
-  PA,
-  PA,
-  PB, /* 8 */
-  PB,
-  PB,
-  PB, /* 11 */
-};
-
-const uint8_t PROGMEM digital_pin_to_bit_mask_PGM[] = 
-{
-  _BV(0), /* port A */
-  _BV(1),
-  _BV(2),
-  _BV(3),
-  _BV(4),
-  _BV(5), 
-  _BV(6),
-  _BV(7),
-  _BV(2), /* port B */
-  _BV(1),
-  _BV(0),
-  _BV(3),
-};
-
-const uint8_t PROGMEM digital_pin_to_timer_PGM[] = 
-{
-  NOT_ON_TIMER,
-  NOT_ON_TIMER,
-  NOT_ON_TIMER,
-  NOT_ON_TIMER, 
-  NOT_ON_TIMER,
-  TIMER1B, /* OC1B */
-  TIMER1A, /* OC1A */
-  TIMER0B, /* OC0B */
-  TIMER0A, /* OC0A */
-  NOT_ON_TIMER,
-  NOT_ON_TIMER,
-  NOT_ON_TIMER,
-};
+#undef portModeRegister
+#define portModeRegister(P)   ( (P==PA) ? (volatile uint8_t *)(&DDRA)  :  (volatile uint8_t *)(&DDRB)  )
 
 #endif
-
-#endif
-
-
-
-
-//Old code, just here for temporary backup until I decide it is not needed.
-/*
-//WARNING, if using software, RX must be on a pin which has a Pin change interrupt <= 7 (e.g. PCINT6, or PCINT1, but not PCINT8)
-#define USE_SOFTWARE_SERIAL						  1
-//These are set to match Optiboot pins.
-#define SOFTWARE_SERIAL_PORT 					  PORTA
-#define SOFTWARE_SERIAL_TX 						  9
-#define SOFTWARE_SERIAL_PIN 					  PINA
-#define SOFTWARE_SERIAL_RX 						  8*/
