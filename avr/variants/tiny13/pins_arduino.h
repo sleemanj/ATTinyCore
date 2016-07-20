@@ -60,8 +60,29 @@
   #define INITIALIZE_ANALOG_TO_DIGITAL_CONVERTER    1
 #endif
 
-//  Tiny13 only has one timer, we wont have tone() functions then
-#define NO_TONE                                   1
+// Tone Support
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// This will cause the core's default tone() [and anything supporting it]
+// to go away and we will implement our own _tone() 
+#if defined( __cplusplus ) && !defined( NO_TONE )
+  // Note because we use default values for length and pin (as does the official
+  // Arduino implementation) this only works in __cplusplus
+  #define tone(...)   _tone(__VA_ARGS__)
+  #define noTone(...) _noTone(__VA_ARGS__)
+  
+  // This is inlined so that the calculations are done at compile time
+  // for constant frequency and length, otherwise we would need to
+  // use runtime division which is basically out of the question on a t13
+  static inline void _tone(const uint8_t pin, const uint32_t frequency, const uint32_t length = 0)  __attribute__ ((always_inline));        
+  void _noTone(uint8_t pin = 0);
+  
+  // _tone() calls _toneRaw() with the "midPoint", which is the number of "ticks" to hold 
+  //  the pin high or low for, and the prescaleMask for prescaling the timer.
+  void _toneRaw(uint8_t pin, uint8_t midPoint, uint32_t lengthTicks, uint8_t prescaleBitMask);
+  
+  // See Tone.h for the implementation of _tone
+  #include "Tone.h"
+#endif
 
 // Serial Port Configuration
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

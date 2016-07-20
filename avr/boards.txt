@@ -10,6 +10,7 @@ menu.TimerClockSource=Timer 1 Clock
 menu.print=Print Support
 menu.serial=Serial Support
 menu.millis_ppm=Millis Accuracy
+menu.millis_tone=Millis, Tone Support
 
 attinyx41.name=ATtinyx41 
 attinyx41.upload.tool=avrdude
@@ -404,8 +405,28 @@ attiny13.menu.bod.2v7.bootloader.high_fuses=0xFB
 attiny13.menu.bod.4v3=B.O.D. Enabled (4.3v)
 attiny13.menu.bod.4v3.bootloader.high_fuses=0xF9
 attiny13.build.variant=tiny13
-attiny13.build.extra_flags=-DNO_TONE
 
+# Millis, Tone Menu
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#attiny13.menu.core.FullCore=Millis and Tone Available
+#attiny13.menu.core.FullCore.build.variant=tiny13
+#attiny13.menu.core.FullCore.build.core=tiny
+#attiny13.menu.core.FullCore.build.extra_flags=
+
+attiny13.menu.core.MillisCore=Millis Available, No Tone
+attiny13.menu.core.MillisCore.build.variant=tiny13
+attiny13.menu.core.MillisCore.build.core=tiny
+attiny13.menu.core.MillisCore.build.extra_flags=-DNO_TONE
+
+attiny13.menu.core.ToneCore=Tone Available, No Millis
+attiny13.menu.core.ToneCore.build.variant=tiny13
+attiny13.menu.core.ToneCore.build.core=tiny
+attiny13.menu.core.ToneCore.build.extra_flags=-DNO_MILLIS
+
+attiny13.menu.core.SmallestCore=No Millis, No Tone
+attiny13.menu.core.SmallestCore.build.variant=tiny13
+attiny13.menu.core.SmallestCore.build.core=tiny
+attiny13.menu.core.SmallestCore.build.extra_flags=-DNO_MILLIS -DNO_TONE
 
 # Serial Menu
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
