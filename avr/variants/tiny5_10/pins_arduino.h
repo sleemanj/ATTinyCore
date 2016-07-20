@@ -34,19 +34,39 @@
   Free Software Foundation, Inc., 59 Temple Place, Suite 330,
   Boston, MA  02111-1307  USA
 
-  $Id: wiring.h 249 2007-02-03 16:52:51Z mellis $
 */
 
 #ifndef Pins_Arduino_h
 #define Pins_Arduino_h
 
-// We will use the lite version of wiring.c
+// Initialisation Core Configuration
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+//  USE_WIRING_LITE will cause wiring_lite.c to be used instead of wiring.c
+//    this is a simpler, better system, but means more code is needed 
+//    for each variant (as it should be IMHO) so the variant can do the 
+//    chip specific stuff.
+//
+//  USE_NEW_MILLIS  will cause MillisMicrosDelay.c/h to be used, this is only
+//    possible with USE_WIRING_LITE, it produces better accuracy with less 
+//    code, and includes the extra feature of the REAL_MILLIS() macro.
+//
+//  REDUCED_CORE_TINYAVR is used at this stage by the new millis code to 
+//    handle some stuff that has trouble with these new very tiny chips.
+//
 #define USE_WIRING_LITE  1
 #define USE_NEW_MILLIS   1
 #define REDUCED_CORE_TINYAVR 1
 
+// TODO: Make this automatic on analogRead()?
+#ifndef INITIALIZE_ANALOG_TO_DIGITAL_CONVERTER
+  #define INITIALIZE_ANALOG_TO_DIGITAL_CONVERTER    1
+#endif
+
+// Print Support
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // For the 4/5 you really don't have a hope in hell of using
-// print.  For the 9/10 maybe.
+// print.  For the 9/10 maybe but probably not realistically.
 //
 // Also we have no chance to use arbitrary bases, while it 
 // will happily fit in the flash, the SRAM will be exhausted
@@ -69,12 +89,10 @@
 //#define PRINT_USE_BASE_HEX
 //#define PRINT_USE_BASE_ARBITRARY
 
-// TODO: Make this automatic on analogRead()?
-#ifndef INITIALIZE_ANALOG_TO_DIGITAL_CONVERTER
-  #define INITIALIZE_ANALOG_TO_DIGITAL_CONVERTER    1
-#endif
-
-//  Only has one timer, we wont have tone() functions then
+// Tone Support
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//  Tone is not implemented on 4/5/9/10 yet.  With such low RAM (32 bytes)
+//  even using a similar method to the Tiny13 tone might be too much.
 #define NO_TONE                                   1
 
 // Serial Port Configuration
@@ -101,7 +119,7 @@
 
 // The below would be used if we instead had
 // #define USE_SERIAL_TYPE SERIAL_TYPE_SOFTWARE
-// But the t13 is too small for even TinySoftwareSerial
+// But the 4/5/9/10 is too small for even TinySoftwareSerial
 // I'll leave the definitions here anyway.
 #define ANALOG_COMP_DDR               DDRB
 #define ANALOG_COMP_PORT              PORTB
@@ -111,18 +129,16 @@
 
 // Analog reference bit masks.
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// This series of chips can only use Vcc as ref
 
 #define DEFAULT (0)
-// This series of chips can only use Vcc as ref
-//#define INTERNAL (1)
-//#define INTERNAL1V1 INTERNAL
 
 // Set the Clock Source/Frequency
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // This series of chips sets it's clock source and system clock prescaling
 // at runtime as opposed to compile time (or by fuses).
 #define setCPUFrequency(f) {                            \
-  switch(F_CPU)\
+  switch(f)\
   { \
     case 8000000UL: \
       CCP = 0xD8; \
@@ -165,7 +181,7 @@
 
 // PWM On/Off
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//  for t13 this is simple since we only have 1 timer anyway
+//  for 4/5/9/10 this is simple since we only have 1 timer anyway
 //  so doing it in macros, it uses less code space
 //
 //  For others, you might want to do something like
@@ -200,12 +216,6 @@
 #define turnOffPWM(t)  ( ( t==TIMER0A ) ? ( TCCR0A &= ~0B11000000 ) : ( TCCR0A &= ~0B00110000 ) )
 #define turnOnPWM(t,v) ( turnOnPWMTimer(t) && ( t==TIMER0A ) ? ( ( TCCR0A |= 0B11000000 ) && ( OCR0A = v ) ) : ( ( TCCR0A |= 0B00110000 ) && ( OCR0B = v ) ) )
 
-// If pin is known to be a compile-time-constant and the mode is OUTPUT
-// then we can reduce pinMode to simply setting the bit, this will be 
-// optimized to a single sbi instruction because pin is a constant
-// #define pinModeX(pin, mode) ( (__builtin_constant_p(pin) && mode == OUTPUT) ? ((void)(DDRB |= _BV(pin))) : pinMode(pin,mode) )
-
-
 // millis()/micros() Timer On/Off
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // 
@@ -237,26 +247,25 @@ void _turnOffMillis();
 
 // Arduino Pin Numbering to Chip's PORT.PIN and ADC Numbers
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+// See PinMapping.jpg
 // Tiny 5/10: https://goo.gl/SKdLZP
 // Tiny 4/9:  https://goo.gl/dL5WWZ
   
 #define NUM_DIGITAL_PINS            4
-
-// This isn't true for the 4/9 but it shouldn't do any harm to leave it...
 #define NUM_ANALOG_INPUTS           4
+
 #define analogInputToDigitalPin(p)  (p)
 
 #define digitalPinHasPWM(p)         ((p) == 0 || (p) == 1)
 
 // These are some convenient NAME => Arduino Digital Pin Number mappings
 // None of these make sense for 4/5/9/10
-// #define SS   3
-// #define MOSI 0
-// #define MISO 1
-// #define SCK  2
-// #define SDA ((uint8_t) 0)
-// #define SCL ((uint8_t) 2)
+// #define SS   ((uint8_t) 3)
+// #define MOSI ((uint8_t) 0)
+// #define MISO ((uint8_t) 1)
+// #define SCK  ((uint8_t) 2)
+// #define SDA  ((uint8_t) 0)
+// #define SCL  ((uint8_t) 2)
 
 // Analog Pin => ADC number, note that if  ANALOG_PINS_ARE_ADC_NUMBERS is not set
 // then you need to add NUM_DIGITAL_PINS to the ADC number and it will be 
@@ -272,7 +281,6 @@ void _turnOffMillis();
 #define digitalPinToPCICRbit(p) (0)
 #define digitalPinToPCMSK(p)    (((p) >= 0 && (p) <= 4) ? (&PCMSK) : ((uint8_t *)NULL))
 #define digitalPinToPCMSKbit(p) (p)
-
 
 // We only have one port (PB) so we can simplify
 // everything to save wasting flash
@@ -310,68 +318,5 @@ void _turnOffMillis();
 
 #undef pullupEnableRegister
 #define pullupEnableRegister(P) ( (volatile uint8_t *)(&PUEB))
-
-#ifdef ARDUINO_MAIN
-/*
- * With the above redefined macros, these are therefore not necessary.
-
- #include <avr/pgmspace.h>
-
-const uint16_t PROGMEM port_to_mode_PGM[] = 
-{
-  NOT_A_PORT,
-  NOT_A_PORT,
-  (uint16_t)&DDRB,
-};
-
-const uint16_t PROGMEM port_to_output_PGM[] = 
-{
-  NOT_A_PORT,
-  NOT_A_PORT,
-  (uint16_t)&PORTB,
-};
-
-const uint16_t PROGMEM port_to_input_PGM[] = 
-{
-  NOT_A_PIN,
-  NOT_A_PIN,
-  (uint16_t)&PINB,
-};
-
-const uint8_t PROGMEM digital_pin_to_port_PGM[] = 
-{
-  PB, 
-  PB,
-  PB,
-  PB,
-  PB, 
-  PB, 
-
-};
-
-const uint8_t PROGMEM digital_pin_to_bit_mask_PGM[] = 
-{
-  _BV(0), 
-  _BV(1),
-  _BV(2),
-  _BV(3),
-  _BV(4),
-  _BV(5),
-
-};
-
-
-const uint8_t PROGMEM digital_pin_to_timer_PGM[] = 
-{
-  TIMER0A, // OC0A 
-  TIMER0B, // OC0B 
-  NOT_ON_TIMER,
-  NOT_ON_TIMER,
-  NOT_ON_TIMER,
-  NOT_ON_TIMER,
-};
-*/
-
-#endif
 
 #endif
