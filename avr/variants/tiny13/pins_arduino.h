@@ -25,11 +25,28 @@
 #ifndef Pins_Arduino_h
 #define Pins_Arduino_h
 
-// We will use the lite version of wiring.c
-//  - this is better for the tiny13
+// Initialisation Core Configuration
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+//  USE_WIRING_LITE will cause wiring_lite.c to be used instead of wiring.c
+//    this is a simpler, better system, but means more code is needed 
+//    for each variant (as it should be IMHO) so the variant can do the 
+//    chip specific stuff.
+//
+//  USE_NEW_MILLIS  will cause MillisMicrosDelay.c/h to be used, this is only
+//    possible with USE_WIRING_LITE, it produces better accuracy with less 
+//    code, and includes the extra feature of the REAL_MILLIS() macro.
+//
 #define USE_WIRING_LITE  1
 #define USE_NEW_MILLIS   1
 
+// TODO: Make this automatic on analogRead()?
+#ifndef INITIALIZE_ANALOG_TO_DIGITAL_CONVERTER
+  #define INITIALIZE_ANALOG_TO_DIGITAL_CONVERTER    1
+#endif
+
+// Print Support
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // The tiny13 is very ram limited, so restrict the Print class
 //  (and things so derived, like Serial) to only be able to 
 //  print at most an int, rather than a long
@@ -54,11 +71,6 @@
 //#define PRINT_USE_BASE_DEC
 //#define PRINT_USE_BASE_HEX
 //#define PRINT_USE_BASE_ARBITRARY
-
-// TODO: Make this automatic on analogRead()?
-#ifndef INITIALIZE_ANALOG_TO_DIGITAL_CONVERTER
-  #define INITIALIZE_ANALOG_TO_DIGITAL_CONVERTER    1
-#endif
 
 // Tone Support
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -119,9 +131,9 @@
 // Analog reference bit masks.
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#define DEFAULT (0)
-#define INTERNAL (1)
-#define INTERNAL1V1 INTERNAL
+#define DEFAULT     (0)
+#define INTERNAL    (1)
+#define INTERNAL1V1 (1)
 
 // PWM On/Off
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -185,18 +197,7 @@ void _turnOffMillis();
 
 // Arduino Pin Numbering to Chip's PORT.PIN and ADC Numbers
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-// ATMEL ATTINY13
-//
-//                    +-\/-+
-//  A0 D5   ~RESET~  1|    |8   VCC
-//  CLKI      A3 D3  2|    |7   D2 A1     SCK
-//            A2 D4  3|    |6   D1    PWM MISO RX* INT0
-//              GND  4|    |5   D0    PWM MOSI TX*
-//                    +----+
-//
-// * Software Serial (not a hardware uart)
-
+// See PinMapping.jpg
   
 #define NUM_DIGITAL_PINS            6
 #define NUM_ANALOG_INPUTS           4
@@ -211,12 +212,12 @@ void _turnOffMillis();
 #define digitalPinHasPWM(p)         ((p) == 0 || (p) == 1)
 
 // These are some convenient NAME => Arduino Digital Pin Number mappings
-#define SS   3
-#define MOSI 0
-#define MISO 1
-#define SCK  2
-#define SDA ((uint8_t) 0)
-#define SCL ((uint8_t) 2)
+#define SS   ((uint8_t) 3)
+#define MOSI ((uint8_t) 0)
+#define MISO ((uint8_t) 1)
+#define SCK  ((uint8_t) 2)
+#define SDA  ((uint8_t) 0)
+#define SCL  ((uint8_t) 2)
 
 // Analog Pin => ADC number, note that if  ANALOG_PINS_ARE_ADC_NUMBERS is not set
 // then you need to add NUM_DIGITAL_PINS to the ADC number and it will be 
@@ -232,7 +233,6 @@ void _turnOffMillis();
 #define digitalPinToPCICRbit(p) 5
 #define digitalPinToPCMSK(p)    (((p) >= 0 && (p) <= 5) ? (&PCMSK) : ((uint8_t *)NULL))
 #define digitalPinToPCMSKbit(p) (p)
-
 
 // The t13 is super small, we only have one port (PB) so we can simplify
 // everything to save wasting flash
@@ -267,69 +267,5 @@ void _turnOffMillis();
 
 #undef portModeRegister
 #define portModeRegister(P) ( (volatile uint8_t *)(&DDRB))
-
-
-#ifdef ARDUINO_MAIN
-/*
- * With the above redefined macros, these are therefore not necessary.
-
- #include <avr/pgmspace.h>
-
-const uint16_t PROGMEM port_to_mode_PGM[] = 
-{
-  NOT_A_PORT,
-  NOT_A_PORT,
-  (uint16_t)&DDRB,
-};
-
-const uint16_t PROGMEM port_to_output_PGM[] = 
-{
-  NOT_A_PORT,
-  NOT_A_PORT,
-  (uint16_t)&PORTB,
-};
-
-const uint16_t PROGMEM port_to_input_PGM[] = 
-{
-  NOT_A_PIN,
-  NOT_A_PIN,
-  (uint16_t)&PINB,
-};
-
-const uint8_t PROGMEM digital_pin_to_port_PGM[] = 
-{
-  PB, 
-  PB,
-  PB,
-  PB,
-  PB, 
-  PB, 
-
-};
-
-const uint8_t PROGMEM digital_pin_to_bit_mask_PGM[] = 
-{
-  _BV(0), 
-  _BV(1),
-  _BV(2),
-  _BV(3),
-  _BV(4),
-  _BV(5),
-
-};
-
-
-const uint8_t PROGMEM digital_pin_to_timer_PGM[] = 
-{
-  TIMER0A, // OC0A 
-  TIMER0B, // OC0B 
-  NOT_ON_TIMER,
-  NOT_ON_TIMER,
-  NOT_ON_TIMER,
-  NOT_ON_TIMER,
-};
-*/
-
-#endif
 
 #endif
