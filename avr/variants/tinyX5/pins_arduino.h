@@ -25,28 +25,42 @@
 #ifndef Pins_Arduino_h
 #define Pins_Arduino_h
 
-// We will use the lite version of wiring.c
-//  - this is better for the tiny13
+// Initialisation Core Configuration
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+//  USE_WIRING_LITE will cause wiring_lite.c to be used instead of wiring.c
+//    this is a simpler, better system, but means more code is needed 
+//    for each variant (as it should be IMHO) so the variant can do the 
+//    chip specific stuff.
+//
+//  USE_NEW_MILLIS  will cause MillisMicrosDelay.c/h to be used, this is only
+//    possible with USE_WIRING_LITE, it produces better accuracy with less 
+//    code, and includes the extra feature of the REAL_MILLIS() macro.
+//
 #define USE_WIRING_LITE  1
 #define USE_NEW_MILLIS   1
 
-// The tiny13 is very ram limited, so restrict the Print class
-//  (and things so derived, like Serial) to only be able to 
-//  print at most an int, rather than a long
+// TODO: Make this automatic on analogRead()?
+#ifndef INITIALIZE_ANALOG_TO_DIGITAL_CONVERTER
+  #define INITIALIZE_ANALOG_TO_DIGITAL_CONVERTER    1
+#endif
+
+// Print Support
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// The print library is pretty heavy, we can elect to shrink a bit.
 //
-// Also we have no chance to use arbitrary bases, while it 
-// will happily fit in the flash, the SRAM will be exhausted
-// the second you try and do anything with it, leading
-// to a crash, or reset, or other randomness.
+// PRINT_MAX_INT_TYPE determins the maximum integer that can be
+//  printed.  PRINT_INT_TYPE_LONG; PRINT_INT_TYPE_INT; PRINT_INT_TYPE_BYTE
+// 
+// PRINT_USE_BASE_xxx defines if you can Print numbers in that base/
 //
-// Since Print.h defines BIN, OCT, DEC and HEX as the defaults
+// Print.h defines BIN, OCT, DEC and HEX as the defaults
 // we will leave all these commented out here, just including
 // them in case you want to force-override
 //
 // You might use for example 
 //    build.extra_flags=-DPRINT_USE_BASE_BIN -DPRINT_USE_BASE_DEC
 // in your boards.txt
-//
 
 #define PRINT_MAX_INT_TYPE  PRINT_INT_TYPE_LONG
 //#define PRINT_USE_BASE_BIN
@@ -54,11 +68,6 @@
 //#define PRINT_USE_BASE_DEC
 //#define PRINT_USE_BASE_HEX
 //#define PRINT_USE_BASE_ARBITRARY
-
-// TODO: Make this automatic on analogRead()?
-#ifndef INITIALIZE_ANALOG_TO_DIGITAL_CONVERTER
-  #define INITIALIZE_ANALOG_TO_DIGITAL_CONVERTER    1
-#endif
 
 // Tone Support
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -93,7 +102,6 @@
 // #define USE_SERIAL_TYPE              SERIAL_TYPE_HALF_DUPLEX
 // #define HALF_DUPLEX_SERIAL_DISABLE_WRITE
 // #define HALF_DUPLEX_SERIAL_DISABLE_READ
-
 
 // The below are used for SERIAL_TYPE_SOFTWARE
 // #define USE_SERIAL_TYPE SERIAL_TYPE_SOFTWARE
