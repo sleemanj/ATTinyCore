@@ -277,9 +277,9 @@ void _turnOffMillis();
 #define A3 ((uint8_t) 3)
 
 // Pin Change Interrupt (PCI) Setup
-#define digitalPinToPCICR(p)    (((p) >= 0 && (p) <= 4) ? (&PCICR) : ((uint8_t *)NULL))
+#define digitalPinToPCICR(p)    (&PCICR)
 #define digitalPinToPCICRbit(p) (0)
-#define digitalPinToPCMSK(p)    (((p) >= 0 && (p) <= 4) ? (&PCMSK) : ((uint8_t *)NULL))
+#define digitalPinToPCMSK(p)    (&PCMSK)
 #define digitalPinToPCMSKbit(p) (p)
 
 // We only have one port (PB) so we can simplify
