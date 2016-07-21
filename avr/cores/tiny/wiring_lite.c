@@ -293,16 +293,39 @@ void init(){
 #endif
   
   
-// TODO: Tidy this away in variant code, not in the core.
 #if defined(INITIALIZE_ANALOG_TO_DIGITAL_CONVERTER) && INITIALIZE_ANALOG_TO_DIGITAL_CONVERTER  
-  ADMUX=0;
-  //Set up ADC clock depending on F_CPU
-  #if F_CPU == 128000
-  ADCSRA |= _BV(ADEN);
-  #elif F_CPU == 1000000 || F_CPU == 1200000 || F_CPU == 600000
-  ADCSRA |= _BV(ADEN) | _BV(ADPS1);
-  #else
-  ADCSRA |= _BV(ADEN) | _BV(ADPS1) | _BV(ADPS0) | _BV(ADPS2);
+  #if defined(turnOnADC)
+    // If a variant has to do things differently, they can define turnOnADC to do so.
+    turnOnADC(F_CPU);
+  #elif !defined(turnOnADC) && defined(ADCSRA)
+    // Default implementation, so far I have not come across a tiny that works differently in this regard
+    // so probably the default is just fine.        
+    //
+    // [ Datasheet: By default, the successive approximation circuitry requires an input clock frequency 
+    // between 50 kHz and 200 kHz to get maximum resolution. ]
+    
+    // It seems that there is no practical advantage in accuracy to run with a clock lower than 200kHZ
+    // so the numbers here are the maximum frequency for which the given prescaler (2^[PRESCALER]) will
+    // result in 200kHZ or less
+    #if   F_CPU <= 400000UL   
+      #define ADC_ARDUINO_PRESCALER 1 
+    #elif F_CPU <= 800000UL 
+      #define ADC_ARDUINO_PRESCALER 2
+    #elif F_CPU <= 1600000UL 
+      #define ADC_ARDUINO_PRESCALER 3
+    #elif F_CPU <= 3200000UL 
+      #define ADC_ARDUINO_PRESCALER 4
+    #elif F_CPU <= 6400000UL 
+      #define ADC_ARDUINO_PRESCALER 5
+    #elif F_CPU <= 12800000UL 
+      #define ADC_ARDUINO_PRESCALER 6
+    #else
+      #define ADC_ARDUINO_PRESCALER 7
+    #endif
+    
+    // Since this is init(), ADCSRA is already going to be zero, we can just
+    // set our bits indiscriminantly
+    ADCSRA = (ADC_ARDUINO_PRESCALER << ADPS0) | _BV(ADEN);
   #endif
 #endif  
 }
