@@ -42,6 +42,11 @@
 #define MISO 5
 #define SCK  6
 
+#define USI_DDR_PORT DDRA
+#define USCK_DD_PIN DDA4
+#define DO_DD_PIN DDA5
+#define DI_DD_PIN DDA6
+
 static const uint8_t SDA = 4;
 static const uint8_t SCL = 6;
 
@@ -96,6 +101,7 @@ static const uint8_t A7 = 7;
 #define EXTERNAL (1)
 // Internal 1.1V voltage reference
 #define INTERNAL (2)
+#define INTERNAL1V1 INTERNAL
 
 //----------------------------------------------------------
 //----------------------------------------------------------

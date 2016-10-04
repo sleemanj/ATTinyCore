@@ -123,6 +123,10 @@
 #define BYPASSED2V6 (7)           // Internal (2v6) but connected to PB0 
                                   //   which must have a bypass capacitor on it.
 
+// These were later defined by @SpenceKonde leaving for backcompat
+#define INTERNAL2V56_NO_CAP (6)
+#define INTERNAL2V56NOBP INTERNAL2V56_NO_CAP
+  
 // PWM On/Off
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -186,6 +190,12 @@ void _turnOffMillis();
 #define SDA ((uint8_t) 0)
 #define SCL ((uint8_t) 2)
 
+#define USI_DDR_PORT DDRB
+#define USCK_DD_PIN DDB2
+#define DO_DD_PIN DDB1
+#define DI_DD_PIN DDB0
+
+
 // Analog Pin => ADC number, note that if  ANALOG_PINS_ARE_ADC_NUMBERS is not set
 // then you need to add NUM_DIGITAL_PINS to the ADC number and it will be 
 // subtracted when yo try to do analogRead() in order to get the ADC.
@@ -200,7 +210,6 @@ void _turnOffMillis();
 #define digitalPinToPCICRbit(p) 5
 #define digitalPinToPCMSK(p)    (((p) >= 0 && (p) <= 5) ? (&PCMSK) : ((uint8_t *)NULL))
 #define digitalPinToPCMSKbit(p) (p)
-
 
 // The x5 is super small, we only have one port (PB) so we can simplify
 // everything to save wasting flash
