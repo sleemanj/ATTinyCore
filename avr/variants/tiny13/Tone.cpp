@@ -98,7 +98,7 @@ ISR(TIMER0_COMPA_vect)
 {  
   // Toggle the pin, most AVR can toggle an output pin by writing a 1 to the input 
   // register bit for that pin.
-  *(portInputRegister(digitalPinToPort(CurrentTonePin))) |= digitalPinToBitMask(CurrentTonePin);
+  *(portInputRegister(digitalPinToPort(CurrentTonePin))) = digitalPinToBitMask(CurrentTonePin);
   
   
   // If we have played this tone for the requested duration, stop playing it.
