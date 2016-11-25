@@ -3,8 +3,7 @@ ATTiny Core - 1634, x313, x4, x41, x5, x61, x7, x8 and 828 for Arduino 1.6.x
 
 [![Join the chat at https://gitter.im/SpenceKonde/ATTinyCore](https://badges.gitter.im/SpenceKonde/ATTinyCore.svg)](https://gitter.im/SpenceKonde/ATTinyCore?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-### All Eclipse compatibility is gone right now due to changes needed to keep a bug in 1.6.10 of the official IDE from breaking the official boards when installing a custom core. This will be rectified once Arduino releases a fixed version of the IDE.
-See the discussion here: https://github.com/SpenceKonde/ReleaseScripts/pull/9
+
 ### [Installation](Installation.md) 
 ### [Basic Wiring](Wiring.md) 
 
@@ -58,6 +57,10 @@ External crystal (x41, 1634 only, in addition to above):
 * 7.37 MHz
 
 **Warning** When using weird clock frequencies (ones with a frequency (in MHz) by which 64 cannot be divided evenly), micros() is 4-5 times slower (~110 clocks); it still reports the time at the point when it was called, not the end, however, and the time it gives is pretty close to reality (w/in 1% or so). This combination of performance and accuracy is the result of hand tuning for these clock speeds. For other clock speeds (for example, if you add your own), it will be slower still - hundreds of clock cycles - though the numbers will be reasonably accurate. The "stock" micros() executes equally fast at all clock speeds, and just returns wrong values with anything that 64 doesn't divide evenly by.  
+
+Link-time Optimization (LTO) support
+------------
+In version 1.1.2 and later, this core supports Link Time Optimization (lto). This can substantially reduce the compiled size of your sketch. Version 1.6.13 or later of the official AVR boards package (included with 1.6.11 and later of the IDE) is required for this functionality. Link time optimization can be enabled from the option in the tools menu.
 
 I2C support
 ------------
@@ -166,10 +169,10 @@ And the old style which reverses the digital pin numbering so that A0 is D10, A1
 ![x4 Pin Mapping](http://drazzy.com/e/img/PinoutT84.png "Arduino Pin Mapping for ATtiny 84/44/24")
 
 ### ATtiny 261/461/861
-![x61 Pin Mapping](http://drazzy.com/e/img/PinoutT861.png "Arduino Pin Mapping for ATtiny 861/461/261")
+![x61 Pin Mapping](http://drazzy.com/e/img/PinoutT861_a.png "Arduino Pin Mapping for ATtiny 861/461/261")
 
 ### ATtiny 87/167
-![x7 Pin Mapping](http://drazzy.com/e/img/PinoutT167.jpg "Arduino Pin Mapping for ATtiny 167/87")
+![x7 Pin Mapping](http://drazzy.com/e/img/PinoutT167_a.jpg "Arduino Pin Mapping for ATtiny 167/87")
 
 ### ATtiny 88/48
 ![x8 Pin Mapping](http://drazzy.com/e/img/PinoutT88x.jpg "Arduino Pin Mapping for ATtiny 88/48 in TQFP")

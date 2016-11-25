@@ -383,8 +383,10 @@ static inline uint16_t analogRead(uint8_t pin)
   if ( pin >= NUM_DIGITAL_PINS ) pin -= NUM_DIGITAL_PINS; // allow for channel or pin numbers
   #endif
   
-  // fix? Validate pin?
-  if(pin >= NUM_ANALOG_INPUTS) return 0; //Not a valid pin.
+  // Below commented out, it allows you to use the internal ADC numbers (eg to read self voltage etc)
+  // See @SpenceKonde c8d57b24d849e0f762b050b9944006bbcda0d057
+  // fix? Validate pin?  
+  // if(pin >= NUM_ANALOG_INPUTS) return 0; //Not a valid pin.
   
   #if !defined(ADCSRA) || NUM_ANALOG_INPUTS < 1
   return digitalRead(analogInputToDigitalPin(pin)) ? 1023 : 0; //No ADC, so read as a digital pin instead.
