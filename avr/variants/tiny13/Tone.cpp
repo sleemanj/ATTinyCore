@@ -20,7 +20,7 @@
 #if !defined(NO_TONE)
 
 static  volatile uint32_t  CurrentToneDuration = 0;
-static  volatile uint8_t   CurrentTonePin      = 0;
+static  volatile uint8_t   CurrentTonePin      = 255;
 static  volatile uint8_t   CurrentToneMidpoint = 0;
 
 void _toneRaw(uint8_t pin, uint8_t midPoint, uint32_t lengthTicks, uint8_t prescaleBitMask) 
@@ -41,6 +41,10 @@ void _toneRaw(uint8_t pin, uint8_t midPoint, uint32_t lengthTicks, uint8_t presc
   // ticks as we hit the mid-point.
     
   CurrentToneDuration = lengthTicks;
+
+  // Are we already playing that tone, if so, just keep doing that
+  // otherwise we would make a clicking sound.
+  if(pin == CurrentTonePin && midPoint == CurrentToneMidpoint) return;
   
   // The official Arduino tone() sets it as output for you
   //  so we will also.

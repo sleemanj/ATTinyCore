@@ -24,6 +24,8 @@
 
 static inline void _tone(const uint8_t pin, const uint32_t frequency, const uint32_t length)
 {
+  if(frequency == 0) return noTone(pin);
+
   uint16_t  prescaleDivider = 1; // The divider increases by powers of 2
   uint8_t   prescaleBitMask = 1; // The bitmask only increments unitarily
   uint32_t  ticksPerMs      = F_CPU/1000;
