@@ -1,10 +1,24 @@
-ATTiny Core - 1634, x313, x4, x41, x5, x61, x7, x8 and 828 for Arduino 1.6.x
-============
+# Attention
+This is a fork of @SpenceKonde's ATTinyCore, it's primary focus is on the following processors
+
+  * ATtiny13
+  * ATtiny25/45/85
+  * ATtiny24/44/84
+  * ATtiny4/5/9/10
+
+Which either Spence does not support, or I have developed *significant* efficiency (reduced codesize) improvements for.
+
+This fork is maintained in order to assist with keeping up-to-date with Spence's work, for actually
+using this, you should [install my DIY ATtiny Distribution](https://github.com/sleemanj/optiboot/tree/master/dists#attiny) with the Boards Manager in the Arduino IDE.
+
+Please also see [that page](https://github.com/sleemanj/optiboot/tree/master/dists#attiny) for pinouts and information about those processors and some extra features available in the DIY ATtiny distribution not present here in ATTinyCore itself.
+
+## ATTiny Core - 1634, x313, x4, x41, x5, x61, x7, x8 and 828 for Arduino 1.6.x
 
 [![Join the chat at https://gitter.im/SpenceKonde/ATTinyCore](https://badges.gitter.im/SpenceKonde/ATTinyCore.svg)](https://gitter.im/SpenceKonde/ATTinyCore?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 
-### [Installation](Installation.md) 
+### [Installation](https://github.com/sleemanj/optiboot/tree/master/dists#attiny) 
 ### [Basic Wiring](Wiring.md) 
 
 ### ATtinyCore Universal
