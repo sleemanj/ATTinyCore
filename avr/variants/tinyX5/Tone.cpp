@@ -68,9 +68,7 @@ void _tone(uint8_t pin, uint32_t frequency, uint32_t length)
   {
     prescaleDivider = prescaleDivider << 1;
     prescaleBitMask++;
-  }
-    
-  CurrentToneDuration = length ? length : ~(0UL);
+  }      
   
   // The official Arduino tone() sets it as output for you
   //  so we will also.
