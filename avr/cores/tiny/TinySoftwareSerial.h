@@ -25,8 +25,12 @@ struct soft_ring_buffer
   int tail;
 };
 
+// When LTO is enabled, the linker drops uartDelay out because
+// it doesn't look used, then it complains that it actually did
+// need it after all (if it indeed did), adding used solves this
+// and doesn't *appear* to cause any problems... probably.
 extern "C"{
-  void uartDelay() __attribute__ ((naked));
+  void uartDelay() __attribute__ ((naked,used));
   uint8_t getch();
   void store_char(unsigned char c, soft_ring_buffer *buffer);
 }
