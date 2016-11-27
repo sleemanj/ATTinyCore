@@ -19,9 +19,10 @@
 
 #if !defined(NO_TONE)
 
+static  volatile uint32_t  CurrentToneFrequency= 0;
 static  volatile uint32_t  CurrentToneDuration = 0;
 static  volatile uint32_t  CurrentToneStarted  = 0;
-static  volatile uint8_t   CurrentTonePin      = 0;
+static  volatile uint8_t   CurrentTonePin      = 255;
 
 void _tone(uint8_t pin, uint32_t frequency, uint32_t length) 
 {
@@ -43,7 +44,20 @@ void _tone(uint8_t pin, uint32_t frequency, uint32_t length)
   //  if the clock cycles is greater than 255 (only an 8 bit timer)
   //  which is the maximum clocks we can count  then we must increase 
   //  the prescaler to achieve it
+  
+  // First, check sanity, if freq comes in as zero that would be a div0
+  // make it noTone() instead as sometimes it would be useful to 
+  // do this (or at least it's something people might expect).
+  if(frequency == 0) { noTone(pin); return; }
     
+  CurrentToneDuration = length ? length : ~(0UL);
+  
+  // Are we already playing that tone, if so, just keep doing that
+  // otherwise we would make a clicking sound.
+  if(pin == CurrentTonePin && frequency == CurrentToneFrequency) return;
+  
+  CurrentToneFrequency = frequency;
+  
   // Start with prescaling of 1, and if it doesn't fit, step up until we 
   // get one that does.
     
@@ -98,7 +112,7 @@ ISR(TIMER1_OVF_vect)
 {  
   // Toggle the pin, most AVR can toggle an output pin by writing a 1 to the input 
   // register bit for that pin.
-  *(portInputRegister(digitalPinToPort(CurrentTonePin))) |= digitalPinToBitMask(CurrentTonePin);
+  *(portInputRegister(digitalPinToPort(CurrentTonePin))) = digitalPinToBitMask(CurrentTonePin);
   
   // If we have played this tone for the requested duration, stop playing it.
   if (millis() - CurrentToneStarted >= CurrentToneDuration)
