@@ -63,7 +63,9 @@ void analogReference(uint8_t mode)
 
 uint16_t _analogRead(uint8_t pin)
 {
-  
+#if defined(HAVE_ADC) && !HAVE_ADC
+  return LOW;
+#else
   #if defined(REFS0)
   #if defined(ADMUX)
   ADMUX = ((analog_reference & ADMUX_REFS_MASK) << REFS0) | ((pin & ADMUX_MUX_MASK) << MUX0); //select the channel and reference
@@ -93,6 +95,7 @@ uint16_t _analogRead(uint8_t pin)
   #else
   return LOW;
   #endif
+#endif
 }
 
 // Right now, PWM output only works on the pins with
