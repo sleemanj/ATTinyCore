@@ -161,9 +161,18 @@ void delayMicrosecondsAdjustedForMillisInterrupt(DelayMicrosecondsTime_t);
   // then we do not need to adjust for it in delayMicroseconds
   #define delayMicroseconds(...) delayMicrosecondsWithoutMillisInterruptAdjustment(__VA_ARGS__)
 #else
-  // Conversely if we do have millis() running then we are probably
-  // best to use our adjusted one instead of the normal one
-  #define delayMicroseconds(...) delayMicrosecondsAdjustedForMillisInterrupt(__VA_ARGS__)
+  #if !defined(LTO_ENABLED)    
+    // Conversely if we do have millis() running then we are probably
+    // best to use our adjusted one instead of the normal one
+    #define delayMicroseconds(...) delayMicrosecondsAdjustedForMillisInterrupt(__VA_ARGS__)
+  #else
+    // Except if LTO is enabled, in which case the clock counts for that adjustment 
+    // are probably invalid, unfortunately there does not presently appear to be 
+    // a way to disable LTO for that specific function, it would require having different
+    // compilation options for MillisMicrosDelay.c specifically which is not possible
+    // (I think)    
+    #define delayMicroseconds(...) delayMicrosecondsWithoutMillisInterruptAdjustment(__VA_ARGS__)
+  #endif
 #endif
 
 #ifndef NO_MILLIS
@@ -2504,7 +2513,7 @@ MillisMicrosTime_t micros();
   //  Error: 0.0000% (0 Decimal)
   // Jitter: 0.0000% (0 Decimal)
 
-  #define REAL_MILLIS(AVR_MILLIS) ((uint32_t) (AVR_MILLIS)
+  #define REAL_MILLIS(AVR_MILLIS) ((uint32_t) (AVR_MILLIS))
 
 
 #elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 125000UL
@@ -2985,7 +2994,7 @@ MillisMicrosTime_t micros();
     //  Error: 0.0000% (0 Decimal)
     // Jitter: 0.0000% (0 Decimal)
 
-    #define REAL_MILLIS(AVR_MILLIS) ((uint32_t) (AVR_MILLIS)
+    #define REAL_MILLIS(AVR_MILLIS) ((uint32_t) (AVR_MILLIS))
     #endif
 
 
@@ -3153,7 +3162,7 @@ MillisMicrosTime_t micros();
   //  Error: 0.0000% (0 Decimal)
   // Jitter: 0.0000% (0 Decimal)
 
-  #define REAL_MILLIS(AVR_MILLIS) ((uint32_t) (AVR_MILLIS)
+  #define REAL_MILLIS(AVR_MILLIS) ((uint32_t) (AVR_MILLIS))
 
 
 #elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 15625UL
@@ -3436,7 +3445,7 @@ MillisMicrosTime_t micros();
     //  Error: 0.0000% (0 Decimal)
     // Jitter: 0.0000% (0 Decimal)
 
-    #define REAL_MILLIS(AVR_MILLIS) ((uint32_t) (AVR_MILLIS)
+    #define REAL_MILLIS(AVR_MILLIS) ((uint32_t) (AVR_MILLIS))
     #endif
 
 
@@ -3445,7 +3454,7 @@ MillisMicrosTime_t micros();
   //  Error: 0.0000% (0 Decimal)
   // Jitter: 0.0000% (0 Decimal)
 
-  #define REAL_MILLIS(AVR_MILLIS) ((uint32_t) (AVR_MILLIS)
+  #define REAL_MILLIS(AVR_MILLIS) ((uint32_t) (AVR_MILLIS))
 
 
 #elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 1953UL
@@ -3500,7 +3509,7 @@ MillisMicrosTime_t micros();
   //  Error: 0.0000% (0 Decimal)
   // Jitter: 0.0000% (0 Decimal)
 
-  #define REAL_MILLIS(AVR_MILLIS) ((uint32_t) (AVR_MILLIS)
+  #define REAL_MILLIS(AVR_MILLIS) ((uint32_t) (AVR_MILLIS))
 #endif
 
   // REAL_MICROS(x)
@@ -3681,7 +3690,7 @@ MillisMicrosTime_t micros();
   //  Error: 0.0000% (0 Decimal)
   // Jitter: 0.0000% (0 Decimal)
 
-  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS)
+  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS))
 
 
 #elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 12000000UL
@@ -3835,7 +3844,7 @@ MillisMicrosTime_t micros();
   //  Error: 0.0000% (0 Decimal)
   // Jitter: 0.0000% (0 Decimal)
 
-  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS)
+  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS))
 
 
 #elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 6400000UL
@@ -3843,7 +3852,7 @@ MillisMicrosTime_t micros();
   //  Error: 0.0000% (0 Decimal)
   // Jitter: 0.0000% (0 Decimal)
 
-  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS)
+  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS))
 
 
 #elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 4800000UL
@@ -3911,7 +3920,7 @@ MillisMicrosTime_t micros();
   //  Error: 0.0000% (0 Decimal)
   // Jitter: 0.0000% (0 Decimal)
 
-  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS)
+  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS))
 
 
 #elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 3000000UL
@@ -4112,7 +4121,7 @@ MillisMicrosTime_t micros();
   //  Error: 0.0000% (0 Decimal)
   // Jitter: 0.0000% (0 Decimal)
 
-  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS)
+  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS))
 
 
 #elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 1500000UL
@@ -4253,7 +4262,7 @@ MillisMicrosTime_t micros();
   //  Error: 0.0000% (0 Decimal)
   // Jitter: 0.0000% (0 Decimal)
 
-  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS)
+  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS))
 
 
 #elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 800000UL
@@ -4261,7 +4270,7 @@ MillisMicrosTime_t micros();
   //  Error: 0.0000% (0 Decimal)
   // Jitter: 0.0000% (0 Decimal)
 
-  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS)
+  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS))
 
 
 #elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 600000UL
@@ -4329,7 +4338,7 @@ MillisMicrosTime_t micros();
   //  Error: 0.0000% (0 Decimal)
   // Jitter: 0.0000% (0 Decimal)
 
-  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS)
+  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS))
 
 
 #elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 375000UL
@@ -4491,7 +4500,7 @@ MillisMicrosTime_t micros();
   //  Error: 0.0000% (0 Decimal)
   // Jitter: 0.0000% (0 Decimal)
 
-  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS)
+  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS))
 
 
 #elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 187500UL
@@ -4593,7 +4602,7 @@ MillisMicrosTime_t micros();
   //  Error: 0.0000% (0 Decimal)
   // Jitter: 0.0000% (0 Decimal)
 
-  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS)
+  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS))
 
 
 #elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 125000UL
@@ -4601,7 +4610,7 @@ MillisMicrosTime_t micros();
   //  Error: 0.0000% (0 Decimal)
   // Jitter: 0.0000% (0 Decimal)
 
-  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS)
+  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS))
 
 
 #elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 100000UL
@@ -4609,7 +4618,7 @@ MillisMicrosTime_t micros();
   //  Error: 0.0000% (0 Decimal)
   // Jitter: 0.0000% (0 Decimal)
 
-  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS)
+  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS))
 
 
 #elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 75000UL
@@ -4651,7 +4660,7 @@ MillisMicrosTime_t micros();
   //  Error: 0.0000% (0 Decimal)
   // Jitter: 0.0000% (0 Decimal)
 
-  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS)
+  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS))
 
 
 #elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 37500UL
@@ -4727,7 +4736,7 @@ MillisMicrosTime_t micros();
   //  Error: 0.0000% (0 Decimal)
   // Jitter: 0.0000% (0 Decimal)
 
-  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS)
+  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS))
 
 
 #elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 18750UL
@@ -4751,7 +4760,7 @@ MillisMicrosTime_t micros();
   //  Error: 0.0000% (0 Decimal)
   // Jitter: 0.0000% (0 Decimal)
 
-  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS)
+  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS))
 
 
 #elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 15625UL
@@ -4759,7 +4768,7 @@ MillisMicrosTime_t micros();
   //  Error: 0.0000% (0 Decimal)
   // Jitter: 0.0000% (0 Decimal)
 
-  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS)
+  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS))
 
 
 #elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 12500UL
@@ -4767,7 +4776,7 @@ MillisMicrosTime_t micros();
   //  Error: 0.0000% (0 Decimal)
   // Jitter: 0.0000% (0 Decimal)
 
-  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS)
+  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS))
 
 
 #elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 9375UL
@@ -4791,7 +4800,7 @@ MillisMicrosTime_t micros();
   //  Error: 0.0000% (0 Decimal)
   // Jitter: 0.0000% (0 Decimal)
 
-  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS)
+  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS))
 
 
 #elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 2000UL
@@ -4799,7 +4808,7 @@ MillisMicrosTime_t micros();
   //  Error: 0.0000% (0 Decimal)
   // Jitter: 0.0000% (0 Decimal)
 
-  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS)
+  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS))
 
 
 #elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 1953UL
@@ -4823,7 +4832,7 @@ MillisMicrosTime_t micros();
   //  Error: 0.0000% (0 Decimal)
   // Jitter: 0.0000% (0 Decimal)
 
-  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS)
+  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS))
 #endif
 
 #endif
