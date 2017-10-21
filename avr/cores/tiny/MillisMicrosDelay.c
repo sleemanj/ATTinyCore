@@ -19,6 +19,31 @@
   }
 */
 
+   
+  // A quick refresher on the calculations for millis() and micros()
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // The millis() and micros() calculations look complex, but it's really not that 
+  // tricky.
+  //
+  // Example of F_CPU = 16kHz, MILLIS_TIMER_PRESCALE = 1
+  //  16000 / 1    = 16000 ticks per second
+  //        / 256  = 62.5 overflows per second
+  //        / 1000 = 0.0625 overflows per mS
+  //   
+  //    1 / 0.0625 = 16 mS per overflow, so millis() = overf * 16 
+  //    
+  // Example F_CPU = 32.768kHz, MILLIS_TIMER_PRESCALE = 1
+  //  32768 / 1    = 32768 ticks per second
+  //        / 256  = 128 overflows per second
+  //        / 1000 = 0.128 overflows per mS
+  //   
+  //    1 / 0.128 = 7.8125 mS per overflow, so millis() = overf * 7.8125
+  //
+  //    To avoid floating point arithmetic various integer math only 
+  //    approximations are presented depending on the acceptable level of error.
+  // 
+  // micros() is of course pretty similar.
+
 volatile MillisMicrosTime_t ovrf=0;
 
 /* 
@@ -49,7 +74,7 @@ MillisMicrosTime_t millis()
   //   https://goo.gl/sgANEr
   //
   // James Sleeman, james@gogo.co.nz, http://sparks.gogo.co.nz/
-   
+ 
 #if (F_CPU / MILLIS_TIMER_PRESCALE) == 16000UL
   // 16 kHz
   //  Error: 0.0000% (0 Decimal)
