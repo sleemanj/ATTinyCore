@@ -166,6 +166,12 @@ void _turnOffMillis();
 #define SDA  ((uint8_t) 6)
 #define SCL  ((uint8_t) 4)
 
+#define USI_DDR_PORT DDRA
+#define USI_SCK_PORT DDRA
+#define USCK_DD_PIN DDA4
+#define DO_DD_PIN DDA5
+#define DI_DD_PIN DDA6
+
 // Analog Pin => ADC number, note that if  ANALOG_PINS_ARE_ADC_NUMBERS is not set
 // then you need to add NUM_DIGITAL_PINS to the ADC number and it will be 
 // subtracted when yo try to do analogRead() in order to get the ADC.
