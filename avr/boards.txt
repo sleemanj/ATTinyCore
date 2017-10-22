@@ -143,6 +143,8 @@ attiny13.menu.millis_ppm.0p25.build.custom_flags.millis_ppm=-DACCEPTABLE_MILLIS_
 attiny13.menu.millis_ppm.0p1=Better Or Equal 0.1% Error (Highest Code Use)
 attiny13.menu.millis_ppm.0p1.build.custom_flags.millis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=1000UL
 
+attinyx4.menu.pinmapping.old=Counterclockwise (like old ATTinyCore and x41-series)
+attinyx4.menu.pinmapping.old.build.variant=tinyX4
 
 
 attinyx5.name=ATtiny25/45/85
