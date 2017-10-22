@@ -219,10 +219,10 @@ void _turnOffMillis();
 #endif
 
 //Ax constants cannot be used for digitalRead/digitalWrite/analogWrite functions, only analogRead().
-static const uint8_t A0 = 0x80 & 0;
-static const uint8_t A1 = 0x80 & 1;
-static const uint8_t A2 = 0x80 & 2;
-static const uint8_t A3 = 0x80 & 3;
+static const uint8_t A0 = 0x80 | 0;
+static const uint8_t A1 = 0x80 | 1;
+static const uint8_t A2 = 0x80 | 2;
+static const uint8_t A3 = 0x80 | 3;
 
 // Pin Change Interrupt (PCI) Setup
 #define digitalPinToPCICR(p)    (((p) >= 0 && (p) <= 5) ? (&GIMSK) : ((uint8_t *)NULL))
