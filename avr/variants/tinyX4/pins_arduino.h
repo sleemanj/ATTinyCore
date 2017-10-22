@@ -72,7 +72,8 @@
 static const uint8_t SDA = 4;
 static const uint8_t SCL = 6;
 
-//Ax constants cannot be used for digitalRead/digitalWrite/analogWrite functions, only analogRead().
+// Analog Pins are set to ( 128 | [ADC] )
+// so that they can be identified by pinMode, digitalRead/Write and analogRead/Write
 static const uint8_t A0 = 0x80 | 0;
 static const uint8_t A1 = 0x80 | 1;
 static const uint8_t A2 = 0x80 | 2;

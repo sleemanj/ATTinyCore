@@ -202,6 +202,14 @@ static inline void pinMode(uint8_t pin, uint8_t mode)
   //  would use in falling through to _pinMode()
   if(__builtin_constant_p(pin))// && __builtin_constant_p(mode))
   {
+    // If we are passed a pin greater than 127 that means we got an analog pin number
+    // which is 0b10000000 | [ADC_REF]
+    // strip off the top bit to get the Reference and convert to digital pin number
+    if( pin & 0b10000000 ) 
+    {
+      pin = analogInputToDigitalPin( pin & 0b01111111 );    
+    }
+     
     if(digitalPinToPort(pin) == NOT_A_PIN)
     {
       return;
@@ -269,6 +277,14 @@ static inline void digitalWrite(uint8_t pin, uint8_t val)
   // We can allow non-constant val I think, the comparison overhead below will probably be no worse than calling _digitalWrite
   if(__builtin_constant_p(pin))// && __builtin_constant_p(val)) 
   {
+    // If we are passed a pin greater than 127 that means we got an analog pin number
+    // which is 0b10000000 | [ADC_REF]
+    // strip off the top bit to get the Reference and convert to digital pin number
+    if( pin & 0b10000000 ) 
+    {
+      pin = analogInputToDigitalPin( pin & 0b01111111 );    
+    }
+    
     if(digitalPinToPort(pin) == NOT_A_PIN)
     {
       return;
@@ -343,6 +359,14 @@ static inline uint8_t digitalRead(uint8_t pin)
 {  
   if(__builtin_constant_p(pin))
   {
+    // If we are passed a pin greater than 127 that means we got an analog pin number
+    // which is 0b10000000 | [ADC_REF]
+    // strip off the top bit to get the Reference and convert to digital pin number
+    if( pin & 0b10000000 ) 
+    {
+      pin = analogInputToDigitalPin( pin & 0b01111111 );    
+    }
+    
     if(digitalPinToPort(pin) == NOT_A_PIN)
     {
       return LOW;
@@ -377,16 +401,10 @@ uint16_t _analogRead(uint8_t pin);
 static inline uint16_t analogRead(uint8_t ) __attribute__((always_inline, unused));
 static inline uint16_t analogRead(uint8_t pin)
 {
-  // @SpenceKonde called it ANALOG_PINS_SEPARATE in his fork after I had called the same thing ANALOG_PINS_ARE_ADC_NUMBERS in mine, 
-  //  keeping both for simplicity.
-  #if defined( NUM_DIGITAL_PINS ) && ! ( defined(ANALOG_PINS_ARE_ADC_NUMBERS) && ANALOG_PINS_ARE_ADC_NUMBERS ) && ! defined(ANALOG_PINS_SEPARATE)
-  if ( pin >= NUM_DIGITAL_PINS ) pin -= NUM_DIGITAL_PINS; // allow for channel or pin numbers
-  #endif
-  
-  // Below commented out, it allows you to use the internal ADC numbers (eg to read self voltage etc)
-  // See @SpenceKonde c8d57b24d849e0f762b050b9944006bbcda0d057
-  // fix? Validate pin?  
-  // if(pin >= NUM_ANALOG_INPUTS) return 0; //Not a valid pin.
+  // If we are passed a pin greater than 127 that means we got an analog pin number
+  // which is 0b10000000 | [ADC_REF]
+  // strip off the top bit to get the Reference
+  pin = pin & 0b01111111;
   
   #if !defined(ADCSRA) || NUM_ANALOG_INPUTS < 1
   return digitalRead(analogInputToDigitalPin(pin)) ? 1023 : 0; //No ADC, so read as a digital pin instead.

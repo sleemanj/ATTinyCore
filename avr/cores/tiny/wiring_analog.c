@@ -63,10 +63,13 @@ void analogReference(uint8_t mode)
 
 uint16_t _analogRead(uint8_t pin)
 {
-  pin &=127; //strip off the high bit of the A# constants
+  // This has been stripped off already by analogRead() in Arduino.h
+  // pin &=127; //strip off the high bit of the A# constants
   
 #if ( defined(HAVE_ADC) && !HAVE_ADC ) || !defined(ADCSRA)
-  return digitalRead(analogInputToDigitalPin(pin)) ? 1023 : 0; //No ADC, so read as a digital pin instead.
+  // This is handled by analogRead() in Arduino.h
+  // return digitalRead(analogInputToDigitalPin(pin)) ? 1023 : 0; //No ADC, so read as a digital pin instead.
+  return 0;
 #else
   #if defined(REFS0)
   #if defined(ADMUX)
@@ -121,6 +124,14 @@ uint16_t _analogRead(uint8_t pin)
 
 void _analogWrite(uint8_t pin, uint8_t val)
 {
+  // If we are passed a pin greater than 127 that means we got an analog pin number
+  // which is 0b10000000 | [ADC_REF]
+  // strip off the top bit to get the Reference and convert to digital pin number
+  if( pin & 0b10000000 ) 
+  {
+    pin = analogInputToDigitalPin( pin & 0b01111111 );    
+  }
+      
   // We need to make sure the PWM output is enabled for those pins
   // that support it, as we turn it off when digitally reading or
   // writing with them.  Also, make sure the pin is in output mode

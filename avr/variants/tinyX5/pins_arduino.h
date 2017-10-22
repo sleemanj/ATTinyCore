@@ -173,6 +173,8 @@ void _turnOffMillis();
 #define NUM_DIGITAL_PINS            6
 #define NUM_ANALOG_INPUTS           4
 
+// Notice here that p is the ADC reference and returns an Arduino
+// pin number
 #define analogInputToDigitalPin(p)  (\
   ((p) == 3) ? 3 : (\
   ((p) == 1) ? 2 : (\
@@ -218,7 +220,8 @@ void _turnOffMillis();
 #  define USI_START_COND_INT USISIF
 #endif
 
-//Ax constants cannot be used for digitalRead/digitalWrite/analogWrite functions, only analogRead().
+// Analog Pins are set to 127+ADC Reference
+// so that they can be identified by pinMode, digitalRead/Write and analogRead/Write
 static const uint8_t A0 = 0x80 | 0;
 static const uint8_t A1 = 0x80 | 1;
 static const uint8_t A2 = 0x80 | 2;
