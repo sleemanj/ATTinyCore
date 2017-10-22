@@ -188,6 +188,7 @@ void _turnOffMillis();
 //              NOT when programming which are inverted and what the 
 //              datasheet shows.  
 //
+
 #define SS   3
 #define MOSI 1
 #define MISO 0
@@ -200,6 +201,22 @@ void _turnOffMillis();
 #define USCK_DD_PIN DDB2
 #define DO_DD_PIN DDB1
 #define DI_DD_PIN DDB0
+
+#  define DDR_USI DDRB
+#  define PORT_USI PORTB
+#  define PIN_USI PINB
+#  define PORT_USI_SDA PORTB0
+#  define PORT_USI_SCL PORTB2
+#  define PIN_USI_SDA PINB0
+#  define PIN_USI_SCL PINB2
+#  define USI_START_VECTOR USI_START_vect
+#  define USI_OVERFLOW_VECTOR USI_OVF_vect
+#  define DDR_USI_CL DDR_USI
+#  define PORT_USI_CL PORT_USI
+#  define PIN_USI_CL PIN_USI
+#ifndef USI_START_COND_INT
+#  define USI_START_COND_INT USISIF
+#endif
 
 
 // Analog Pin => ADC number, note that if  ANALOG_PINS_ARE_ADC_NUMBERS is not set

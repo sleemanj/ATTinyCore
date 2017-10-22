@@ -113,6 +113,9 @@ extern const uint8_t PROGMEM port_to_pullup_PGM[];
 #define PORT_B_ID 2
 #define PORT_C_ID 3
 
+//This part has a USI, not an SPI module. Accordingly, there is no MISO/MOSI in hardware. There's a DI and a DO. When the chip is used as master, DI is used as MISO, DO is MOSI; the defines here specify the pins for master mode, as SPI master is much more commonly used in Arduino-land than SPI slave, and these defines are required for compatibility. Be aware of this when using the USI SPI fucntionality (and also, be aware that the MISO and MOSI markings on the pinout diagram in the datasheet are for ISP programming, where the chip is a slave. The pinout diagram included with this core attempts to clarify this)
+
+#define SS 13
 #define MISO 16
 #define MOSI 15
 #define SCK 12
@@ -121,6 +124,24 @@ extern const uint8_t PROGMEM port_to_pullup_PGM[];
 #define USCK_DD_PIN DDC1
 #define DO_DD_PIN DDB2
 #define DI_DD_PIN DDB1
+
+
+#  define DDR_USI DDRB
+#  define PORT_USI PORTB
+#  define PIN_USI PINB
+#  define DDR_USI_CL DDRC
+#  define PORT_USI_CL PORTC
+#  define PIN_USI_CL PINC
+#  define PORT_USI_SDA PORTB1
+#  define PORT_USI_SCL PORTC1
+#  define PIN_USI_SDA PINB1
+#  define PIN_USI_SCL PINC1
+#  define USI_START_VECTOR USI_START_vect
+#  define USI_OVERFLOW_VECTOR USI_OVF_vect
+#ifndef USI_START_COND_INT
+#  define USI_START_COND_INT USISIF
+#endif
+
 
 #define digitalPinToPCX(p,s1,s2,s3,s4,s5,s6) \
     (((p) >= 0) \
