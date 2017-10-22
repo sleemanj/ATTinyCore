@@ -63,8 +63,10 @@ void analogReference(uint8_t mode)
 
 uint16_t _analogRead(uint8_t pin)
 {
-#if defined(HAVE_ADC) && !HAVE_ADC
-  return LOW;
+  pin &=127; //strip off the high bit of the A# constants
+  
+#if ( defined(HAVE_ADC) && !HAVE_ADC ) || !defined(ADCSRA)
+  return digitalRead(analogInputToDigitalPin(pin)) ? 1023 : 0; //No ADC, so read as a digital pin instead.
 #else
   #if defined(REFS0)
   #if defined(ADMUX)
@@ -84,7 +86,7 @@ uint16_t _analogRead(uint8_t pin)
   while(ADCSRA & (1<<ADSC)); //Wait for conversion to complete.
 
   uint8_t low = ADCL;
-#if defined(ADCH)  
+#if defined(ADCH)
   uint8_t high = ADCH;
   return (high << 8) | low;
 #else

@@ -218,15 +218,11 @@ void _turnOffMillis();
 #  define USI_START_COND_INT USISIF
 #endif
 
-
-// Analog Pin => ADC number, note that if  ANALOG_PINS_ARE_ADC_NUMBERS is not set
-// then you need to add NUM_DIGITAL_PINS to the ADC number and it will be 
-// subtracted when yo try to do analogRead() in order to get the ADC.
-#define ANALOG_PINS_ARE_ADC_NUMBERS 1
-#define A0 ((uint8_t) 0)
-#define A1 ((uint8_t) 1)
-#define A2 ((uint8_t) 2)
-#define A3 ((uint8_t) 3)
+//Ax constants cannot be used for digitalRead/digitalWrite/analogWrite functions, only analogRead().
+static const uint8_t A0 = 0x80 & 0;
+static const uint8_t A1 = 0x80 & 1;
+static const uint8_t A2 = 0x80 & 2;
+static const uint8_t A3 = 0x80 & 3;
 
 // Pin Change Interrupt (PCI) Setup
 #define digitalPinToPCICR(p)    (((p) >= 0 && (p) <= 5) ? (&GIMSK) : ((uint8_t *)NULL))

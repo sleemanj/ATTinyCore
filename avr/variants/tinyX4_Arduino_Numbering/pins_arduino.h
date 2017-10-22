@@ -178,18 +178,14 @@ void _turnOffMillis();
 #define DO_DD_PIN DDA5
 #define DI_DD_PIN DDA6
 
-// Analog Pin => ADC number, note that if  ANALOG_PINS_ARE_ADC_NUMBERS is not set
-// then you need to add NUM_DIGITAL_PINS to the ADC number and it will be 
-// subtracted when yo try to do analogRead() in order to get the ADC.
-#define ANALOG_PINS_ARE_ADC_NUMBERS 1
-#define A0 ((uint8_t) 0)
-#define A1 ((uint8_t) 1)
-#define A2 ((uint8_t) 2)
-#define A3 ((uint8_t) 3)
-#define A4 ((uint8_t) 4)
-#define A5 ((uint8_t) 5)
-#define A6 ((uint8_t) 6)
-#define A7 ((uint8_t) 7)
+static const uint8_t A0 = 0x80 & 0;
+static const uint8_t A1 = 0x80 & 1;
+static const uint8_t A2 = 0x80 & 2;
+static const uint8_t A3 = 0x80 & 3;
+static const uint8_t A4 = 0x80 & 4;
+static const uint8_t A5 = 0x80 & 5;
+static const uint8_t A6 = 0x80 & 6;
+static const uint8_t A7 = 0x80 & 7;
 
 // Pin Change Interrupt (PCI) Setup
 #define digitalPinToPCICR(p)    ((p) <= 11) ? (&GIMSK) : ((uint8_t *)NULL))
