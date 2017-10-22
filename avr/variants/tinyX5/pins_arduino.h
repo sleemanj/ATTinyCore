@@ -184,8 +184,8 @@ void _turnOffMillis();
 
 // These are some convenient NAME => Arduino Digital Pin Number mappings
 #define SS   3
-#define MOSI 0
-#define MISO 1
+#define MOSI 1
+#define MISO 0
 #define SCK  2
 #define SDA ((uint8_t) 0)
 #define SCL ((uint8_t) 2)
