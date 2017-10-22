@@ -37,6 +37,11 @@
 
 #define digitalPinHasPWM(p)         ((p) == 2 || (p) == 3 || (p) == 4 || (p) == 5)
 
+//  MOSI/MISO : These are when using SPI as a master
+//              NOT when programming which are inverted and what the 
+//              datasheet shows.  
+//
+
 #define SS   7
 #define MOSI 5
 #define MISO 4

@@ -183,6 +183,11 @@ void _turnOffMillis();
 #define digitalPinHasPWM(p)         ((p) == 0 || (p) == 1 || (p) == 4)
 
 // These are some convenient NAME => Arduino Digital Pin Number mappings
+//
+//  MOSI/MISO : These are when using SPI as a master
+//              NOT when programming which are inverted and what the 
+//              datasheet shows.  
+//
 #define SS   3
 #define MOSI 1
 #define MISO 0
