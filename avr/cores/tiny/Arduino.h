@@ -541,7 +541,56 @@ void noTone(uint8_t _pin = 255);
 long random(long);
 long random(long, long);
 void randomSeed(unsigned int);
-long map(long, long, long, long, long);
+// map()
+// {{{
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Pay attention, Multiplication and Division have the same operator 
+// precedence, execution left to right!  Multiplication will happen before 
+// division in the map() calculation, this means overflow is highly likely 
+// for anything less than a uint32_t, using a smaller integer size will have
+// bad results unfortunately.
+
+uint32_t _map(uint32_t, uint32_t, uint32_t, uint32_t, uint32_t);
+static inline uint32_t map(uint32_t, uint32_t, uint32_t, uint32_t, uint32_t) __attribute__((always_inline, unused));
+static inline uint32_t map(uint32_t x, uint32_t in_min, uint32_t in_max, uint32_t out_min, uint32_t out_max)
+{
+  if(__builtin_constant_p(in_min) && __builtin_constant_p(in_max) && 
+     __builtin_constant_p(out_min) && __builtin_constant_p(out_max))
+  {    
+    // For a couple of very common cases we can cheat.
+    // Note that these do not strictly adhere to the results "map()" would
+    // otherwise give but the difference is minimal and in my opinion the
+    // cheaper result is the more expected one anyway.
+    if(in_min == 0 && out_min == 0 && in_max == 1023 && out_max == 255) 
+    {
+      // Just lose 2 bits
+      return x >> 2;
+    }
+    else if(in_min == 0 && out_min == 0 && in_max == 255 && out_max == 1023) 
+    {
+      // Just add 2 bits
+      return x << 2;
+    }
+    else if ( x <= in_min ) 
+    {
+      return out_min;
+    }
+    else if (x >= in_max )
+    {
+      return out_max;
+    }
+
+    // For other constant ranges, we inline these calculations so at least
+    // some of it can happen at compile time to save us some bytes
+    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+  }
+
+  // Otherwise just drop through to _map itself
+  return _map(x, in_min, in_max, out_min, out_max);
+}
+
+// }}}
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 void     tiny_srandom(unsigned int);
 unsigned int tiny_random();
