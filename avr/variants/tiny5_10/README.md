@@ -1,21 +1,9 @@
 Special Considerations for the ATTiny 4/5/9/10 in Arduino ATTinyCore
 -------------------------------------------------------------------------------
 
-## Toolchain
+Older versions of the Arduino IDE did not have the necessary tools to support these chips.  
 
-The 4/5/9/10 are not presently supported by the Arduino IDE's built in gcc, 
-so in order to use the IDE with these chips you will need to download
-the "official" build of avr-gcc toolchain from Atmel.
-
-  * Linux: http://www.atmel.com/tools/ATMELAVRTOOLCHAINFORLINUX.aspx
-  * Windows: http://www.atmel.com/tools/ATMELAVRTOOLCHAINFORWINDOWS.aspx
-
-
-After downloading the toolchain open your Arduino installation path, and navigate into the hardware/tools/ directory where you will see a directory called "avr".  Copy it to "avr.arduino" as a backkup.
-
-Open the file you downloaded and copy the contents  (avr, bin, doc...) of the top level directory into your hardware/tools/avr/ diretcory overwriting any existing files, (seriously if you can't work this out, you are not ready for using a Tiny 4/5/9/10).
-
-You should be good to go then.
+Starting with about 1.6.13 this should be OK now, but if you insist on using an old version of the IDE then you will find some help at the bottom of this page.
 
 ## Uploading
 
@@ -42,3 +30,19 @@ Pretty much forget about anything to do with Print (that includes Serial) as it'
 ## analogRead
 
 The 4/9 do not have any ADC so you can't use analogRead
+
+## Toolchain for Older IDE Versions
+
+The 4/5/9/10 are not supported by the Arduino IDE's built in gcc in IDE versions at least before 1.6.13,
+so in order to use an old version of the IDE with these chips you will need to download
+the "official" build of avr-gcc toolchain from Atmel.
+
+  * Linux: http://www.atmel.com/tools/ATMELAVRTOOLCHAINFORLINUX.aspx
+  * Windows: http://www.atmel.com/tools/ATMELAVRTOOLCHAINFORWINDOWS.aspx
+
+
+After downloading the toolchain open your Arduino installation path, and navigate into the hardware/tools/ directory where you will see a directory called "avr".  Copy it to "avr.arduino" as a backkup.
+
+Open the file you downloaded and copy the contents  (avr, bin, doc...) of the top level directory into your hardware/tools/avr/ diretcory overwriting any existing files, (seriously if you can't work this out, you are not ready for using a Tiny 4/5/9/10).
+
+You should be good to go then.

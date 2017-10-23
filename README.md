@@ -164,7 +164,7 @@ Pin Mapping
 
 
 ### ATtiny13
- ![ATtiny13 Arduino Pin Mapping](https://cdn.rawgit.com/sleemanj/ArduinoOrientedChipPinoutCreator/master/13.jpg)
+ ![ATtiny13 Arduino Pin Mapping](https://rawgit.com/sleemanj/ArduinoOrientedChipPinoutCreator/master/13.jpg)
  
 ### ATtinyX4 
 
@@ -172,17 +172,17 @@ Two styles of numbering are available, the New Style which follows that of David
  
 **New Style**
 
-![New Style ATtinyX4 Arduino Pin Mapping](https://cdn.rawgit.com/sleemanj/ArduinoOrientedChipPinoutCreator/master/x4.jpg)
+![New Style ATtinyX4 Arduino Pin Mapping](https://rawgit.com/sleemanj/ArduinoOrientedChipPinoutCreator/master/x4.jpg)
 
 And the old style which reverses the digital pin numbering so that A0 is D10, A1 is D9 etc.
 
 **Old Style**
 
-![Old Style ATtinyX4 Arduino Pin Mapping](https://cdn.rawgit.com/sleemanj/ArduinoOrientedChipPinoutCreator/master/x4-alt.jpg)
+![Old Style ATtinyX4 Arduino Pin Mapping](https://rawgit.com/sleemanj/ArduinoOrientedChipPinoutCreator/master/x4-alt.jpg)
 
 ### ATtinyX5
 
- ![ATtinyX5 Arduino Pin Mapping](https://cdn.rawgit.com/sleemanj/ArduinoOrientedChipPinoutCreator/master/x5.jpg)
+ ![ATtinyX5 Arduino Pin Mapping](https://rawgit.com/sleemanj/ArduinoOrientedChipPinoutCreator/master/x5.jpg)
 ### ATtiny 441/841
 ![x41 pin mapping](http://drazzy.com/e/products/img/PinoutT841_fixed.png "Arduino Pin Mapping for ATTiny 841 and 441")
 ### ATtiny 1634
