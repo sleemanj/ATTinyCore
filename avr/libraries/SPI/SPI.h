@@ -429,7 +429,12 @@ extern tinySPI SPI;
 #else 
 //if no USICR and no TWBR
 
-#error No supported hardware
+#ifdef MOSI
+  #include <VeryTinySoftwareSPI.h>
+  typedef VeryTinySoftSPIClass SPIClass;
+#else
+  #error No supported hardware
+#endif
 
 #endif //end if USICR
 #endif //end if TWBR

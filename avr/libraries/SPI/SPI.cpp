@@ -455,5 +455,11 @@ void tinySPI::end(void)
 tinySPI SPI = tinySPI();                //instantiate a tinySPI objec
 
 
+#else
+  #ifdef MOSI
+  //  #include <TinySoftwareSPI.cpp>
+  #else
+    #error No supported hardware
+  #endif
 #endif
 #endif
