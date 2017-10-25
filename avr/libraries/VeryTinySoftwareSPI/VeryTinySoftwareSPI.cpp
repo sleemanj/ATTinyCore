@@ -150,32 +150,14 @@ byte VeryTinySoftSPIClass::transfer(byte _data)
 	byte _newData = 0;
   byte oldSREG = SREG;
 	cli();
-  if(1)
-  {
-    if((_bitOrder == MSBFIRST)) _data = reverseByte(_data);
-    _data = (*this.*transferType)(_data);
-    SREG = oldSREG;
-    if((_bitOrder == MSBFIRST)) _data = reverseByte(_data);
-    return _data;
-  }
-  else
-  {
-	if (_bitOrder == MSBFIRST){
-	//Send data
-		_newData = (*this.*transferType)(_data);
-		SREG = oldSREG;
-		return _newData;
-	} else {
-    _newData = reverseByte(_data);
-		//SPI transfer
-		_newData = (*this.*transferType)(_newData);
-		SREG = oldSREG;
-		//flip data back.
-		_data = 0;
-    _data = reverseByte(_newData);
-		return _data;
-	}
-  }
+
+  // The transfer functions all do MSB FIRST (most common)
+  // so flip in and out if we need LSB FIRST (least common)
+  if((_bitOrder != MSBFIRST)) _data = reverseByte(_data);
+  _data = (*this.*transferType)(_data);
+  SREG = oldSREG;
+  if((_bitOrder != MSBFIRST)) _data = reverseByte(_data);
+  return _data;
 }
 
 void VeryTinySoftSPIClass::setBitOrder(uint8_t bitOrder)
