@@ -251,7 +251,7 @@ static const uint8_t A3 = 0x80 | 3;
 // 
 // so we will undefine the standard "arduino way" and redefine our macros
 #undef  digitalPinToPort
-#define digitalPinToPort(P) ( (uint16_t)&DDRB )
+#define digitalPinToPort(P) ( PB )
 
 #undef  digitalPinToBitMask
 #define digitalPinToBitMask(P) ( (_BV(P)) )

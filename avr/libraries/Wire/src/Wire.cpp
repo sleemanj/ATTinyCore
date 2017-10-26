@@ -797,7 +797,7 @@ void TWSWire::onRequest(void(*function)(void)) {
 // Preinstantiate Objects //////////////////////////////////////////////////////
 TWSWire Wire = TWSWire();
 #else
-#error No Wire support on unknown board
+//#error No Wire support on unknown board
 #endif // TWSD
 #endif // USIDR
 #endif // TWDR

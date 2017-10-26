@@ -185,7 +185,9 @@ public:
 extern TWSWire Wire;
 #endif // TWSWire_h
 #else
-#error No Wire support on unknown board
+#include <TinySoftWire.h>
+extern TinySoftWire Wire;
+//#error No Wire support on unknown board
 #endif // TWSD
 #endif // USIDR
 #endif // TWDR
