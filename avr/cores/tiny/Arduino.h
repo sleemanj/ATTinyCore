@@ -21,6 +21,8 @@ extern "C"{
 #define ATTINY_CORE_NM 1
 #endif
   
+void yield(void);
+
 #define HIGH 0x1
 #define LOW  0x0
 
@@ -28,8 +30,6 @@ extern "C"{
 #define OUTPUT 0x1
 #define INPUT_PULLUP 0x2
 
-#define true 0x1
-#define false 0x0
 
 #define PI 3.1415926535897932384626433832795
 #define HALF_PI 1.5707963267948966192313216916398
