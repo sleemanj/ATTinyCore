@@ -238,7 +238,7 @@ static const uint8_t A7 = 0x80 | 7;
   ( (P  < 8 ) ? (_BV(P)) :       \
   ( (P == 8 ) ? (_BV(10-8)) :    \
   ( (P == 10) ? (_BV(8-8)) :     \
-  ( (P-8) ))))                   \
+  ( _BV(P-8) ))))                   \
 )
 
 #undef digitalPinToTimer
