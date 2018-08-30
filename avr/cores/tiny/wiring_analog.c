@@ -209,7 +209,9 @@ void _analogWrite(uint8_t pin, uint8_t val)
 	} else
 	#endif
 
-	#if defined(TCCR1A) && defined(COM1A1) && !defined(TCCR1E)
+	#if defined(TCCR1A) && defined(COM1A1) && !defined(TCCR1E) 
+		//TCCR1E is present only on tiny861, and there's no TCCR1A on Tiny85. 
+		//So this handles "normal" timers
 	if( timer == TIMER1A){
 		// connect pwm to pin on timer 1, channel A
 		sbi(TCCR1A, COM1A1);
@@ -224,7 +226,7 @@ void _analogWrite(uint8_t pin, uint8_t val)
 	} else
 	#endif
 
-	#if defined(TCCR1E)
+	#if defined(TCCR1E) //Tiny861
 	if( timer == TIMER1A){
 		// connect pwm to pin on timer 1, channel A
 		cbi(TCCR1C,COM1A1S);
@@ -243,7 +245,7 @@ void _analogWrite(uint8_t pin, uint8_t val)
 	} else
 	#endif
 
-	#if defined(TCCR1) && defined(COM1A1)
+	#if defined(TCCR1) && defined(COM1A1) //Tiny85
 	if(timer == TIMER1A){
 		// connect pwm to pin on timer 1, channel A
 		sbi(TCCR1, COM1A1);
