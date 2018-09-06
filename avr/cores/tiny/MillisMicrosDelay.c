@@ -75,179 +75,639 @@ MillisMicrosTime_t millis()
   //
   // James Sleeman, james@gogo.co.nz, http://sparks.gogo.co.nz/
  
-#if (F_CPU / MILLIS_TIMER_PRESCALE) == 16000UL
-  // 16 kHz
-  //  Error: 0.0000% (0 Decimal)
-  // Jitter: 0.0000% (0 Decimal)
+#if (F_CPU / MILLIS_TIMER_PRESCALE) >= 24000000UL
+  // 24 MHz
+  //     Best Error Possible: 0.0146%  (0.0001455417 Decimal)
+  //    Worst Error Possible: 26.7588% (0.267588149 Decimal)
 
-  x = (ovrf * 16) ;
-
-
-#elif (F_CPU / MILLIS_TIMER_PRESCALE) == 32768UL
-  // 32.768 kHz
-  //     Best Error Possible: 0.0000%  (0 Decimal)
-  //    Worst Error Possible: 10.4000% (0.104 Decimal)
-
-  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 104000UL
-    //  Error: 10.4000% (0.104 Decimal)
-    // Jitter: 0.0000% (0 Decimal)
-    x = (ovrf * 7) ;
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 40000UL
-    //  Error: 4.0000% (0.04 Decimal)
-    // Jitter: 0.0000% (0 Decimal)
-    x = (ovrf * 7)  + (ovrf / 2);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 8000UL
-    //  Error: 0.8000% (0.008 Decimal)
-    // Jitter: 0.0000% (0 Decimal)
-    x = (ovrf * 7)  + (ovrf / 2) + (ovrf / 4);
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 267588UL
+    //  Error: 26.7588% (0.267588149 Decimal)
+    // Jitter: 0.0065% (0.0000647321 Decimal)
+    x = (ovrf * 0)  + (ovrf / 128);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 84492UL
+    //  Error: 8.4492% (0.0844921373 Decimal)
+    // Jitter: 0.0098% (0.0000977444 Decimal)
+    x = (ovrf * 0)  + (ovrf / 128) + (ovrf / 512);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 38726UL
+    //  Error: 3.8726% (0.038726386 Decimal)
+    // Jitter: 0.0160% (0.0001597744 Decimal)
+    x = (ovrf * 0)  + (ovrf / 128) + (ovrf / 512) + (ovrf / 2048);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 15849UL
+    //  Error: 1.5849% (0.015849382 Decimal)
+    // Jitter: 0.0188% (0.0001879699 Decimal)
+    x = (ovrf * 0)  + (ovrf / 128) + (ovrf / 512) + (ovrf / 2048) + (ovrf / 4096);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 4417UL
+    //  Error: 0.4417% (0.0044165132000000005 Decimal)
+    // Jitter: 0.0268% (0.0002679426 Decimal)
+    x = (ovrf * 0)  + (ovrf / 128) + (ovrf / 512) + (ovrf / 2048) + (ovrf / 4096) + (ovrf / 8192);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 1566UL
+    //  Error: 0.1566% (0.0015659282000000001 Decimal)
+    // Jitter: 0.0307% (0.00030690359999999996 Decimal)
+    x = (ovrf * 0)  + (ovrf / 128) + (ovrf / 512) + (ovrf / 2048) + (ovrf / 4096) + (ovrf / 8192) + (ovrf / 32768);
   #else
-    //  Error: 0.0000% (0 Decimal)
-    // Jitter: 0.0000% (0 Decimal)
-    x = (ovrf * 7)  + (ovrf / 2) + (ovrf / 4) + (ovrf / 16);
+    //  Error: 0.0146% (0.0001455417 Decimal)
+    // Jitter: 0.0372% (0.0003718387 Decimal)
+    x = (ovrf * 0)  + (ovrf / 128) + (ovrf / 512) + (ovrf / 2048) + (ovrf / 4096) + (ovrf / 8192) + (ovrf / 32768) + (ovrf / 65536);
   #endif
 
 
-#elif (F_CPU / MILLIS_TIMER_PRESCALE) == 125000UL
-  // 125 kHz
-  //     Best Error Possible: 0.0054%  (0.000054086100000000004 Decimal)
-  //    Worst Error Possible: 2.3438% (0.0234377102 Decimal)
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 20000000UL
+  // 20 MHz
+  //     Best Error Possible: 0.1080%  (0.0010804776999999998 Decimal)
+  //    Worst Error Possible: 38.9659% (0.38965908730000004 Decimal)
 
-  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 23438UL
-    //  Error: 2.3438% (0.0234377102 Decimal)
-    // Jitter: 0.0053% (0.0000532543 Decimal)
-    x = (ovrf * 2) ;
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 8189UL
-    //  Error: 0.8189% (0.008188850000000001 Decimal)
-    // Jitter: 0.0105% (0.00010538 Decimal)
-    x = (ovrf * 2)  + (ovrf / 32);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 570UL
-    //  Error: 0.0570% (0.0005696364 Decimal)
-    // Jitter: 0.0185% (0.0001854254 Decimal)
-    x = (ovrf * 2)  + (ovrf / 32) + (ovrf / 64);
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 389659UL
+    //  Error: 38.9659% (0.38965908730000004 Decimal)
+    // Jitter: 0.0079% (0.0000788352 Decimal)
+    x = (ovrf * 0)  + (ovrf / 128);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 84494UL
+    //  Error: 8.4494% (0.0844941297 Decimal)
+    // Jitter: 0.0163% (0.00016339070000000001 Decimal)
+    x = (ovrf * 0)  + (ovrf / 128) + (ovrf / 256);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 8211UL
+    //  Error: 0.8211% (0.00821125 Decimal)
+    // Jitter: 0.0218% (0.0002175182 Decimal)
+    x = (ovrf * 0)  + (ovrf / 128) + (ovrf / 256) + (ovrf / 1024);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 3454UL
+    //  Error: 0.3454% (0.0034536073999999997 Decimal)
+    // Jitter: 0.0284% (0.0002839416 Decimal)
+    x = (ovrf * 0)  + (ovrf / 128) + (ovrf / 256) + (ovrf / 1024) + (ovrf / 16384);
   #else
-    //  Error: 0.0054% (0.000054086100000000004 Decimal)
-    // Jitter: 0.0258% (0.0002581209 Decimal)
-    x = (ovrf * 2)  + (ovrf / 32) + (ovrf / 64) + (ovrf / 1024) + (ovrf / 8192) + (ovrf / 65536);
+    //  Error: 0.1080% (0.0010804776999999998 Decimal)
+    // Jitter: 0.0367% (0.0003666667 Decimal)
+    x = (ovrf * 0)  + (ovrf / 128) + (ovrf / 256) + (ovrf / 1024) + (ovrf / 16384) + (ovrf / 32768);
   #endif
 
 
-#elif (F_CPU / MILLIS_TIMER_PRESCALE) == 128000UL
-  // 128 kHz
-  //  Error: 0.0000% (0 Decimal)
-  // Jitter: 0.0000% (0 Decimal)
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 19200000UL
+  // 19.2 MHz
+  //     Best Error Possible: 0.0992%  (0.0009916172 Decimal)
+  //    Worst Error Possible: 41.4072% (0.4140718057 Decimal)
 
-  x = (ovrf * 2) ;
-
-
-#elif (F_CPU / MILLIS_TIMER_PRESCALE) == 600000UL
-  // 600 kHz
-  //     Best Error Possible: 0.0091%  (0.0000913535 Decimal)
-  //    Worst Error Possible: 41.4068% (0.4140676903 Decimal)
-
-  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 414067UL
-    //  Error: 41.4068% (0.4140676903 Decimal)
-    // Jitter: 0.0039% (0.0000390023 Decimal)
-    x = (ovrf * 0)  + (ovrf / 4);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 121112UL
-    //  Error: 12.1112% (0.1211119719 Decimal)
-    // Jitter: 0.0103% (0.0001027377 Decimal)
-    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 8);
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 414072UL
+    //  Error: 41.4072% (0.4140718057 Decimal)
+    // Jitter: 0.0055% (0.0000551471 Decimal)
+    x = (ovrf * 0)  + (ovrf / 128);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 121113UL
+    //  Error: 12.1113% (0.1211131569 Decimal)
+    // Jitter: 0.0106% (0.00010625 Decimal)
+    x = (ovrf * 0)  + (ovrf / 128) + (ovrf / 256);
   #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 47881UL
-    //  Error: 4.7881% (0.0478809068 Decimal)
-    // Jitter: 0.0144% (0.00014398660000000001 Decimal)
-    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 8) + (ovrf / 32);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 11270UL
-    //  Error: 1.1270% (0.011270414199999999 Decimal)
-    // Jitter: 0.0218% (0.000217923 Decimal)
-    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 8) + (ovrf / 32) + (ovrf / 64);
+    //  Error: 4.7881% (0.0478814326 Decimal)
+    // Jitter: 0.0148% (0.0001484375 Decimal)
+    x = (ovrf * 0)  + (ovrf / 128) + (ovrf / 256) + (ovrf / 1024);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 11271UL
+    //  Error: 1.1271% (0.011270545 Decimal)
+    // Jitter: 0.0223% (0.0002229665 Decimal)
+    x = (ovrf * 0)  + (ovrf / 128) + (ovrf / 256) + (ovrf / 1024) + (ovrf / 2048);
   #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 2126UL
-    //  Error: 0.2126% (0.0021257019 Decimal)
-    // Jitter: 0.0281% (0.0002812586 Decimal)
-    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 8) + (ovrf / 32) + (ovrf / 64) + (ovrf / 256);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 992UL
-    //  Error: 0.0992% (0.0009915898999999998 Decimal)
-    // Jitter: 0.0329% (0.0003288179 Decimal)
-    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 8) + (ovrf / 32) + (ovrf / 64) + (ovrf / 256) + (ovrf / 2048);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 429UL
-    //  Error: 0.0429% (0.00042937520000000003 Decimal)
-    // Jitter: 0.0374% (0.0003740969 Decimal)
-    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 8) + (ovrf / 32) + (ovrf / 64) + (ovrf / 256) + (ovrf / 2048) + (ovrf / 4096);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 153UL
-    //  Error: 0.0153% (0.00015276230000000002 Decimal)
-    // Jitter: 0.0410% (0.0004097833 Decimal)
-    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 8) + (ovrf / 32) + (ovrf / 64) + (ovrf / 256) + (ovrf / 2048) + (ovrf / 4096) + (ovrf / 8192);
+    //  Error: 0.2126% (0.0021257332 Decimal)
+    // Jitter: 0.0283% (0.0002829912 Decimal)
+    x = (ovrf * 0)  + (ovrf / 128) + (ovrf / 256) + (ovrf / 1024) + (ovrf / 2048) + (ovrf / 8192);
   #else
-    //  Error: 0.0091% (0.0000913535 Decimal)
-    // Jitter: 0.0480% (0.0004795937 Decimal)
-    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 8) + (ovrf / 32) + (ovrf / 64) + (ovrf / 256) + (ovrf / 2048) + (ovrf / 4096) + (ovrf / 8192) + (ovrf / 32768);
+    //  Error: 0.0992% (0.0009916172 Decimal)
+    // Jitter: 0.0329% (0.0003291789 Decimal)
+    x = (ovrf * 0)  + (ovrf / 128) + (ovrf / 256) + (ovrf / 1024) + (ovrf / 2048) + (ovrf / 8192) + (ovrf / 65536);
   #endif
 
 
-#elif (F_CPU / MILLIS_TIMER_PRESCALE) == 800000UL
-  // 800 kHz
-  //     Best Error Possible: 0.0115%  (0.0001145359 Decimal)
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 16000000UL
+  // 16 MHz
+  //     Best Error Possible: 0.0580%  (0.0005804791 Decimal)
+  //    Worst Error Possible: 2.3447% (0.0234473254 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 23447UL
+    //  Error: 2.3447% (0.0234473254 Decimal)
+    // Jitter: 0.0062% (0.0000625 Decimal)
+    x = (ovrf * 0)  + (ovrf / 64);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 8199UL
+    //  Error: 0.8199% (0.008199243200000001 Decimal)
+    // Jitter: 0.0120% (0.0001203125 Decimal)
+    x = (ovrf * 0)  + (ovrf / 64) + (ovrf / 4096);
+  #else
+    //  Error: 0.0580% (0.0005804791 Decimal)
+    // Jitter: 0.0177% (0.00017671090000000002 Decimal)
+    x = (ovrf * 0)  + (ovrf / 64) + (ovrf / 4096) + (ovrf / 8192);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 15360000UL
+  // 15.36 MHz
+  //     Best Error Possible: 0.0271%  (0.0002705402 Decimal)
+  //    Worst Error Possible: 6.2505% (0.06250512309999999 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 62505UL
+    //  Error: 6.2505% (0.06250512309999999 Decimal)
+    // Jitter: 0.0045% (0.0000454545 Decimal)
+    x = (ovrf * 0)  + (ovrf / 64);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 3922UL
+    //  Error: 0.3922% (0.0039217042 Decimal)
+    // Jitter: 0.0094% (0.00009375 Decimal)
+    x = (ovrf * 0)  + (ovrf / 64) + (ovrf / 1024);
+  #else
+    //  Error: 0.0271% (0.0002705402 Decimal)
+    // Jitter: 0.0154% (0.00015423730000000001 Decimal)
+    x = (ovrf * 0)  + (ovrf / 64) + (ovrf / 1024) + (ovrf / 16384);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 12800000UL
+  // 12.8 MHz
+  //     Best Error Possible: 0.0608%  (0.0006080995 Decimal)
   //    Worst Error Possible: 21.8758% (0.21875796979999998 Decimal)
 
   #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 218758UL
     //  Error: 21.8758% (0.21875796979999998 Decimal)
     // Jitter: 0.0068% (0.00006818179999999999 Decimal)
-    x = (ovrf * 0)  + (ovrf / 4);
+    x = (ovrf * 0)  + (ovrf / 64);
   #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 23455UL
     //  Error: 2.3455% (0.023454928400000002 Decimal)
     // Jitter: 0.0108% (0.0001079545 Decimal)
-    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 16);
+    x = (ovrf * 0)  + (ovrf / 64) + (ovrf / 256);
   #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 11258UL
     //  Error: 1.1258% (0.0112578935 Decimal)
     // Jitter: 0.0136% (0.0001362782 Decimal)
-    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 16) + (ovrf / 256);
+    x = (ovrf * 0)  + (ovrf / 64) + (ovrf / 256) + (ovrf / 4096);
   #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 5164UL
     //  Error: 0.5164% (0.0051639588 Decimal)
     // Jitter: 0.0186% (0.00018647909999999998 Decimal)
-    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 16) + (ovrf / 256) + (ovrf / 512);
+    x = (ovrf * 0)  + (ovrf / 64) + (ovrf / 256) + (ovrf / 4096) + (ovrf / 8192);
   #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 2123UL
     //  Error: 0.2123% (0.0021232221 Decimal)
     // Jitter: 0.0238% (0.0002382033 Decimal)
-    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 16) + (ovrf / 256) + (ovrf / 512) + (ovrf / 1024);
+    x = (ovrf * 0)  + (ovrf / 64) + (ovrf / 256) + (ovrf / 4096) + (ovrf / 8192) + (ovrf / 16384);
+  #else
+    //  Error: 0.0608% (0.0006080995 Decimal)
+    // Jitter: 0.0290% (0.0002903811 Decimal)
+    x = (ovrf * 0)  + (ovrf / 64) + (ovrf / 256) + (ovrf / 4096) + (ovrf / 8192) + (ovrf / 16384) + (ovrf / 32768);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 12000000UL
+  // 12 MHz
+  //     Best Error Possible: 0.0146%  (0.0001455417 Decimal)
+  //    Worst Error Possible: 26.7588% (0.267588149 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 267588UL
+    //  Error: 26.7588% (0.267588149 Decimal)
+    // Jitter: 0.0065% (0.0000647321 Decimal)
+    x = (ovrf * 0)  + (ovrf / 64);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 84492UL
+    //  Error: 8.4492% (0.0844921373 Decimal)
+    // Jitter: 0.0098% (0.0000977444 Decimal)
+    x = (ovrf * 0)  + (ovrf / 64) + (ovrf / 256);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 38726UL
+    //  Error: 3.8726% (0.038726386 Decimal)
+    // Jitter: 0.0160% (0.0001597744 Decimal)
+    x = (ovrf * 0)  + (ovrf / 64) + (ovrf / 256) + (ovrf / 1024);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 15849UL
+    //  Error: 1.5849% (0.015849382 Decimal)
+    // Jitter: 0.0188% (0.0001879699 Decimal)
+    x = (ovrf * 0)  + (ovrf / 64) + (ovrf / 256) + (ovrf / 1024) + (ovrf / 2048);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 4417UL
+    //  Error: 0.4417% (0.0044165132000000005 Decimal)
+    // Jitter: 0.0268% (0.0002679426 Decimal)
+    x = (ovrf * 0)  + (ovrf / 64) + (ovrf / 256) + (ovrf / 1024) + (ovrf / 2048) + (ovrf / 4096);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 1566UL
+    //  Error: 0.1566% (0.0015659282000000001 Decimal)
+    // Jitter: 0.0307% (0.00030690359999999996 Decimal)
+    x = (ovrf * 0)  + (ovrf / 64) + (ovrf / 256) + (ovrf / 1024) + (ovrf / 2048) + (ovrf / 4096) + (ovrf / 16384);
+  #else
+    //  Error: 0.0146% (0.0001455417 Decimal)
+    // Jitter: 0.0372% (0.0003718387 Decimal)
+    x = (ovrf * 0)  + (ovrf / 64) + (ovrf / 256) + (ovrf / 1024) + (ovrf / 2048) + (ovrf / 4096) + (ovrf / 16384) + (ovrf / 32768);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 9600000UL
+  // 9.6 MHz
+  //     Best Error Possible: 0.0429%  (0.0004293574 Decimal)
+  //    Worst Error Possible: 41.4072% (0.4140718057 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 414072UL
+    //  Error: 41.4072% (0.4140718057 Decimal)
+    // Jitter: 0.0055% (0.0000551471 Decimal)
+    x = (ovrf * 0)  + (ovrf / 64);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 121113UL
+    //  Error: 12.1113% (0.1211131569 Decimal)
+    // Jitter: 0.0106% (0.00010625 Decimal)
+    x = (ovrf * 0)  + (ovrf / 64) + (ovrf / 128);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 47881UL
+    //  Error: 4.7881% (0.0478814326 Decimal)
+    // Jitter: 0.0148% (0.0001484375 Decimal)
+    x = (ovrf * 0)  + (ovrf / 64) + (ovrf / 128) + (ovrf / 512);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 11271UL
+    //  Error: 1.1271% (0.011270545 Decimal)
+    // Jitter: 0.0223% (0.0002229665 Decimal)
+    x = (ovrf * 0)  + (ovrf / 64) + (ovrf / 128) + (ovrf / 512) + (ovrf / 1024);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 2126UL
+    //  Error: 0.2126% (0.0021257332 Decimal)
+    // Jitter: 0.0283% (0.0002829912 Decimal)
+    x = (ovrf * 0)  + (ovrf / 64) + (ovrf / 128) + (ovrf / 512) + (ovrf / 1024) + (ovrf / 4096);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 992UL
+    //  Error: 0.0992% (0.0009916172 Decimal)
+    // Jitter: 0.0329% (0.0003291789 Decimal)
+    x = (ovrf * 0)  + (ovrf / 64) + (ovrf / 128) + (ovrf / 512) + (ovrf / 1024) + (ovrf / 4096) + (ovrf / 32768);
+  #else
+    //  Error: 0.0429% (0.0004293574 Decimal)
+    // Jitter: 0.0377% (0.0003769841 Decimal)
+    x = (ovrf * 0)  + (ovrf / 64) + (ovrf / 128) + (ovrf / 512) + (ovrf / 1024) + (ovrf / 4096) + (ovrf / 32768) + (ovrf / 65536);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 8000000UL
+  // 8 MHz
+  //     Best Error Possible: 0.0114%  (0.0001138951 Decimal)
+  //    Worst Error Possible: 2.3447% (0.0234473254 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 23447UL
+    //  Error: 2.3447% (0.0234473254 Decimal)
+    // Jitter: 0.0062% (0.0000625 Decimal)
+    x = (ovrf * 0)  + (ovrf / 32);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 8199UL
+    //  Error: 0.8199% (0.008199243200000001 Decimal)
+    // Jitter: 0.0120% (0.0001203125 Decimal)
+    x = (ovrf * 0)  + (ovrf / 32) + (ovrf / 2048);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 580UL
+    //  Error: 0.0580% (0.0005804791 Decimal)
+    // Jitter: 0.0177% (0.00017671090000000002 Decimal)
+    x = (ovrf * 0)  + (ovrf / 32) + (ovrf / 2048) + (ovrf / 4096);
+  #else
+    //  Error: 0.0114% (0.0001138951 Decimal)
+    // Jitter: 0.0224% (0.0002238095 Decimal)
+    x = (ovrf * 0)  + (ovrf / 32) + (ovrf / 2048) + (ovrf / 4096) + (ovrf / 65536);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 6400000UL
+  // 6.4 MHz
+  //     Best Error Possible: 0.0237%  (0.0002371862 Decimal)
+  //    Worst Error Possible: 21.8758% (0.21875796979999998 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 218758UL
+    //  Error: 21.8758% (0.21875796979999998 Decimal)
+    // Jitter: 0.0068% (0.00006818179999999999 Decimal)
+    x = (ovrf * 0)  + (ovrf / 32);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 23455UL
+    //  Error: 2.3455% (0.023454928400000002 Decimal)
+    // Jitter: 0.0108% (0.0001079545 Decimal)
+    x = (ovrf * 0)  + (ovrf / 32) + (ovrf / 128);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 11258UL
+    //  Error: 1.1258% (0.0112578935 Decimal)
+    // Jitter: 0.0136% (0.0001362782 Decimal)
+    x = (ovrf * 0)  + (ovrf / 32) + (ovrf / 128) + (ovrf / 2048);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 5164UL
+    //  Error: 0.5164% (0.0051639588 Decimal)
+    // Jitter: 0.0186% (0.00018647909999999998 Decimal)
+    x = (ovrf * 0)  + (ovrf / 32) + (ovrf / 128) + (ovrf / 2048) + (ovrf / 4096);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 2123UL
+    //  Error: 0.2123% (0.0021232221 Decimal)
+    // Jitter: 0.0238% (0.0002382033 Decimal)
+    x = (ovrf * 0)  + (ovrf / 32) + (ovrf / 128) + (ovrf / 2048) + (ovrf / 4096) + (ovrf / 8192);
   #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 608UL
     //  Error: 0.0608% (0.0006080995 Decimal)
     // Jitter: 0.0290% (0.0002903811 Decimal)
-    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 16) + (ovrf / 256) + (ovrf / 512) + (ovrf / 1024) + (ovrf / 2048);
+    x = (ovrf * 0)  + (ovrf / 32) + (ovrf / 128) + (ovrf / 2048) + (ovrf / 4096) + (ovrf / 8192) + (ovrf / 16384);
+  #else
+    //  Error: 0.0237% (0.0002371862 Decimal)
+    // Jitter: 0.0301% (0.0003012704 Decimal)
+    x = (ovrf * 0)  + (ovrf / 32) + (ovrf / 128) + (ovrf / 2048) + (ovrf / 4096) + (ovrf / 8192) + (ovrf / 16384) + (ovrf / 65536);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 4800000UL
+  // 4.8 MHz
+  //     Best Error Possible: 0.0153%  (0.00015272219999999998 Decimal)
+  //    Worst Error Possible: 41.4072% (0.4140718057 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 414072UL
+    //  Error: 41.4072% (0.4140718057 Decimal)
+    // Jitter: 0.0055% (0.0000551471 Decimal)
+    x = (ovrf * 0)  + (ovrf / 32);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 121113UL
+    //  Error: 12.1113% (0.1211131569 Decimal)
+    // Jitter: 0.0106% (0.00010625 Decimal)
+    x = (ovrf * 0)  + (ovrf / 32) + (ovrf / 64);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 47881UL
+    //  Error: 4.7881% (0.0478814326 Decimal)
+    // Jitter: 0.0148% (0.0001484375 Decimal)
+    x = (ovrf * 0)  + (ovrf / 32) + (ovrf / 64) + (ovrf / 256);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 11271UL
+    //  Error: 1.1271% (0.011270545 Decimal)
+    // Jitter: 0.0223% (0.0002229665 Decimal)
+    x = (ovrf * 0)  + (ovrf / 32) + (ovrf / 64) + (ovrf / 256) + (ovrf / 512);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 2126UL
+    //  Error: 0.2126% (0.0021257332 Decimal)
+    // Jitter: 0.0283% (0.0002829912 Decimal)
+    x = (ovrf * 0)  + (ovrf / 32) + (ovrf / 64) + (ovrf / 256) + (ovrf / 512) + (ovrf / 2048);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 992UL
+    //  Error: 0.0992% (0.0009916172 Decimal)
+    // Jitter: 0.0329% (0.0003291789 Decimal)
+    x = (ovrf * 0)  + (ovrf / 32) + (ovrf / 64) + (ovrf / 256) + (ovrf / 512) + (ovrf / 2048) + (ovrf / 16384);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 429UL
+    //  Error: 0.0429% (0.0004293574 Decimal)
+    // Jitter: 0.0377% (0.0003769841 Decimal)
+    x = (ovrf * 0)  + (ovrf / 32) + (ovrf / 64) + (ovrf / 256) + (ovrf / 512) + (ovrf / 2048) + (ovrf / 16384) + (ovrf / 32768);
+  #else
+    //  Error: 0.0153% (0.00015272219999999998 Decimal)
+    // Jitter: 0.0413% (0.0004126984 Decimal)
+    x = (ovrf * 0)  + (ovrf / 32) + (ovrf / 64) + (ovrf / 256) + (ovrf / 512) + (ovrf / 2048) + (ovrf / 16384) + (ovrf / 32768) + (ovrf / 65536);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 4608000UL
+  // 4.608 MHz
+  //     Best Error Possible: 0.0299%  (0.000298618 Decimal)
+  //    Worst Error Possible: 43.7505% (0.4375051231 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 437505UL
+    //  Error: 43.7505% (0.4375051231 Decimal)
+    // Jitter: 0.0045% (0.0000454545 Decimal)
+    x = (ovrf * 0)  + (ovrf / 32);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 156263UL
+    //  Error: 15.6263% (0.15626309289999998 Decimal)
+    // Jitter: 0.0114% (0.0001136364 Decimal)
+    x = (ovrf * 0)  + (ovrf / 32) + (ovrf / 64);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 15647UL
+    //  Error: 1.5647% (0.0156472925 Decimal)
+    // Jitter: 0.0193% (0.0001931818 Decimal)
+    x = (ovrf * 0)  + (ovrf / 32) + (ovrf / 64) + (ovrf / 128);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 6869UL
+    //  Error: 0.6869% (0.0068689933 Decimal)
+    // Jitter: 0.0255% (0.0002549716 Decimal)
+    x = (ovrf * 0)  + (ovrf / 32) + (ovrf / 64) + (ovrf / 128) + (ovrf / 2048);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 2485UL
+    //  Error: 0.2485% (0.0024850979000000002 Decimal)
+    // Jitter: 0.0285% (0.000284965 Decimal)
+    x = (ovrf * 0)  + (ovrf / 32) + (ovrf / 64) + (ovrf / 128) + (ovrf / 2048) + (ovrf / 4096);
+  #else
+    //  Error: 0.0299% (0.000298618 Decimal)
+    // Jitter: 0.0350% (0.00035 Decimal)
+    x = (ovrf * 0)  + (ovrf / 32) + (ovrf / 64) + (ovrf / 128) + (ovrf / 2048) + (ovrf / 4096) + (ovrf / 8192);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 4000000UL
+  // 4 MHz
+  //     Best Error Possible: 0.0114%  (0.0001138951 Decimal)
+  //    Worst Error Possible: 2.3447% (0.0234473254 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 23447UL
+    //  Error: 2.3447% (0.0234473254 Decimal)
+    // Jitter: 0.0062% (0.0000625 Decimal)
+    x = (ovrf * 0)  + (ovrf / 16);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 8199UL
+    //  Error: 0.8199% (0.008199243200000001 Decimal)
+    // Jitter: 0.0120% (0.0001203125 Decimal)
+    x = (ovrf * 0)  + (ovrf / 16) + (ovrf / 1024);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 580UL
+    //  Error: 0.0580% (0.0005804791 Decimal)
+    // Jitter: 0.0177% (0.00017671090000000002 Decimal)
+    x = (ovrf * 0)  + (ovrf / 16) + (ovrf / 1024) + (ovrf / 2048);
+  #else
+    //  Error: 0.0114% (0.0001138951 Decimal)
+    // Jitter: 0.0224% (0.0002238095 Decimal)
+    x = (ovrf * 0)  + (ovrf / 16) + (ovrf / 1024) + (ovrf / 2048) + (ovrf / 32768);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 3000000UL
+  // 3 MHz
+  //     Best Error Possible: 0.0145%  (0.0001452576 Decimal)
+  //    Worst Error Possible: 26.7587% (0.2675870743 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 267587UL
+    //  Error: 26.7587% (0.2675870743 Decimal)
+    // Jitter: 0.0071% (0.00007142860000000001 Decimal)
+    x = (ovrf * 0)  + (ovrf / 16);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 84491UL
+    //  Error: 8.4491% (0.0844910299 Decimal)
+    // Jitter: 0.0107% (0.0001071429 Decimal)
+    x = (ovrf * 0)  + (ovrf / 16) + (ovrf / 64);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 38726UL
+    //  Error: 3.8726% (0.0387255216 Decimal)
+    // Jitter: 0.0160% (0.0001602836 Decimal)
+    x = (ovrf * 0)  + (ovrf / 16) + (ovrf / 64) + (ovrf / 256);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 15849UL
+    //  Error: 1.5849% (0.0158488616 Decimal)
+    // Jitter: 0.0186% (0.0001862917 Decimal)
+    x = (ovrf * 0)  + (ovrf / 16) + (ovrf / 64) + (ovrf / 256) + (ovrf / 512);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 4416UL
+    //  Error: 0.4416% (0.0044161647 Decimal)
+    // Jitter: 0.0265% (0.00026546640000000004 Decimal)
+    x = (ovrf * 0)  + (ovrf / 16) + (ovrf / 64) + (ovrf / 256) + (ovrf / 512) + (ovrf / 1024);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 1566UL
+    //  Error: 0.1566% (0.0015656226999999998 Decimal)
+    // Jitter: 0.0307% (0.0003065773 Decimal)
+    x = (ovrf * 0)  + (ovrf / 16) + (ovrf / 64) + (ovrf / 256) + (ovrf / 512) + (ovrf / 1024) + (ovrf / 4096);
+  #else
+    //  Error: 0.0145% (0.0001452576 Decimal)
+    // Jitter: 0.0369% (0.0003692755 Decimal)
+    x = (ovrf * 0)  + (ovrf / 16) + (ovrf / 64) + (ovrf / 256) + (ovrf / 512) + (ovrf / 1024) + (ovrf / 4096) + (ovrf / 8192);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 2500000UL
+  // 2.5 MHz
+  //     Best Error Possible: 0.0205%  (0.0002048921 Decimal)
+  //    Worst Error Possible: 38.9657% (0.3896574804 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 389657UL
+    //  Error: 38.9657% (0.3896574804 Decimal)
+    // Jitter: 0.0091% (0.0000909091 Decimal)
+    x = (ovrf * 0)  + (ovrf / 16);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 84492UL
+    //  Error: 8.4492% (0.0844916438 Decimal)
+    // Jitter: 0.0182% (0.0001818182 Decimal)
+    x = (ovrf * 0)  + (ovrf / 16) + (ovrf / 32);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 8208UL
+    //  Error: 0.8208% (0.008208097599999999 Decimal)
+    // Jitter: 0.0224% (0.0002235294 Decimal)
+    x = (ovrf * 0)  + (ovrf / 16) + (ovrf / 32) + (ovrf / 128);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 3449UL
+    //  Error: 0.3450% (0.0034504404 Decimal)
+    // Jitter: 0.0288% (0.0002882353 Decimal)
+    x = (ovrf * 0)  + (ovrf / 16) + (ovrf / 32) + (ovrf / 128) + (ovrf / 2048);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 1077UL
+    //  Error: 0.1077% (0.0010773807 Decimal)
+    // Jitter: 0.0368% (0.00036803300000000003 Decimal)
+    x = (ovrf * 0)  + (ovrf / 16) + (ovrf / 32) + (ovrf / 128) + (ovrf / 2048) + (ovrf / 4096);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 492UL
+    //  Error: 0.0492% (0.0004921641 Decimal)
+    // Jitter: 0.0460% (0.0004600141 Decimal)
+    x = (ovrf * 0)  + (ovrf / 16) + (ovrf / 32) + (ovrf / 128) + (ovrf / 2048) + (ovrf / 4096) + (ovrf / 16384);
+  #else
+    //  Error: 0.0205% (0.0002048921 Decimal)
+    // Jitter: 0.0556% (0.0005560046 Decimal)
+    x = (ovrf * 0)  + (ovrf / 16) + (ovrf / 32) + (ovrf / 128) + (ovrf / 2048) + (ovrf / 4096) + (ovrf / 16384) + (ovrf / 32768);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 2400000UL
+  // 2.4 MHz
+  //     Best Error Possible: 0.0153%  (0.00015272219999999998 Decimal)
+  //    Worst Error Possible: 41.4072% (0.4140718057 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 414072UL
+    //  Error: 41.4072% (0.4140718057 Decimal)
+    // Jitter: 0.0055% (0.0000551471 Decimal)
+    x = (ovrf * 0)  + (ovrf / 16);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 121113UL
+    //  Error: 12.1113% (0.1211131569 Decimal)
+    // Jitter: 0.0106% (0.00010625 Decimal)
+    x = (ovrf * 0)  + (ovrf / 16) + (ovrf / 32);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 47881UL
+    //  Error: 4.7881% (0.0478814326 Decimal)
+    // Jitter: 0.0148% (0.0001484375 Decimal)
+    x = (ovrf * 0)  + (ovrf / 16) + (ovrf / 32) + (ovrf / 128);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 11271UL
+    //  Error: 1.1271% (0.011270545 Decimal)
+    // Jitter: 0.0223% (0.0002229665 Decimal)
+    x = (ovrf * 0)  + (ovrf / 16) + (ovrf / 32) + (ovrf / 128) + (ovrf / 256);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 2126UL
+    //  Error: 0.2126% (0.0021257332 Decimal)
+    // Jitter: 0.0283% (0.0002829912 Decimal)
+    x = (ovrf * 0)  + (ovrf / 16) + (ovrf / 32) + (ovrf / 128) + (ovrf / 256) + (ovrf / 1024);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 992UL
+    //  Error: 0.0992% (0.0009916172 Decimal)
+    // Jitter: 0.0329% (0.0003291789 Decimal)
+    x = (ovrf * 0)  + (ovrf / 16) + (ovrf / 32) + (ovrf / 128) + (ovrf / 256) + (ovrf / 1024) + (ovrf / 8192);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 429UL
+    //  Error: 0.0429% (0.0004293574 Decimal)
+    // Jitter: 0.0377% (0.0003769841 Decimal)
+    x = (ovrf * 0)  + (ovrf / 16) + (ovrf / 32) + (ovrf / 128) + (ovrf / 256) + (ovrf / 1024) + (ovrf / 8192) + (ovrf / 16384);
+  #else
+    //  Error: 0.0153% (0.00015272219999999998 Decimal)
+    // Jitter: 0.0413% (0.0004126984 Decimal)
+    x = (ovrf * 0)  + (ovrf / 16) + (ovrf / 32) + (ovrf / 128) + (ovrf / 256) + (ovrf / 1024) + (ovrf / 8192) + (ovrf / 16384) + (ovrf / 32768);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 2000000UL
+  // 2 MHz
+  //     Best Error Possible: 0.0113%  (0.0001126104 Decimal)
+  //    Worst Error Possible: 2.3446% (0.0234464846 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 23445UL
+    //  Error: 2.3446% (0.0234464846 Decimal)
+    // Jitter: 0.0088% (0.00008823529999999999 Decimal)
+    x = (ovrf * 0)  + (ovrf / 8);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 8198UL
+    //  Error: 0.8198% (0.008198212299999999 Decimal)
+    // Jitter: 0.0124% (0.0001235294 Decimal)
+    x = (ovrf * 0)  + (ovrf / 8) + (ovrf / 512);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 579UL
+    //  Error: 0.0579% (0.0005791708 Decimal)
+    // Jitter: 0.0179% (0.00017891220000000002 Decimal)
+    x = (ovrf * 0)  + (ovrf / 8) + (ovrf / 512) + (ovrf / 1024);
+  #else
+    //  Error: 0.0113% (0.0001126104 Decimal)
+    // Jitter: 0.0224% (0.0002238139 Decimal)
+    x = (ovrf * 0)  + (ovrf / 8) + (ovrf / 512) + (ovrf / 1024) + (ovrf / 16384);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 1920000UL
+  // 1.92 MHz
+  //     Best Error Possible: 0.0052%  (0.000052218699999999995 Decimal)
+  //    Worst Error Possible: 6.2505% (0.06250512309999999 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 62505UL
+    //  Error: 6.2505% (0.06250512309999999 Decimal)
+    // Jitter: 0.0045% (0.0000454545 Decimal)
+    x = (ovrf * 0)  + (ovrf / 8);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 3922UL
+    //  Error: 0.3922% (0.0039217042 Decimal)
+    // Jitter: 0.0094% (0.00009375 Decimal)
+    x = (ovrf * 0)  + (ovrf / 8) + (ovrf / 128);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 271UL
+    //  Error: 0.0271% (0.0002705402 Decimal)
+    // Jitter: 0.0154% (0.00015423730000000001 Decimal)
+    x = (ovrf * 0)  + (ovrf / 8) + (ovrf / 128) + (ovrf / 2048);
+  #else
+    //  Error: 0.0052% (0.000052218699999999995 Decimal)
+    // Jitter: 0.0214% (0.0002138201 Decimal)
+    x = (ovrf * 0)  + (ovrf / 8) + (ovrf / 128) + (ovrf / 2048) + (ovrf / 32768);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 1600000UL
+  // 1.6 MHz
+  //     Best Error Possible: 0.0152%  (0.0001516764 Decimal)
+  //    Worst Error Possible: 21.8758% (0.21875796979999998 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 218758UL
+    //  Error: 21.8758% (0.21875796979999998 Decimal)
+    // Jitter: 0.0068% (0.00006818179999999999 Decimal)
+    x = (ovrf * 0)  + (ovrf / 8);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 23455UL
+    //  Error: 2.3455% (0.023454928400000002 Decimal)
+    // Jitter: 0.0108% (0.0001079545 Decimal)
+    x = (ovrf * 0)  + (ovrf / 8) + (ovrf / 32);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 11258UL
+    //  Error: 1.1258% (0.0112578935 Decimal)
+    // Jitter: 0.0136% (0.0001362782 Decimal)
+    x = (ovrf * 0)  + (ovrf / 8) + (ovrf / 32) + (ovrf / 512);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 5164UL
+    //  Error: 0.5164% (0.0051639588 Decimal)
+    // Jitter: 0.0186% (0.00018647909999999998 Decimal)
+    x = (ovrf * 0)  + (ovrf / 8) + (ovrf / 32) + (ovrf / 512) + (ovrf / 1024);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 2123UL
+    //  Error: 0.2123% (0.0021232221 Decimal)
+    // Jitter: 0.0238% (0.0002382033 Decimal)
+    x = (ovrf * 0)  + (ovrf / 8) + (ovrf / 32) + (ovrf / 512) + (ovrf / 1024) + (ovrf / 2048);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 608UL
+    //  Error: 0.0608% (0.0006080995 Decimal)
+    // Jitter: 0.0290% (0.0002903811 Decimal)
+    x = (ovrf * 0)  + (ovrf / 8) + (ovrf / 32) + (ovrf / 512) + (ovrf / 1024) + (ovrf / 2048) + (ovrf / 4096);
   #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 237UL
     //  Error: 0.0237% (0.0002371862 Decimal)
     // Jitter: 0.0301% (0.0003012704 Decimal)
-    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 16) + (ovrf / 256) + (ovrf / 512) + (ovrf / 1024) + (ovrf / 2048) + (ovrf / 8192);
+    x = (ovrf * 0)  + (ovrf / 8) + (ovrf / 32) + (ovrf / 512) + (ovrf / 1024) + (ovrf / 2048) + (ovrf / 4096) + (ovrf / 16384);
   #else
-    //  Error: 0.0115% (0.0001145359 Decimal)
-    // Jitter: 0.0387% (0.0003865699 Decimal)
-    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 16) + (ovrf / 256) + (ovrf / 512) + (ovrf / 1024) + (ovrf / 2048) + (ovrf / 8192) + (ovrf / 32768) + (ovrf / 65536);
+    //  Error: 0.0152% (0.0001516764 Decimal)
+    // Jitter: 0.0343% (0.00034346640000000004 Decimal)
+    x = (ovrf * 0)  + (ovrf / 8) + (ovrf / 32) + (ovrf / 512) + (ovrf / 1024) + (ovrf / 2048) + (ovrf / 4096) + (ovrf / 16384) + (ovrf / 65536);
   #endif
 
 
-#elif (F_CPU / MILLIS_TIMER_PRESCALE) == 1000000UL
-  // 1 MHz
-  //     Best Error Possible: 0.0066%  (0.0000658686 Decimal)
-  //    Worst Error Possible: 2.3448% (0.0234481704 Decimal)
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 1500000UL
+  // 1.5 MHz
+  //     Best Error Possible: 0.0141%  (0.0001406642 Decimal)
+  //    Worst Error Possible: 26.7586% (0.2675857411 Decimal)
 
-  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 23448UL
-    //  Error: 2.3448% (0.0234481704 Decimal)
-    // Jitter: 0.0070% (0.0000703129 Decimal)
-    x = (ovrf * 0)  + (ovrf / 4);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 8200UL
-    //  Error: 0.8200% (0.008199986800000001 Decimal)
-    // Jitter: 0.0121% (0.0001212963 Decimal)
-    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 256);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 581UL
-    //  Error: 0.0581% (0.0005812023000000001 Decimal)
-    // Jitter: 0.0175% (0.0001750009 Decimal)
-    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 256) + (ovrf / 512);
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 267586UL
+    //  Error: 26.7586% (0.2675857411 Decimal)
+    // Jitter: 0.0065% (0.00006493510000000001 Decimal)
+    x = (ovrf * 0)  + (ovrf / 8);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 84490UL
+    //  Error: 8.4490% (0.08448953660000001 Decimal)
+    // Jitter: 0.0118% (0.0001176401 Decimal)
+    x = (ovrf * 0)  + (ovrf / 8) + (ovrf / 32);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 38723UL
+    //  Error: 3.8723% (0.038723407700000004 Decimal)
+    // Jitter: 0.0125% (0.0001247285 Decimal)
+    x = (ovrf * 0)  + (ovrf / 8) + (ovrf / 32) + (ovrf / 128);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 15846UL
+    //  Error: 1.5846% (0.0158457416 Decimal)
+    // Jitter: 0.0191% (0.00019142279999999999 Decimal)
+    x = (ovrf * 0)  + (ovrf / 8) + (ovrf / 32) + (ovrf / 128) + (ovrf / 256);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 4412UL
+    //  Error: 0.4412% (0.0044117933 Decimal)
+    // Jitter: 0.0270% (0.0002700851 Decimal)
+    x = (ovrf * 0)  + (ovrf / 8) + (ovrf / 32) + (ovrf / 128) + (ovrf / 256) + (ovrf / 512);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 1561UL
+    //  Error: 0.1561% (0.0015610432 Decimal)
+    // Jitter: 0.0309% (0.00030906229999999997 Decimal)
+    x = (ovrf * 0)  + (ovrf / 8) + (ovrf / 32) + (ovrf / 128) + (ovrf / 256) + (ovrf / 512) + (ovrf / 2048);
   #else
-    //  Error: 0.0066% (0.0000658686 Decimal)
-    // Jitter: 0.0281% (0.0002809513 Decimal)
-    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 256) + (ovrf / 512) + (ovrf / 8192) + (ovrf / 65536);
+    //  Error: 0.0141% (0.0001406642 Decimal)
+    // Jitter: 0.0375% (0.0003745527 Decimal)
+    x = (ovrf * 0)  + (ovrf / 8) + (ovrf / 32) + (ovrf / 128) + (ovrf / 256) + (ovrf / 512) + (ovrf / 2048) + (ovrf / 4096);
   #endif
 
 
-#elif (F_CPU / MILLIS_TIMER_PRESCALE) == 1200000UL
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 1200000UL
   // 1.2 MHz
   //     Best Error Possible: 0.0096%  (0.0000955207 Decimal)
   //    Worst Error Possible: 41.4070% (0.4140701323 Decimal)
@@ -291,315 +751,900 @@ MillisMicrosTime_t millis()
   #endif
 
 
-#elif (F_CPU / MILLIS_TIMER_PRESCALE) == 2000000UL
-  // 2 MHz
-  //     Best Error Possible: 0.0113%  (0.0001126104 Decimal)
-  //    Worst Error Possible: 2.3446% (0.0234464846 Decimal)
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 1000000UL
+  // 1 MHz
+  //     Best Error Possible: 0.0063%  (0.0000628935 Decimal)
+  //    Worst Error Possible: 2.3445% (0.023445183300000002 Decimal)
 
   #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 23445UL
-    //  Error: 2.3446% (0.0234464846 Decimal)
-    // Jitter: 0.0088% (0.00008823529999999999 Decimal)
-    x = (ovrf * 0)  + (ovrf / 8);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 8198UL
-    //  Error: 0.8198% (0.008198212299999999 Decimal)
-    // Jitter: 0.0124% (0.0001235294 Decimal)
-    x = (ovrf * 0)  + (ovrf / 8) + (ovrf / 512);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 579UL
-    //  Error: 0.0579% (0.0005791708 Decimal)
-    // Jitter: 0.0179% (0.00017891220000000002 Decimal)
-    x = (ovrf * 0)  + (ovrf / 8) + (ovrf / 512) + (ovrf / 1024);
+    //  Error: 2.3445% (0.023445183300000002 Decimal)
+    // Jitter: 0.0083% (0.00008333329999999999 Decimal)
+    x = (ovrf * 0)  + (ovrf / 4);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 8197UL
+    //  Error: 0.8197% (0.0081970502 Decimal)
+    // Jitter: 0.0133% (0.0001333333 Decimal)
+    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 256);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 578UL
+    //  Error: 0.0578% (0.0005781245999999999 Decimal)
+    // Jitter: 0.0178% (0.00017781720000000002 Decimal)
+    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 256) + (ovrf / 512);
   #else
-    //  Error: 0.0113% (0.0001126104 Decimal)
-    // Jitter: 0.0224% (0.0002238139 Decimal)
-    x = (ovrf * 0)  + (ovrf / 8) + (ovrf / 512) + (ovrf / 1024) + (ovrf / 16384);
+    //  Error: 0.0063% (0.0000628935 Decimal)
+    // Jitter: 0.0278% (0.0002777817 Decimal)
+    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 256) + (ovrf / 512) + (ovrf / 8192) + (ovrf / 65536);
   #endif
 
 
-#elif (F_CPU / MILLIS_TIMER_PRESCALE) == 2400000UL
-  // 2.4 MHz
-  //     Best Error Possible: 0.0153%  (0.00015272219999999998 Decimal)
-  //    Worst Error Possible: 41.4072% (0.4140718057 Decimal)
-
-  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 414072UL
-    //  Error: 41.4072% (0.4140718057 Decimal)
-    // Jitter: 0.0055% (0.0000551471 Decimal)
-    x = (ovrf * 0)  + (ovrf / 16);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 121113UL
-    //  Error: 12.1113% (0.1211131569 Decimal)
-    // Jitter: 0.0106% (0.00010625 Decimal)
-    x = (ovrf * 0)  + (ovrf / 16) + (ovrf / 32);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 47881UL
-    //  Error: 4.7881% (0.0478814326 Decimal)
-    // Jitter: 0.0148% (0.0001484375 Decimal)
-    x = (ovrf * 0)  + (ovrf / 16) + (ovrf / 32) + (ovrf / 128);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 11271UL
-    //  Error: 1.1271% (0.011270545 Decimal)
-    // Jitter: 0.0223% (0.0002229665 Decimal)
-    x = (ovrf * 0)  + (ovrf / 16) + (ovrf / 32) + (ovrf / 128) + (ovrf / 256);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 2126UL
-    //  Error: 0.2126% (0.0021257332 Decimal)
-    // Jitter: 0.0283% (0.0002829912 Decimal)
-    x = (ovrf * 0)  + (ovrf / 16) + (ovrf / 32) + (ovrf / 128) + (ovrf / 256) + (ovrf / 1024);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 992UL
-    //  Error: 0.0992% (0.0009916172 Decimal)
-    // Jitter: 0.0329% (0.0003291789 Decimal)
-    x = (ovrf * 0)  + (ovrf / 16) + (ovrf / 32) + (ovrf / 128) + (ovrf / 256) + (ovrf / 1024) + (ovrf / 8192);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 429UL
-    //  Error: 0.0429% (0.0004293574 Decimal)
-    // Jitter: 0.0377% (0.0003769841 Decimal)
-    x = (ovrf * 0)  + (ovrf / 16) + (ovrf / 32) + (ovrf / 128) + (ovrf / 256) + (ovrf / 1024) + (ovrf / 8192) + (ovrf / 16384);
-  #else
-    //  Error: 0.0153% (0.00015272219999999998 Decimal)
-    // Jitter: 0.0413% (0.0004126984 Decimal)
-    x = (ovrf * 0)  + (ovrf / 16) + (ovrf / 32) + (ovrf / 128) + (ovrf / 256) + (ovrf / 1024) + (ovrf / 8192) + (ovrf / 16384) + (ovrf / 32768);
-  #endif
-
-
-#elif (F_CPU / MILLIS_TIMER_PRESCALE) == 4000000UL
-  // 4 MHz
-  //     Best Error Possible: 0.0114%  (0.0001138951 Decimal)
-  //    Worst Error Possible: 2.3447% (0.0234473254 Decimal)
-
-  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 23447UL
-    //  Error: 2.3447% (0.0234473254 Decimal)
-    // Jitter: 0.0062% (0.0000625 Decimal)
-    x = (ovrf * 0)  + (ovrf / 16);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 8199UL
-    //  Error: 0.8199% (0.008199243200000001 Decimal)
-    // Jitter: 0.0120% (0.0001203125 Decimal)
-    x = (ovrf * 0)  + (ovrf / 16) + (ovrf / 1024);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 580UL
-    //  Error: 0.0580% (0.0005804791 Decimal)
-    // Jitter: 0.0177% (0.00017671090000000002 Decimal)
-    x = (ovrf * 0)  + (ovrf / 16) + (ovrf / 1024) + (ovrf / 2048);
-  #else
-    //  Error: 0.0114% (0.0001138951 Decimal)
-    // Jitter: 0.0224% (0.0002238095 Decimal)
-    x = (ovrf * 0)  + (ovrf / 16) + (ovrf / 1024) + (ovrf / 2048) + (ovrf / 32768);
-  #endif
-
-
-#elif (F_CPU / MILLIS_TIMER_PRESCALE) == 4800000UL
-  // 4.8 MHz
-  //     Best Error Possible: 0.0153%  (0.00015272219999999998 Decimal)
-  //    Worst Error Possible: 41.4072% (0.4140718057 Decimal)
-
-  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 414072UL
-    //  Error: 41.4072% (0.4140718057 Decimal)
-    // Jitter: 0.0055% (0.0000551471 Decimal)
-    x = (ovrf * 0)  + (ovrf / 32);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 121113UL
-    //  Error: 12.1113% (0.1211131569 Decimal)
-    // Jitter: 0.0106% (0.00010625 Decimal)
-    x = (ovrf * 0)  + (ovrf / 32) + (ovrf / 64);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 47881UL
-    //  Error: 4.7881% (0.0478814326 Decimal)
-    // Jitter: 0.0148% (0.0001484375 Decimal)
-    x = (ovrf * 0)  + (ovrf / 32) + (ovrf / 64) + (ovrf / 256);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 11271UL
-    //  Error: 1.1271% (0.011270545 Decimal)
-    // Jitter: 0.0223% (0.0002229665 Decimal)
-    x = (ovrf * 0)  + (ovrf / 32) + (ovrf / 64) + (ovrf / 256) + (ovrf / 512);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 2126UL
-    //  Error: 0.2126% (0.0021257332 Decimal)
-    // Jitter: 0.0283% (0.0002829912 Decimal)
-    x = (ovrf * 0)  + (ovrf / 32) + (ovrf / 64) + (ovrf / 256) + (ovrf / 512) + (ovrf / 2048);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 992UL
-    //  Error: 0.0992% (0.0009916172 Decimal)
-    // Jitter: 0.0329% (0.0003291789 Decimal)
-    x = (ovrf * 0)  + (ovrf / 32) + (ovrf / 64) + (ovrf / 256) + (ovrf / 512) + (ovrf / 2048) + (ovrf / 16384);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 429UL
-    //  Error: 0.0429% (0.0004293574 Decimal)
-    // Jitter: 0.0377% (0.0003769841 Decimal)
-    x = (ovrf * 0)  + (ovrf / 32) + (ovrf / 64) + (ovrf / 256) + (ovrf / 512) + (ovrf / 2048) + (ovrf / 16384) + (ovrf / 32768);
-  #else
-    //  Error: 0.0153% (0.00015272219999999998 Decimal)
-    // Jitter: 0.0413% (0.0004126984 Decimal)
-    x = (ovrf * 0)  + (ovrf / 32) + (ovrf / 64) + (ovrf / 256) + (ovrf / 512) + (ovrf / 2048) + (ovrf / 16384) + (ovrf / 32768) + (ovrf / 65536);
-  #endif
-
-
-#elif (F_CPU / MILLIS_TIMER_PRESCALE) == 6400000UL
-  // 6.4 MHz
-  //     Best Error Possible: 0.0237%  (0.0002371862 Decimal)
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 800000UL
+  // 800 kHz
+  //     Best Error Possible: 0.0115%  (0.0001145359 Decimal)
   //    Worst Error Possible: 21.8758% (0.21875796979999998 Decimal)
 
   #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 218758UL
     //  Error: 21.8758% (0.21875796979999998 Decimal)
     // Jitter: 0.0068% (0.00006818179999999999 Decimal)
-    x = (ovrf * 0)  + (ovrf / 32);
+    x = (ovrf * 0)  + (ovrf / 4);
   #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 23455UL
     //  Error: 2.3455% (0.023454928400000002 Decimal)
     // Jitter: 0.0108% (0.0001079545 Decimal)
-    x = (ovrf * 0)  + (ovrf / 32) + (ovrf / 128);
+    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 16);
   #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 11258UL
     //  Error: 1.1258% (0.0112578935 Decimal)
     // Jitter: 0.0136% (0.0001362782 Decimal)
-    x = (ovrf * 0)  + (ovrf / 32) + (ovrf / 128) + (ovrf / 2048);
+    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 16) + (ovrf / 256);
   #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 5164UL
     //  Error: 0.5164% (0.0051639588 Decimal)
     // Jitter: 0.0186% (0.00018647909999999998 Decimal)
-    x = (ovrf * 0)  + (ovrf / 32) + (ovrf / 128) + (ovrf / 2048) + (ovrf / 4096);
+    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 16) + (ovrf / 256) + (ovrf / 512);
   #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 2123UL
     //  Error: 0.2123% (0.0021232221 Decimal)
     // Jitter: 0.0238% (0.0002382033 Decimal)
-    x = (ovrf * 0)  + (ovrf / 32) + (ovrf / 128) + (ovrf / 2048) + (ovrf / 4096) + (ovrf / 8192);
+    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 16) + (ovrf / 256) + (ovrf / 512) + (ovrf / 1024);
   #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 608UL
     //  Error: 0.0608% (0.0006080995 Decimal)
     // Jitter: 0.0290% (0.0002903811 Decimal)
-    x = (ovrf * 0)  + (ovrf / 32) + (ovrf / 128) + (ovrf / 2048) + (ovrf / 4096) + (ovrf / 8192) + (ovrf / 16384);
-  #else
+    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 16) + (ovrf / 256) + (ovrf / 512) + (ovrf / 1024) + (ovrf / 2048);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 237UL
     //  Error: 0.0237% (0.0002371862 Decimal)
     // Jitter: 0.0301% (0.0003012704 Decimal)
-    x = (ovrf * 0)  + (ovrf / 32) + (ovrf / 128) + (ovrf / 2048) + (ovrf / 4096) + (ovrf / 8192) + (ovrf / 16384) + (ovrf / 65536);
-  #endif
-
-
-#elif (F_CPU / MILLIS_TIMER_PRESCALE) == 8000000UL
-  // 8 MHz
-  //     Best Error Possible: 0.0114%  (0.0001138951 Decimal)
-  //    Worst Error Possible: 2.3447% (0.0234473254 Decimal)
-
-  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 23447UL
-    //  Error: 2.3447% (0.0234473254 Decimal)
-    // Jitter: 0.0062% (0.0000625 Decimal)
-    x = (ovrf * 0)  + (ovrf / 32);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 8199UL
-    //  Error: 0.8199% (0.008199243200000001 Decimal)
-    // Jitter: 0.0120% (0.0001203125 Decimal)
-    x = (ovrf * 0)  + (ovrf / 32) + (ovrf / 2048);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 580UL
-    //  Error: 0.0580% (0.0005804791 Decimal)
-    // Jitter: 0.0177% (0.00017671090000000002 Decimal)
-    x = (ovrf * 0)  + (ovrf / 32) + (ovrf / 2048) + (ovrf / 4096);
+    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 16) + (ovrf / 256) + (ovrf / 512) + (ovrf / 1024) + (ovrf / 2048) + (ovrf / 8192);
   #else
-    //  Error: 0.0114% (0.0001138951 Decimal)
-    // Jitter: 0.0224% (0.0002238095 Decimal)
-    x = (ovrf * 0)  + (ovrf / 32) + (ovrf / 2048) + (ovrf / 4096) + (ovrf / 65536);
+    //  Error: 0.0115% (0.0001145359 Decimal)
+    // Jitter: 0.0387% (0.0003865699 Decimal)
+    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 16) + (ovrf / 256) + (ovrf / 512) + (ovrf / 1024) + (ovrf / 2048) + (ovrf / 8192) + (ovrf / 32768) + (ovrf / 65536);
   #endif
 
 
-#elif (F_CPU / MILLIS_TIMER_PRESCALE) == 9600000UL
-  // 9.6 MHz
-  //     Best Error Possible: 0.0429%  (0.0004293574 Decimal)
-  //    Worst Error Possible: 41.4072% (0.4140718057 Decimal)
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 600000UL
+  // 600 kHz
+  //     Best Error Possible: 0.0091%  (0.0000913535 Decimal)
+  //    Worst Error Possible: 41.4068% (0.4140676903 Decimal)
 
-  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 414072UL
-    //  Error: 41.4072% (0.4140718057 Decimal)
-    // Jitter: 0.0055% (0.0000551471 Decimal)
-    x = (ovrf * 0)  + (ovrf / 64);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 121113UL
-    //  Error: 12.1113% (0.1211131569 Decimal)
-    // Jitter: 0.0106% (0.00010625 Decimal)
-    x = (ovrf * 0)  + (ovrf / 64) + (ovrf / 128);
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 414067UL
+    //  Error: 41.4068% (0.4140676903 Decimal)
+    // Jitter: 0.0039% (0.0000390023 Decimal)
+    x = (ovrf * 0)  + (ovrf / 4);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 121112UL
+    //  Error: 12.1112% (0.1211119719 Decimal)
+    // Jitter: 0.0103% (0.0001027377 Decimal)
+    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 8);
   #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 47881UL
-    //  Error: 4.7881% (0.0478814326 Decimal)
-    // Jitter: 0.0148% (0.0001484375 Decimal)
-    x = (ovrf * 0)  + (ovrf / 64) + (ovrf / 128) + (ovrf / 512);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 11271UL
-    //  Error: 1.1271% (0.011270545 Decimal)
-    // Jitter: 0.0223% (0.0002229665 Decimal)
-    x = (ovrf * 0)  + (ovrf / 64) + (ovrf / 128) + (ovrf / 512) + (ovrf / 1024);
+    //  Error: 4.7881% (0.0478809068 Decimal)
+    // Jitter: 0.0144% (0.00014398660000000001 Decimal)
+    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 8) + (ovrf / 32);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 11270UL
+    //  Error: 1.1270% (0.011270414199999999 Decimal)
+    // Jitter: 0.0218% (0.000217923 Decimal)
+    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 8) + (ovrf / 32) + (ovrf / 64);
   #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 2126UL
-    //  Error: 0.2126% (0.0021257332 Decimal)
-    // Jitter: 0.0283% (0.0002829912 Decimal)
-    x = (ovrf * 0)  + (ovrf / 64) + (ovrf / 128) + (ovrf / 512) + (ovrf / 1024) + (ovrf / 4096);
+    //  Error: 0.2126% (0.0021257019 Decimal)
+    // Jitter: 0.0281% (0.0002812586 Decimal)
+    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 8) + (ovrf / 32) + (ovrf / 64) + (ovrf / 256);
   #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 992UL
-    //  Error: 0.0992% (0.0009916172 Decimal)
-    // Jitter: 0.0329% (0.0003291789 Decimal)
-    x = (ovrf * 0)  + (ovrf / 64) + (ovrf / 128) + (ovrf / 512) + (ovrf / 1024) + (ovrf / 4096) + (ovrf / 32768);
+    //  Error: 0.0992% (0.0009915898999999998 Decimal)
+    // Jitter: 0.0329% (0.0003288179 Decimal)
+    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 8) + (ovrf / 32) + (ovrf / 64) + (ovrf / 256) + (ovrf / 2048);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 429UL
+    //  Error: 0.0429% (0.00042937520000000003 Decimal)
+    // Jitter: 0.0374% (0.0003740969 Decimal)
+    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 8) + (ovrf / 32) + (ovrf / 64) + (ovrf / 256) + (ovrf / 2048) + (ovrf / 4096);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 153UL
+    //  Error: 0.0153% (0.00015276230000000002 Decimal)
+    // Jitter: 0.0410% (0.0004097833 Decimal)
+    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 8) + (ovrf / 32) + (ovrf / 64) + (ovrf / 256) + (ovrf / 2048) + (ovrf / 4096) + (ovrf / 8192);
   #else
-    //  Error: 0.0429% (0.0004293574 Decimal)
-    // Jitter: 0.0377% (0.0003769841 Decimal)
-    x = (ovrf * 0)  + (ovrf / 64) + (ovrf / 128) + (ovrf / 512) + (ovrf / 1024) + (ovrf / 4096) + (ovrf / 32768) + (ovrf / 65536);
+    //  Error: 0.0091% (0.0000913535 Decimal)
+    // Jitter: 0.0480% (0.0004795937 Decimal)
+    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 8) + (ovrf / 32) + (ovrf / 64) + (ovrf / 256) + (ovrf / 2048) + (ovrf / 4096) + (ovrf / 8192) + (ovrf / 32768);
   #endif
 
 
-#elif (F_CPU / MILLIS_TIMER_PRESCALE) == 12000000UL
-  // 12 MHz
-  //     Best Error Possible: 0.0146%  (0.0001455417 Decimal)
-  //    Worst Error Possible: 26.7588% (0.267588149 Decimal)
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 576000UL
+  // 576 kHz
+  //     Best Error Possible: 0.0090%  (0.000090388 Decimal)
+  //    Worst Error Possible: 43.7505% (0.4375051231 Decimal)
 
-  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 267588UL
-    //  Error: 26.7588% (0.267588149 Decimal)
-    // Jitter: 0.0065% (0.0000647321 Decimal)
-    x = (ovrf * 0)  + (ovrf / 64);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 84492UL
-    //  Error: 8.4492% (0.0844921373 Decimal)
-    // Jitter: 0.0098% (0.0000977444 Decimal)
-    x = (ovrf * 0)  + (ovrf / 64) + (ovrf / 256);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 38726UL
-    //  Error: 3.8726% (0.038726386 Decimal)
-    // Jitter: 0.0160% (0.0001597744 Decimal)
-    x = (ovrf * 0)  + (ovrf / 64) + (ovrf / 256) + (ovrf / 1024);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 15849UL
-    //  Error: 1.5849% (0.015849382 Decimal)
-    // Jitter: 0.0188% (0.0001879699 Decimal)
-    x = (ovrf * 0)  + (ovrf / 64) + (ovrf / 256) + (ovrf / 1024) + (ovrf / 2048);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 4417UL
-    //  Error: 0.4417% (0.0044165132000000005 Decimal)
-    // Jitter: 0.0268% (0.0002679426 Decimal)
-    x = (ovrf * 0)  + (ovrf / 64) + (ovrf / 256) + (ovrf / 1024) + (ovrf / 2048) + (ovrf / 4096);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 1566UL
-    //  Error: 0.1566% (0.0015659282000000001 Decimal)
-    // Jitter: 0.0307% (0.00030690359999999996 Decimal)
-    x = (ovrf * 0)  + (ovrf / 64) + (ovrf / 256) + (ovrf / 1024) + (ovrf / 2048) + (ovrf / 4096) + (ovrf / 16384);
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 437505UL
+    //  Error: 43.7505% (0.4375051231 Decimal)
+    // Jitter: 0.0045% (0.0000454545 Decimal)
+    x = (ovrf * 0)  + (ovrf / 4);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 156263UL
+    //  Error: 15.6263% (0.15626309289999998 Decimal)
+    // Jitter: 0.0114% (0.0001136364 Decimal)
+    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 8);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 15647UL
+    //  Error: 1.5647% (0.0156472925 Decimal)
+    // Jitter: 0.0193% (0.0001931818 Decimal)
+    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 8) + (ovrf / 16);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 6869UL
+    //  Error: 0.6869% (0.0068689933 Decimal)
+    // Jitter: 0.0255% (0.0002549716 Decimal)
+    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 8) + (ovrf / 16) + (ovrf / 256);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 2485UL
+    //  Error: 0.2485% (0.0024850979000000002 Decimal)
+    // Jitter: 0.0285% (0.000284965 Decimal)
+    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 8) + (ovrf / 16) + (ovrf / 256) + (ovrf / 512);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 299UL
+    //  Error: 0.0299% (0.000298618 Decimal)
+    // Jitter: 0.0350% (0.00035 Decimal)
+    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 8) + (ovrf / 16) + (ovrf / 256) + (ovrf / 512) + (ovrf / 1024);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 172UL
+    //  Error: 0.0172% (0.0001717264 Decimal)
+    // Jitter: 0.0386% (0.0003863636 Decimal)
+    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 8) + (ovrf / 16) + (ovrf / 256) + (ovrf / 512) + (ovrf / 1024) + (ovrf / 16384);
   #else
-    //  Error: 0.0146% (0.0001455417 Decimal)
-    // Jitter: 0.0372% (0.0003718387 Decimal)
-    x = (ovrf * 0)  + (ovrf / 64) + (ovrf / 256) + (ovrf / 1024) + (ovrf / 2048) + (ovrf / 4096) + (ovrf / 16384) + (ovrf / 32768);
+    //  Error: 0.0090% (0.000090388 Decimal)
+    // Jitter: 0.0485% (0.0004848485 Decimal)
+    x = (ovrf * 0)  + (ovrf / 4) + (ovrf / 8) + (ovrf / 16) + (ovrf / 256) + (ovrf / 512) + (ovrf / 1024) + (ovrf / 16384) + (ovrf / 32768) + (ovrf / 65536);
   #endif
 
 
-#elif (F_CPU / MILLIS_TIMER_PRESCALE) == 16000000UL
-  // 16 MHz
-  //     Best Error Possible: 0.0580%  (0.0005804791 Decimal)
-  //    Worst Error Possible: 2.3447% (0.0234473254 Decimal)
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 500000UL
+  // 500 kHz
+  //     Best Error Possible: 0.0066%  (0.0000656635 Decimal)
+  //    Worst Error Possible: 2.3448% (0.0234479327 Decimal)
 
-  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 23447UL
-    //  Error: 2.3447% (0.0234473254 Decimal)
-    // Jitter: 0.0062% (0.0000625 Decimal)
-    x = (ovrf * 0)  + (ovrf / 64);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 8199UL
-    //  Error: 0.8199% (0.008199243200000001 Decimal)
-    // Jitter: 0.0120% (0.0001203125 Decimal)
-    x = (ovrf * 0)  + (ovrf / 64) + (ovrf / 4096);
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 23448UL
+    //  Error: 2.3448% (0.0234479327 Decimal)
+    // Jitter: 0.0062% (0.000062373 Decimal)
+    x = (ovrf * 0)  + (ovrf / 2);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 8200UL
+    //  Error: 0.8200% (0.008199769 Decimal)
+    // Jitter: 0.0120% (0.0001195449 Decimal)
+    x = (ovrf * 0)  + (ovrf / 2) + (ovrf / 128);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 581UL
+    //  Error: 0.0581% (0.0005809696 Decimal)
+    // Jitter: 0.0176% (0.0001760291 Decimal)
+    x = (ovrf * 0)  + (ovrf / 2) + (ovrf / 128) + (ovrf / 256);
   #else
-    //  Error: 0.0580% (0.0005804791 Decimal)
-    // Jitter: 0.0177% (0.00017671090000000002 Decimal)
-    x = (ovrf * 0)  + (ovrf / 64) + (ovrf / 4096) + (ovrf / 8192);
+    //  Error: 0.0066% (0.0000656635 Decimal)
+    // Jitter: 0.0278% (0.0002779503 Decimal)
+    x = (ovrf * 0)  + (ovrf / 2) + (ovrf / 128) + (ovrf / 256) + (ovrf / 4096) + (ovrf / 32768);
   #endif
 
 
-#elif (F_CPU / MILLIS_TIMER_PRESCALE) == 20000000UL
-  // 20 MHz
-  //     Best Error Possible: 0.1080%  (0.0010804776999999998 Decimal)
-  //    Worst Error Possible: 38.9659% (0.38965908730000004 Decimal)
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 375000UL
+  // 375 kHz
+  //     Best Error Possible: 0.0092%  (0.0000915869 Decimal)
+  //    Worst Error Possible: 26.7583% (0.26758349670000003 Decimal)
 
-  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 389659UL
-    //  Error: 38.9659% (0.38965908730000004 Decimal)
-    // Jitter: 0.0079% (0.0000788352 Decimal)
-    x = (ovrf * 0)  + (ovrf / 128);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 84494UL
-    //  Error: 8.4494% (0.0844941297 Decimal)
-    // Jitter: 0.0163% (0.00016339070000000001 Decimal)
-    x = (ovrf * 0)  + (ovrf / 128) + (ovrf / 256);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 8211UL
-    //  Error: 0.8211% (0.00821125 Decimal)
-    // Jitter: 0.0218% (0.0002175182 Decimal)
-    x = (ovrf * 0)  + (ovrf / 128) + (ovrf / 256) + (ovrf / 1024);
-  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 3454UL
-    //  Error: 0.3454% (0.0034536073999999997 Decimal)
-    // Jitter: 0.0284% (0.0002839416 Decimal)
-    x = (ovrf * 0)  + (ovrf / 128) + (ovrf / 256) + (ovrf / 1024) + (ovrf / 16384);
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 267583UL
+    //  Error: 26.7583% (0.26758349670000003 Decimal)
+    // Jitter: 0.0074% (0.00007386360000000001 Decimal)
+    x = (ovrf * 0)  + (ovrf / 2);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 84487UL
+    //  Error: 8.4487% (0.0844867312 Decimal)
+    // Jitter: 0.0087% (0.0000871645 Decimal)
+    x = (ovrf * 0)  + (ovrf / 2) + (ovrf / 8);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 38720UL
+    //  Error: 3.8720% (0.0387204621 Decimal)
+    // Jitter: 0.0127% (0.0001273622 Decimal)
+    x = (ovrf * 0)  + (ovrf / 2) + (ovrf / 8) + (ovrf / 32);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 15843UL
+    //  Error: 1.5843% (0.0158427259 Decimal)
+    // Jitter: 0.0196% (0.000196471 Decimal)
+    x = (ovrf * 0)  + (ovrf / 2) + (ovrf / 8) + (ovrf / 32) + (ovrf / 64);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 4409UL
+    //  Error: 0.4409% (0.0044087425 Decimal)
+    // Jitter: 0.0275% (0.0002754948 Decimal)
+    x = (ovrf * 0)  + (ovrf / 2) + (ovrf / 8) + (ovrf / 32) + (ovrf / 64) + (ovrf / 128);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 1558UL
+    //  Error: 0.1558% (0.0015579837 Decimal)
+    // Jitter: 0.0318% (0.0003182651 Decimal)
+    x = (ovrf * 0)  + (ovrf / 2) + (ovrf / 8) + (ovrf / 32) + (ovrf / 64) + (ovrf / 128) + (ovrf / 512);
   #else
-    //  Error: 0.1080% (0.0010804776999999998 Decimal)
-    // Jitter: 0.0367% (0.0003666667 Decimal)
-    x = (ovrf * 0)  + (ovrf / 128) + (ovrf / 256) + (ovrf / 1024) + (ovrf / 16384) + (ovrf / 32768);
+    //  Error: 0.0092% (0.0000915869 Decimal)
+    // Jitter: 0.0435% (0.0004345473 Decimal)
+    x = (ovrf * 0)  + (ovrf / 2) + (ovrf / 8) + (ovrf / 32) + (ovrf / 64) + (ovrf / 128) + (ovrf / 512) + (ovrf / 1024) + (ovrf / 32768) + (ovrf / 65536);
   #endif
-    
-#else
-  #error This CPU frequency is not defined
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 312500UL
+  // 312.5 kHz
+  //     Best Error Possible: 0.0098%  (0.000098003 Decimal)
+  //    Worst Error Possible: 38.9654% (0.3896535267 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 389654UL
+    //  Error: 38.9654% (0.3896535267 Decimal)
+    // Jitter: 0.0064% (0.0000636364 Decimal)
+    x = (ovrf * 0)  + (ovrf / 2);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 84486UL
+    //  Error: 8.4486% (0.0844855181 Decimal)
+    // Jitter: 0.0145% (0.0001454545 Decimal)
+    x = (ovrf * 0)  + (ovrf / 2) + (ovrf / 4);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 8202UL
+    //  Error: 0.8202% (0.0082016394 Decimal)
+    // Jitter: 0.0227% (0.00022715299999999998 Decimal)
+    x = (ovrf * 0)  + (ovrf / 2) + (ovrf / 4) + (ovrf / 16);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 3444UL
+    //  Error: 0.3444% (0.0034437723 Decimal)
+    // Jitter: 0.0290% (0.0002903556 Decimal)
+    x = (ovrf * 0)  + (ovrf / 2) + (ovrf / 4) + (ovrf / 16) + (ovrf / 256);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 1070UL
+    //  Error: 0.1070% (0.001070239 Decimal)
+    // Jitter: 0.0375% (0.000374543 Decimal)
+    x = (ovrf * 0)  + (ovrf / 2) + (ovrf / 4) + (ovrf / 16) + (ovrf / 256) + (ovrf / 512);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 485UL
+    //  Error: 0.0485% (0.0004848923 Decimal)
+    // Jitter: 0.0464% (0.00046418079999999997 Decimal)
+    x = (ovrf * 0)  + (ovrf / 2) + (ovrf / 4) + (ovrf / 16) + (ovrf / 256) + (ovrf / 512) + (ovrf / 2048);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 198UL
+    //  Error: 0.0198% (0.0001975922 Decimal)
+    // Jitter: 0.0557% (0.0005571742000000001 Decimal)
+    x = (ovrf * 0)  + (ovrf / 2) + (ovrf / 4) + (ovrf / 16) + (ovrf / 256) + (ovrf / 512) + (ovrf / 2048) + (ovrf / 4096);
+  #else
+    //  Error: 0.0098% (0.000098003 Decimal)
+    // Jitter: 0.0678% (0.0006777827 Decimal)
+    x = (ovrf * 0)  + (ovrf / 2) + (ovrf / 4) + (ovrf / 16) + (ovrf / 256) + (ovrf / 512) + (ovrf / 2048) + (ovrf / 4096) + (ovrf / 16384) + (ovrf / 32768) + (ovrf / 65536);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 300000UL
+  // 300 kHz
+  //     Best Error Possible: 0.0082%  (0.00008233490000000001 Decimal)
+  //    Worst Error Possible: 41.4062% (0.4140624052 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 414062UL
+    //  Error: 41.4062% (0.4140624052 Decimal)
+    // Jitter: 0.0046% (0.0000456935 Decimal)
+    x = (ovrf * 0)  + (ovrf / 2);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 121104UL
+    //  Error: 12.1104% (0.12110404429999999 Decimal)
+    // Jitter: 0.0072% (0.0000723293 Decimal)
+    x = (ovrf * 0)  + (ovrf / 2) + (ovrf / 4);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 47872UL
+    //  Error: 4.7872% (0.0478723188 Decimal)
+    // Jitter: 0.0147% (0.0001471747 Decimal)
+    x = (ovrf * 0)  + (ovrf / 2) + (ovrf / 4) + (ovrf / 16);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 11261UL
+    //  Error: 1.1261% (0.011261496 Decimal)
+    // Jitter: 0.0185% (0.0001845974 Decimal)
+    x = (ovrf * 0)  + (ovrf / 2) + (ovrf / 4) + (ovrf / 16) + (ovrf / 32);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 2117UL
+    //  Error: 0.2117% (0.0021167014 Decimal)
+    // Jitter: 0.0252% (0.0002515538 Decimal)
+    x = (ovrf * 0)  + (ovrf / 2) + (ovrf / 4) + (ovrf / 16) + (ovrf / 32) + (ovrf / 128);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 983UL
+    //  Error: 0.0983% (0.0009825792 Decimal)
+    // Jitter: 0.0310% (0.00031023520000000003 Decimal)
+    x = (ovrf * 0)  + (ovrf / 2) + (ovrf / 4) + (ovrf / 16) + (ovrf / 32) + (ovrf / 128) + (ovrf / 1024);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 420UL
+    //  Error: 0.0420% (0.00042035950000000004 Decimal)
+    // Jitter: 0.0382% (0.0003816122 Decimal)
+    x = (ovrf * 0)  + (ovrf / 2) + (ovrf / 4) + (ovrf / 16) + (ovrf / 32) + (ovrf / 128) + (ovrf / 1024) + (ovrf / 2048);
+  #else
+    //  Error: 0.0082% (0.00008233490000000001 Decimal)
+    // Jitter: 0.0485% (0.0004849638 Decimal)
+    x = (ovrf * 0)  + (ovrf / 2) + (ovrf / 4) + (ovrf / 16) + (ovrf / 32) + (ovrf / 128) + (ovrf / 1024) + (ovrf / 2048) + (ovrf / 4096) + (ovrf / 16384);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 250000UL
+  // 250 kHz
+  //     Best Error Possible: 0.0055%  (0.0000546916 Decimal)
+  //    Worst Error Possible: 2.3437% (0.0234372169 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 23437UL
+    //  Error: 2.3437% (0.0234372169 Decimal)
+    // Jitter: 0.0061% (0.000061198 Decimal)
+    x = (ovrf * 1) ;
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 8189UL
+    //  Error: 0.8189% (0.008188886000000001 Decimal)
+    // Jitter: 0.0106% (0.0001060606 Decimal)
+    x = (ovrf * 1)  + (ovrf / 64);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 570UL
+    //  Error: 0.0570% (0.0005700031000000001 Decimal)
+    // Jitter: 0.0184% (0.0001839716 Decimal)
+    x = (ovrf * 1)  + (ovrf / 64) + (ovrf / 128);
+  #else
+    //  Error: 0.0055% (0.0000546916 Decimal)
+    // Jitter: 0.0255% (0.0002551896 Decimal)
+    x = (ovrf * 1)  + (ovrf / 64) + (ovrf / 128) + (ovrf / 2048) + (ovrf / 16384);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 240000UL
+  // 240 kHz
+  //     Best Error Possible: 0.0043%  (0.000042799 Decimal)
+  //    Worst Error Possible: 6.2500% (0.0625004542 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 62500UL
+    //  Error: 6.2500% (0.0625004542 Decimal)
+    // Jitter: 0.0058% (0.000057993000000000005 Decimal)
+    x = (ovrf * 1) ;
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 3917UL
+    //  Error: 0.3917% (0.0039173927 Decimal)
+    // Jitter: 0.0104% (0.0001040625 Decimal)
+    x = (ovrf * 1)  + (ovrf / 16);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 266UL
+    //  Error: 0.0266% (0.0002664493 Decimal)
+    // Jitter: 0.0158% (0.0001580094 Decimal)
+    x = (ovrf * 1)  + (ovrf / 16) + (ovrf / 256);
+  #else
+    //  Error: 0.0043% (0.000042799 Decimal)
+    // Jitter: 0.0223% (0.0002228636 Decimal)
+    x = (ovrf * 1)  + (ovrf / 16) + (ovrf / 256) + (ovrf / 4096) + (ovrf / 65536);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 200000UL
+  // 200 kHz
+  //     Best Error Possible: 0.0087%  (0.00008692650000000001 Decimal)
+  //    Worst Error Possible: 21.8749% (0.21874940969999998 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 218749UL
+    //  Error: 21.8749% (0.21874940969999998 Decimal)
+    // Jitter: 0.0040% (0.0000402168 Decimal)
+    x = (ovrf * 1) ;
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 23442UL
+    //  Error: 2.3442% (0.0234418821 Decimal)
+    // Jitter: 0.0066% (0.0000663896 Decimal)
+    x = (ovrf * 1)  + (ovrf / 4);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 11245UL
+    //  Error: 1.1245% (0.0112446471 Decimal)
+    // Jitter: 0.0105% (0.0001048328 Decimal)
+    x = (ovrf * 1)  + (ovrf / 4) + (ovrf / 64);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 5151UL
+    //  Error: 0.5151% (0.0051506819 Decimal)
+    // Jitter: 0.0133% (0.00013293700000000002 Decimal)
+    x = (ovrf * 1)  + (ovrf / 4) + (ovrf / 64) + (ovrf / 128);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 2110UL
+    //  Error: 0.2110% (0.0021097311 Decimal)
+    // Jitter: 0.0160% (0.0001601772 Decimal)
+    x = (ovrf * 1)  + (ovrf / 4) + (ovrf / 64) + (ovrf / 128) + (ovrf / 256);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 594UL
+    //  Error: 0.0594% (0.0005942365 Decimal)
+    // Jitter: 0.0217% (0.0002168587 Decimal)
+    x = (ovrf * 1)  + (ovrf / 4) + (ovrf / 64) + (ovrf / 128) + (ovrf / 256) + (ovrf / 512);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 223UL
+    //  Error: 0.0223% (0.0002234391 Decimal)
+    // Jitter: 0.0288% (0.00028770170000000004 Decimal)
+    x = (ovrf * 1)  + (ovrf / 4) + (ovrf / 64) + (ovrf / 128) + (ovrf / 256) + (ovrf / 512) + (ovrf / 2048);
+  #else
+    //  Error: 0.0087% (0.00008692650000000001 Decimal)
+    // Jitter: 0.0373% (0.0003726614 Decimal)
+    x = (ovrf * 1)  + (ovrf / 4) + (ovrf / 64) + (ovrf / 128) + (ovrf / 256) + (ovrf / 512) + (ovrf / 2048) + (ovrf / 8192) + (ovrf / 16384) + (ovrf / 32768);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 187500UL
+  // 187.5 kHz
+  //     Best Error Possible: 0.0085%  (0.0000847758 Decimal)
+  //    Worst Error Possible: 26.7578% (0.2675778189 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 267578UL
+    //  Error: 26.7578% (0.2675778189 Decimal)
+    // Jitter: 0.0055% (0.000054545499999999995 Decimal)
+    x = (ovrf * 1) ;
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 84480UL
+    //  Error: 8.4480% (0.08447986 Decimal)
+    // Jitter: 0.0071% (0.0000709122 Decimal)
+    x = (ovrf * 1)  + (ovrf / 4);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 38713UL
+    //  Error: 3.8713% (0.0387132482 Decimal)
+    // Jitter: 0.0119% (0.0001193403 Decimal)
+    x = (ovrf * 1)  + (ovrf / 4) + (ovrf / 16);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 15835UL
+    //  Error: 1.5836% (0.0158355798 Decimal)
+    // Jitter: 0.0208% (0.00020789609999999998 Decimal)
+    x = (ovrf * 1)  + (ovrf / 4) + (ovrf / 16) + (ovrf / 32);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 4402UL
+    //  Error: 0.4402% (0.0044019472 Decimal)
+    // Jitter: 0.0238% (0.00023807089999999998 Decimal)
+    x = (ovrf * 1)  + (ovrf / 4) + (ovrf / 16) + (ovrf / 32) + (ovrf / 64);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 1550UL
+    //  Error: 0.1551% (0.0015511828 Decimal)
+    // Jitter: 0.0293% (0.00029315179999999996 Decimal)
+    x = (ovrf * 1)  + (ovrf / 4) + (ovrf / 16) + (ovrf / 32) + (ovrf / 64) + (ovrf / 256);
+  #else
+    //  Error: 0.0085% (0.0000847758 Decimal)
+    // Jitter: 0.0385% (0.0003851959 Decimal)
+    x = (ovrf * 1)  + (ovrf / 4) + (ovrf / 16) + (ovrf / 32) + (ovrf / 64) + (ovrf / 256) + (ovrf / 512) + (ovrf / 16384) + (ovrf / 32768);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 150000UL
+  // 150 kHz
+  //     Best Error Possible: 0.0082%  (0.00008233490000000001 Decimal)
+  //    Worst Error Possible: 41.4062% (0.4140624052 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 414062UL
+    //  Error: 41.4062% (0.4140624052 Decimal)
+    // Jitter: 0.0046% (0.0000456935 Decimal)
+    x = (ovrf * 1) ;
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 121104UL
+    //  Error: 12.1104% (0.12110404429999999 Decimal)
+    // Jitter: 0.0072% (0.0000723293 Decimal)
+    x = (ovrf * 1)  + (ovrf / 2);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 47872UL
+    //  Error: 4.7872% (0.0478723188 Decimal)
+    // Jitter: 0.0147% (0.0001471747 Decimal)
+    x = (ovrf * 1)  + (ovrf / 2) + (ovrf / 8);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 11261UL
+    //  Error: 1.1261% (0.011261496 Decimal)
+    // Jitter: 0.0185% (0.0001845974 Decimal)
+    x = (ovrf * 1)  + (ovrf / 2) + (ovrf / 8) + (ovrf / 16);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 2117UL
+    //  Error: 0.2117% (0.0021167014 Decimal)
+    // Jitter: 0.0252% (0.0002515538 Decimal)
+    x = (ovrf * 1)  + (ovrf / 2) + (ovrf / 8) + (ovrf / 16) + (ovrf / 64);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 983UL
+    //  Error: 0.0983% (0.0009825792 Decimal)
+    // Jitter: 0.0310% (0.00031023520000000003 Decimal)
+    x = (ovrf * 1)  + (ovrf / 2) + (ovrf / 8) + (ovrf / 16) + (ovrf / 64) + (ovrf / 512);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 420UL
+    //  Error: 0.0420% (0.00042035950000000004 Decimal)
+    // Jitter: 0.0382% (0.0003816122 Decimal)
+    x = (ovrf * 1)  + (ovrf / 2) + (ovrf / 8) + (ovrf / 16) + (ovrf / 64) + (ovrf / 512) + (ovrf / 1024);
+  #else
+    //  Error: 0.0082% (0.00008233490000000001 Decimal)
+    // Jitter: 0.0485% (0.0004849638 Decimal)
+    x = (ovrf * 1)  + (ovrf / 2) + (ovrf / 8) + (ovrf / 16) + (ovrf / 64) + (ovrf / 512) + (ovrf / 1024) + (ovrf / 2048) + (ovrf / 8192);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 128000UL
+  // 128 kHz
+  //  Error: 0.0000% (0 Decimal)
+  // Jitter: 0.0000% (0 Decimal)
+
+  x = (ovrf * 2) ;
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 125000UL
+  // 125 kHz
+  //     Best Error Possible: 0.0055%  (0.0000545291 Decimal)
+  //    Worst Error Possible: 2.3437% (0.0234373939 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 23437UL
+    //  Error: 2.3437% (0.0234373939 Decimal)
+    // Jitter: 0.0055% (0.0000547528 Decimal)
+    x = (ovrf * 2) ;
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 8189UL
+    //  Error: 0.8189% (0.0081890157 Decimal)
+    // Jitter: 0.0107% (0.00010674110000000001 Decimal)
+    x = (ovrf * 2)  + (ovrf / 32);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 570UL
+    //  Error: 0.0570% (0.0005699991999999999 Decimal)
+    // Jitter: 0.0182% (0.0001824126 Decimal)
+    x = (ovrf * 2)  + (ovrf / 32) + (ovrf / 64);
+  #else
+    //  Error: 0.0055% (0.0000545291 Decimal)
+    // Jitter: 0.0258% (0.00025814839999999996 Decimal)
+    x = (ovrf * 2)  + (ovrf / 32) + (ovrf / 64) + (ovrf / 1024) + (ovrf / 8192) + (ovrf / 65536);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 100000UL
+  // 100 kHz
+  //     Best Error Possible: 0.0087%  (0.00008692650000000001 Decimal)
+  //    Worst Error Possible: 21.8749% (0.21874940969999998 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 218749UL
+    //  Error: 21.8749% (0.21874940969999998 Decimal)
+    // Jitter: 0.0040% (0.0000402168 Decimal)
+    x = (ovrf * 2) ;
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 23442UL
+    //  Error: 2.3442% (0.0234418821 Decimal)
+    // Jitter: 0.0066% (0.0000663896 Decimal)
+    x = (ovrf * 2)  + (ovrf / 2);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 11245UL
+    //  Error: 1.1245% (0.0112446471 Decimal)
+    // Jitter: 0.0105% (0.0001048328 Decimal)
+    x = (ovrf * 2)  + (ovrf / 2) + (ovrf / 32);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 5151UL
+    //  Error: 0.5151% (0.0051506819 Decimal)
+    // Jitter: 0.0133% (0.00013293700000000002 Decimal)
+    x = (ovrf * 2)  + (ovrf / 2) + (ovrf / 32) + (ovrf / 64);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 2110UL
+    //  Error: 0.2110% (0.0021097311 Decimal)
+    // Jitter: 0.0160% (0.0001601772 Decimal)
+    x = (ovrf * 2)  + (ovrf / 2) + (ovrf / 32) + (ovrf / 64) + (ovrf / 128);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 594UL
+    //  Error: 0.0594% (0.0005942365 Decimal)
+    // Jitter: 0.0217% (0.0002168587 Decimal)
+    x = (ovrf * 2)  + (ovrf / 2) + (ovrf / 32) + (ovrf / 64) + (ovrf / 128) + (ovrf / 256);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 223UL
+    //  Error: 0.0223% (0.0002234391 Decimal)
+    // Jitter: 0.0288% (0.00028770170000000004 Decimal)
+    x = (ovrf * 2)  + (ovrf / 2) + (ovrf / 32) + (ovrf / 64) + (ovrf / 128) + (ovrf / 256) + (ovrf / 1024);
+  #else
+    //  Error: 0.0087% (0.00008692650000000001 Decimal)
+    // Jitter: 0.0373% (0.0003726614 Decimal)
+    x = (ovrf * 2)  + (ovrf / 2) + (ovrf / 32) + (ovrf / 64) + (ovrf / 128) + (ovrf / 256) + (ovrf / 1024) + (ovrf / 4096) + (ovrf / 8192) + (ovrf / 16384);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 75000UL
+  // 75 kHz
+  //     Best Error Possible: 0.0068%  (0.00006818429999999999 Decimal)
+  //    Worst Error Possible: 12.1094% (0.12109413129999999 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 121094UL
+    //  Error: 12.1094% (0.12109413129999999 Decimal)
+    // Jitter: 0.0051% (0.000051157400000000006 Decimal)
+    x = (ovrf * 3) ;
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 47859UL
+    //  Error: 4.7860% (0.0478598407 Decimal)
+    // Jitter: 0.0095% (0.00009549769999999999 Decimal)
+    x = (ovrf * 3)  + (ovrf / 4);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 11248UL
+    //  Error: 1.1248% (0.011247735699999999 Decimal)
+    // Jitter: 0.0144% (0.00014372999999999998 Decimal)
+    x = (ovrf * 3)  + (ovrf / 4) + (ovrf / 8);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 2103UL
+    //  Error: 0.2103% (0.0021026210000000003 Decimal)
+    // Jitter: 0.0207% (0.0002065198 Decimal)
+    x = (ovrf * 3)  + (ovrf / 4) + (ovrf / 8) + (ovrf / 32);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 968UL
+    //  Error: 0.0968% (0.0009684594 Decimal)
+    // Jitter: 0.0249% (0.000248762 Decimal)
+    x = (ovrf * 3)  + (ovrf / 4) + (ovrf / 8) + (ovrf / 32) + (ovrf / 256);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 406UL
+    //  Error: 0.0406% (0.00040622019999999996 Decimal)
+    // Jitter: 0.0303% (0.00030316500000000004 Decimal)
+    x = (ovrf * 3)  + (ovrf / 4) + (ovrf / 8) + (ovrf / 32) + (ovrf / 256) + (ovrf / 512);
+  #else
+    //  Error: 0.0068% (0.00006818429999999999 Decimal)
+    // Jitter: 0.0407% (0.00040653280000000003 Decimal)
+    x = (ovrf * 3)  + (ovrf / 4) + (ovrf / 8) + (ovrf / 32) + (ovrf / 256) + (ovrf / 512) + (ovrf / 1024) + (ovrf / 4096);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 72000UL
+  // 72 kHz
+  //     Best Error Possible: 0.0069%  (0.0000690607 Decimal)
+  //    Worst Error Possible: 15.6252% (0.1562517948 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 156252UL
+    //  Error: 15.6252% (0.1562517948 Decimal)
+    // Jitter: 0.0050% (0.000049993299999999994 Decimal)
+    x = (ovrf * 3) ;
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 15627UL
+    //  Error: 1.5627% (0.015627093999999998 Decimal)
+    // Jitter: 0.0058% (0.0000583256 Decimal)
+    x = (ovrf * 3)  + (ovrf / 2);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 6848UL
+    //  Error: 0.6848% (0.0068482214999999996 Decimal)
+    // Jitter: 0.0098% (0.0000981721 Decimal)
+    x = (ovrf * 3)  + (ovrf / 2) + (ovrf / 32);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 2464UL
+    //  Error: 0.2464% (0.0024640803999999997 Decimal)
+    // Jitter: 0.0164% (0.00016422329999999998 Decimal)
+    x = (ovrf * 3)  + (ovrf / 2) + (ovrf / 32) + (ovrf / 64);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 277UL
+    //  Error: 0.0277% (0.0002771324 Decimal)
+    // Jitter: 0.0260% (0.00026046429999999996 Decimal)
+    x = (ovrf * 3)  + (ovrf / 2) + (ovrf / 32) + (ovrf / 64) + (ovrf / 128);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 150UL
+    //  Error: 0.0150% (0.0001502798 Decimal)
+    // Jitter: 0.0290% (0.0002902523 Decimal)
+    x = (ovrf * 3)  + (ovrf / 2) + (ovrf / 32) + (ovrf / 64) + (ovrf / 128) + (ovrf / 2048);
+  #else
+    //  Error: 0.0069% (0.0000690607 Decimal)
+    // Jitter: 0.0389% (0.0003888704 Decimal)
+    x = (ovrf * 3)  + (ovrf / 2) + (ovrf / 32) + (ovrf / 64) + (ovrf / 128) + (ovrf / 2048) + (ovrf / 4096) + (ovrf / 8192);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 62500UL
+  // 62.5 kHz
+  //     Best Error Possible: 0.0053%  (0.000053184600000000006 Decimal)
+  //    Worst Error Possible: 2.3437% (0.023436712800000002 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 23437UL
+    //  Error: 2.3437% (0.023436712800000002 Decimal)
+    // Jitter: 0.0055% (0.000055436900000000005 Decimal)
+    x = (ovrf * 4) ;
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 8188UL
+    //  Error: 0.8188% (0.0081878192 Decimal)
+    // Jitter: 0.0116% (0.00011633599999999999 Decimal)
+    x = (ovrf * 4)  + (ovrf / 16);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 569UL
+    //  Error: 0.0569% (0.0005687699 Decimal)
+    // Jitter: 0.0188% (0.0001879552 Decimal)
+    x = (ovrf * 4)  + (ovrf / 16) + (ovrf / 32);
+  #else
+    //  Error: 0.0053% (0.000053184600000000006 Decimal)
+    // Jitter: 0.0258% (0.0002582281 Decimal)
+    x = (ovrf * 4)  + (ovrf / 16) + (ovrf / 32) + (ovrf / 512) + (ovrf / 4096) + (ovrf / 32768) + (ovrf / 65536);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 37500UL
+  // 37.5 kHz
+  //     Best Error Possible: 0.0064%  (0.0000640909 Decimal)
+  //    Worst Error Possible: 12.1093% (0.1210933981 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 121093UL
+    //  Error: 12.1093% (0.1210933981 Decimal)
+    // Jitter: 0.0040% (0.000040286 Decimal)
+    x = (ovrf * 6) ;
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 47855UL
+    //  Error: 4.7856% (0.047856293700000004 Decimal)
+    // Jitter: 0.0089% (0.000089106 Decimal)
+    x = (ovrf * 6)  + (ovrf / 2);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 11243UL
+    //  Error: 1.1243% (0.011242939 Decimal)
+    // Jitter: 0.0159% (0.0001589788 Decimal)
+    x = (ovrf * 6)  + (ovrf / 2) + (ovrf / 4);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 2098UL
+    //  Error: 0.2098% (0.0020975313000000002 Decimal)
+    // Jitter: 0.0220% (0.0002200943 Decimal)
+    x = (ovrf * 6)  + (ovrf / 2) + (ovrf / 4) + (ovrf / 16);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 963UL
+    //  Error: 0.0963% (0.0009634308 Decimal)
+    // Jitter: 0.0254% (0.000253992 Decimal)
+    x = (ovrf * 6)  + (ovrf / 2) + (ovrf / 4) + (ovrf / 16) + (ovrf / 128);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 400UL
+    //  Error: 0.0401% (0.0004014773 Decimal)
+    // Jitter: 0.0280% (0.0002795405 Decimal)
+    x = (ovrf * 6)  + (ovrf / 2) + (ovrf / 4) + (ovrf / 16) + (ovrf / 128) + (ovrf / 256);
+  #else
+    //  Error: 0.0064% (0.0000640909 Decimal)
+    // Jitter: 0.0364% (0.0003637025 Decimal)
+    x = (ovrf * 6)  + (ovrf / 2) + (ovrf / 4) + (ovrf / 16) + (ovrf / 128) + (ovrf / 256) + (ovrf / 512) + (ovrf / 2048);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 32768UL
+  // 32.768 kHz
+  //     Best Error Possible: 0.0000%  (0 Decimal)
+  //    Worst Error Possible: 10.4000% (0.104 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 104000UL
+    //  Error: 10.4000% (0.104 Decimal)
+    // Jitter: 0.0000% (0 Decimal)
+    x = (ovrf * 7) ;
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 40000UL
+    //  Error: 4.0000% (0.04 Decimal)
+    // Jitter: 0.0000% (0 Decimal)
+    x = (ovrf * 7)  + (ovrf / 2);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 8000UL
+    //  Error: 0.8000% (0.008 Decimal)
+    // Jitter: 0.0000% (0 Decimal)
+    x = (ovrf * 7)  + (ovrf / 2) + (ovrf / 4);
+  #else
+    //  Error: 0.0000% (0 Decimal)
+    // Jitter: 0.0000% (0 Decimal)
+    x = (ovrf * 7)  + (ovrf / 2) + (ovrf / 4) + (ovrf / 16);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 31250UL
+  // 31.25 kHz
+  //     Best Error Possible: 0.0052%  (0.0000522177 Decimal)
+  //    Worst Error Possible: 2.3437% (0.0234370909 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 23437UL
+    //  Error: 2.3437% (0.0234370909 Decimal)
+    // Jitter: 0.0064% (0.00006404550000000001 Decimal)
+    x = (ovrf * 8) ;
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 8188UL
+    //  Error: 0.8188% (0.0081875548 Decimal)
+    // Jitter: 0.0111% (0.0001106772 Decimal)
+    x = (ovrf * 8)  + (ovrf / 8);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 568UL
+    //  Error: 0.0568% (0.0005678393 Decimal)
+    // Jitter: 0.0187% (0.0001868103 Decimal)
+    x = (ovrf * 8)  + (ovrf / 8) + (ovrf / 16);
+  #else
+    //  Error: 0.0052% (0.0000522177 Decimal)
+    // Jitter: 0.0258% (0.0002581808 Decimal)
+    x = (ovrf * 8)  + (ovrf / 8) + (ovrf / 16) + (ovrf / 256) + (ovrf / 2048) + (ovrf / 16384) + (ovrf / 32768);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 18750UL
+  // 18.75 kHz
+  //     Best Error Possible: 0.0050%  (0.000049767899999999995 Decimal)
+  //    Worst Error Possible: 4.7852% (0.047851534099999996 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 47852UL
+    //  Error: 4.7852% (0.047851534099999996 Decimal)
+    // Jitter: 0.0059% (0.0000586267 Decimal)
+    x = (ovrf * 13) ;
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 11230UL
+    //  Error: 1.1230% (0.011230439200000001 Decimal)
+    // Jitter: 0.0061% (0.000060881599999999997 Decimal)
+    x = (ovrf * 13)  + (ovrf / 2);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 2083UL
+    //  Error: 0.2083% (0.0020830862999999997 Decimal)
+    // Jitter: 0.0126% (0.00012552049999999999 Decimal)
+    x = (ovrf * 13)  + (ovrf / 2) + (ovrf / 8);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 949UL
+    //  Error: 0.0949% (0.0009487892000000001 Decimal)
+    // Jitter: 0.0168% (0.00016777330000000002 Decimal)
+    x = (ovrf * 13)  + (ovrf / 2) + (ovrf / 8) + (ovrf / 64);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 387UL
+    //  Error: 0.0387% (0.0003868662 Decimal)
+    // Jitter: 0.0190% (0.0001903451 Decimal)
+    x = (ovrf * 13)  + (ovrf / 2) + (ovrf / 8) + (ovrf / 64) + (ovrf / 128);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 111UL
+    //  Error: 0.0111% (0.0001108822 Decimal)
+    // Jitter: 0.0229% (0.0002292078 Decimal)
+    x = (ovrf * 13)  + (ovrf / 2) + (ovrf / 8) + (ovrf / 64) + (ovrf / 128) + (ovrf / 256);
+  #else
+    //  Error: 0.0050% (0.000049767899999999995 Decimal)
+    // Jitter: 0.0300% (0.00030018009999999997 Decimal)
+    x = (ovrf * 13)  + (ovrf / 2) + (ovrf / 8) + (ovrf / 64) + (ovrf / 128) + (ovrf / 256) + (ovrf / 1024);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 16000UL
+  // 16 kHz
+  //  Error: 0.0000% (0 Decimal)
+  // Jitter: 0.0000% (0 Decimal)
+
+  x = (ovrf * 16) ;
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 15625UL
+  // 15.625 kHz
+  //     Best Error Possible: 0.0046%  (0.0000461119 Decimal)
+  //    Worst Error Possible: 2.3437% (0.023437407599999998 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 23437UL
+    //  Error: 2.3437% (0.023437407599999998 Decimal)
+    // Jitter: 0.0058% (0.0000579497 Decimal)
+    x = (ovrf * 16) ;
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 8184UL
+    //  Error: 0.8184% (0.0081838807 Decimal)
+    // Jitter: 0.0072% (0.00007187699999999999 Decimal)
+    x = (ovrf * 16)  + (ovrf / 4);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 562UL
+    //  Error: 0.0562% (0.000562095 Decimal)
+    // Jitter: 0.0134% (0.000134475 Decimal)
+    x = (ovrf * 16)  + (ovrf / 4) + (ovrf / 8);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 95UL
+    //  Error: 0.0095% (0.00009518080000000001 Decimal)
+    // Jitter: 0.0183% (0.0001831157 Decimal)
+    x = (ovrf * 16)  + (ovrf / 4) + (ovrf / 8) + (ovrf / 128);
+  #else
+    //  Error: 0.0046% (0.0000461119 Decimal)
+    // Jitter: 0.0242% (0.0002421586 Decimal)
+    x = (ovrf * 16)  + (ovrf / 4) + (ovrf / 8) + (ovrf / 128) + (ovrf / 1024) + (ovrf / 8192) + (ovrf / 16384) + (ovrf / 65536);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 12500UL
+  // 12.5 kHz
+  //     Best Error Possible: 0.0078%  (0.0000782744 Decimal)
+  //    Worst Error Possible: 2.3437% (0.023437109 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 23437UL
+    //  Error: 2.3437% (0.023437109 Decimal)
+    // Jitter: 0.0045% (0.000044762300000000003 Decimal)
+    x = (ovrf * 20) ;
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 11238UL
+    //  Error: 1.1238% (0.0112376471 Decimal)
+    // Jitter: 0.0097% (0.00009662080000000001 Decimal)
+    x = (ovrf * 20)  + (ovrf / 4);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 5143UL
+    //  Error: 0.5143% (0.0051427518 Decimal)
+    // Jitter: 0.0126% (0.0001263876 Decimal)
+    x = (ovrf * 20)  + (ovrf / 4) + (ovrf / 8);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 2101UL
+    //  Error: 0.2101% (0.0021012148000000004 Decimal)
+    // Jitter: 0.0180% (0.00017975239999999998 Decimal)
+    x = (ovrf * 20)  + (ovrf / 4) + (ovrf / 8) + (ovrf / 16);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 586UL
+    //  Error: 0.0586% (0.0005856277 Decimal)
+    // Jitter: 0.0225% (0.00022505439999999998 Decimal)
+    x = (ovrf * 20)  + (ovrf / 4) + (ovrf / 8) + (ovrf / 16) + (ovrf / 32);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 214UL
+    //  Error: 0.0215% (0.000214637 Decimal)
+    // Jitter: 0.0295% (0.0002951753 Decimal)
+    x = (ovrf * 20)  + (ovrf / 4) + (ovrf / 8) + (ovrf / 16) + (ovrf / 32) + (ovrf / 128);
+  #else
+    //  Error: 0.0078% (0.0000782744 Decimal)
+    // Jitter: 0.0369% (0.00036935969999999995 Decimal)
+    x = (ovrf * 20)  + (ovrf / 4) + (ovrf / 8) + (ovrf / 16) + (ovrf / 32) + (ovrf / 128) + (ovrf / 512) + (ovrf / 1024) + (ovrf / 2048) + (ovrf / 65536);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 9375UL
+  // 9.375 kHz
+  //     Best Error Possible: 0.0050%  (0.000049767899999999995 Decimal)
+  //    Worst Error Possible: 1.1230% (0.011230439200000001 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 11230UL
+    //  Error: 1.1230% (0.011230439200000001 Decimal)
+    // Jitter: 0.0061% (0.000060881599999999997 Decimal)
+    x = (ovrf * 27) ;
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 2083UL
+    //  Error: 0.2083% (0.0020830862999999997 Decimal)
+    // Jitter: 0.0126% (0.00012552049999999999 Decimal)
+    x = (ovrf * 27)  + (ovrf / 4);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 949UL
+    //  Error: 0.0949% (0.0009487892000000001 Decimal)
+    // Jitter: 0.0168% (0.00016777330000000002 Decimal)
+    x = (ovrf * 27)  + (ovrf / 4) + (ovrf / 32);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 387UL
+    //  Error: 0.0387% (0.0003868662 Decimal)
+    // Jitter: 0.0190% (0.0001903451 Decimal)
+    x = (ovrf * 27)  + (ovrf / 4) + (ovrf / 32) + (ovrf / 64);
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 111UL
+    //  Error: 0.0111% (0.0001108822 Decimal)
+    // Jitter: 0.0229% (0.0002292078 Decimal)
+    x = (ovrf * 27)  + (ovrf / 4) + (ovrf / 32) + (ovrf / 64) + (ovrf / 128);
+  #else
+    //  Error: 0.0050% (0.000049767899999999995 Decimal)
+    // Jitter: 0.0300% (0.00030018009999999997 Decimal)
+    x = (ovrf * 27)  + (ovrf / 4) + (ovrf / 32) + (ovrf / 64) + (ovrf / 128) + (ovrf / 512) + (ovrf / 65536);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 4096UL
+  // 4.096 kHz
+  //     Best Error Possible: 0.0000%  (0 Decimal)
+  //    Worst Error Possible: 0.8000% (0.008 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 8000UL
+    //  Error: 0.8000% (0.008 Decimal)
+    // Jitter: 0.0000% (0 Decimal)
+    x = (ovrf * 62) ;
+  #else
+    //  Error: 0.0000% (0 Decimal)
+    // Jitter: 0.0000% (0 Decimal)
+    x = (ovrf * 62)  + (ovrf / 2);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 2000UL
+  // 2 kHz
+  //  Error: 0.0000% (0 Decimal)
+  // Jitter: 0.0000% (0 Decimal)
+
+  x = (ovrf * 128) ;
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 1953UL
+  // 1.953 kHz
+  //     Best Error Possible: 0.0031%  (0.0000310192 Decimal)
+  //    Worst Error Possible: 0.0613% (0.0006130248 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 613UL
+    //  Error: 0.0613% (0.0006130248 Decimal)
+    // Jitter: 0.0055% (0.000055248600000000005 Decimal)
+    x = (ovrf * 131) ;
+  #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 146UL
+    //  Error: 0.0146% (0.0001464549 Decimal)
+    // Jitter: 0.0085% (0.00008475830000000001 Decimal)
+    x = (ovrf * 131)  + (ovrf / 16);
+  #else
+    //  Error: 0.0031% (0.0000310192 Decimal)
+    // Jitter: 0.0141% (0.0001412729 Decimal)
+    x = (ovrf * 131)  + (ovrf / 16) + (ovrf / 64) + (ovrf / 512) + (ovrf / 4096) + (ovrf / 16384);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 512UL
+  // 0.512 kHz
+  //  Error: 0.0000% (0 Decimal)
+  // Jitter: 0.0000% (0 Decimal)
+
+  x = (ovrf * 500) ;
 #endif
   SREG = oldSREG;
   return x;
@@ -619,183 +1664,175 @@ MillisMicrosTime_t micros()
   //
   // James Sleeman, james@gogo.co.nz, http://sparks.gogo.co.nz/
   
-#if (F_CPU / MILLIS_TIMER_PRESCALE) == 16000UL
-  // 16 kHz
-  //  Error: 0.0000% (0 Decimal)
-  // Jitter: 0.0000% (0 Decimal)
+#if (F_CPU / MILLIS_TIMER_PRESCALE) >= 24000000UL
+  // 24 MHz
+  //     Best Error Possible: 0.0074%  (0.0000739307 Decimal)
+  //    Worst Error Possible: 6.2500% (0.0625000838 Decimal)
 
-  x = (ovrf * 16000) ;
-
-
-#elif (F_CPU / MILLIS_TIMER_PRESCALE) == 32768UL
-  // 32.768 kHz
-  //  Error: 0.0127% (0.0001274919 Decimal)
-  // Jitter: 0.0064% (0.00006399179999999999 Decimal)
-
-  x = (ovrf * 7812)  + (ovrf / 2);
-
-
-#elif (F_CPU / MILLIS_TIMER_PRESCALE) == 125000UL
-  // 125 kHz
-  //  Error: 0.0000% (0 Decimal)
-  // Jitter: 0.0000% (0 Decimal)
-
-  x = (ovrf * 2048) ;
-
-
-#elif (F_CPU / MILLIS_TIMER_PRESCALE) == 128000UL
-  // 128 kHz
-  //  Error: 0.0000% (0 Decimal)
-  // Jitter: 0.0000% (0 Decimal)
-
-  x = (ovrf * 2000) ;
-
-
-#elif (F_CPU / MILLIS_TIMER_PRESCALE) == 600000UL
-  // 600 kHz
-  //     Best Error Possible: 0.0037%  (0.000036858 Decimal)
-  //    Worst Error Possible: 0.1562% (0.0015624011 Decimal)
-
-  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 1562UL
-    //  Error: 0.1562% (0.0015624011 Decimal)
-    // Jitter: 0.0058% (0.000057859400000000004 Decimal)
-    x = (ovrf * 426) ;
-  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 391UL
-    //  Error: 0.0391% (0.0003910875 Decimal)
-    // Jitter: 0.0102% (0.0001019122 Decimal)
-    x = (ovrf * 426)  + (ovrf / 2);
-  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 107UL
-    //  Error: 0.0107% (0.00010718529999999999 Decimal)
-    // Jitter: 0.0189% (0.000189256 Decimal)
-    x = (ovrf * 426)  + (ovrf / 2) + (ovrf / 8);
+  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 62500UL
+    //  Error: 6.2500% (0.0625000838 Decimal)
+    // Jitter: 0.0060% (0.000059682499999999997 Decimal)
+    x = (ovrf * 10) ;
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 15636UL
+    //  Error: 1.5636% (0.0156355095 Decimal)
+    // Jitter: 0.0082% (0.0000816024 Decimal)
+    x = (ovrf * 10)  + (ovrf / 2);
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 3927UL
+    //  Error: 0.3927% (0.0039271237 Decimal)
+    // Jitter: 0.0094% (0.00009356999999999999 Decimal)
+    x = (ovrf * 10)  + (ovrf / 2) + (ovrf / 8);
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 1007UL
+    //  Error: 0.1007% (0.0010074724 Decimal)
+    // Jitter: 0.0153% (0.0001532351 Decimal)
+    x = (ovrf * 10)  + (ovrf / 2) + (ovrf / 8) + (ovrf / 32);
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 285UL
+    //  Error: 0.0285% (0.000285344 Decimal)
+    // Jitter: 0.0213% (0.0002133005 Decimal)
+    x = (ovrf * 10)  + (ovrf / 2) + (ovrf / 8) + (ovrf / 32) + (ovrf / 128);
   #else
-    //  Error: 0.0037% (0.000036858 Decimal)
-    // Jitter: 0.0263% (0.0002625 Decimal)
-    x = (ovrf * 426)  + (ovrf / 2) + (ovrf / 8) + (ovrf / 32) + (ovrf / 128) + (ovrf / 512) + (ovrf / 2048) + (ovrf / 8192) + (ovrf / 32768);
+    //  Error: 0.0074% (0.0000739307 Decimal)
+    // Jitter: 0.0315% (0.00031501690000000003 Decimal)
+    x = (ovrf * 10)  + (ovrf / 2) + (ovrf / 8) + (ovrf / 32) + (ovrf / 128) + (ovrf / 512) + (ovrf / 2048) + (ovrf / 8192) + (ovrf / 32768);
   #endif
 
 
-#elif (F_CPU / MILLIS_TIMER_PRESCALE) == 800000UL
-  // 800 kHz
-  //  Error: 0.0000% (0 Decimal)
-  // Jitter: 0.0000% (0 Decimal)
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 20000000UL
+  // 20 MHz
+  //     Best Error Possible: 0.0068%  (0.000067535 Decimal)
+  //    Worst Error Possible: 6.2500% (0.0625000152 Decimal)
 
-  x = (ovrf * 320) ;
-
-
-#elif (F_CPU / MILLIS_TIMER_PRESCALE) == 1000000UL
-  // 1 MHz
-  //  Error: 0.0000% (0 Decimal)
-  // Jitter: 0.0000% (0 Decimal)
-
-  x = (ovrf * 256) ;
-
-
-#elif (F_CPU / MILLIS_TIMER_PRESCALE) == 1200000UL
-  // 1.2 MHz
-  //     Best Error Possible: 0.0042%  (0.0000423357 Decimal)
-  //    Worst Error Possible: 0.1562% (0.0015623306 Decimal)
-
-  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 1562UL
-    //  Error: 0.1562% (0.0015623306 Decimal)
-    // Jitter: 0.0055% (0.0000551636 Decimal)
-    x = (ovrf * 213) ;
-  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 398UL
-    //  Error: 0.0398% (0.0003979971 Decimal)
-    // Jitter: 0.0102% (0.0001019122 Decimal)
-    x = (ovrf * 213)  + (ovrf / 4);
-  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 115UL
-    //  Error: 0.0115% (0.0001147185 Decimal)
-    // Jitter: 0.0179% (0.0001787935 Decimal)
-    x = (ovrf * 213)  + (ovrf / 4) + (ovrf / 16);
+  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 62500UL
+    //  Error: 6.2500% (0.0625000152 Decimal)
+    // Jitter: 0.0055% (0.0000554853 Decimal)
+    x = (ovrf * 12) ;
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 23443UL
+    //  Error: 2.3443% (0.0234427938 Decimal)
+    // Jitter: 0.0100% (0.000099531 Decimal)
+    x = (ovrf * 12)  + (ovrf / 2);
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 3919UL
+    //  Error: 0.3919% (0.0039191754 Decimal)
+    // Jitter: 0.0112% (0.0001121674 Decimal)
+    x = (ovrf * 12)  + (ovrf / 2) + (ovrf / 4);
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 1487UL
+    //  Error: 0.1488% (0.001487974 Decimal)
+    // Jitter: 0.0139% (0.00013947550000000002 Decimal)
+    x = (ovrf * 12)  + (ovrf / 2) + (ovrf / 4) + (ovrf / 32);
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 277UL
+    //  Error: 0.0277% (0.0002772847 Decimal)
+    // Jitter: 0.0176% (0.00017571119999999999 Decimal)
+    x = (ovrf * 12)  + (ovrf / 2) + (ovrf / 4) + (ovrf / 32) + (ovrf / 64);
   #else
-    //  Error: 0.0042% (0.0000423357 Decimal)
-    // Jitter: 0.0255% (0.0002545819 Decimal)
-    x = (ovrf * 213)  + (ovrf / 4) + (ovrf / 16) + (ovrf / 64) + (ovrf / 256) + (ovrf / 1024) + (ovrf / 4096) + (ovrf / 16384) + (ovrf / 65536);
+    //  Error: 0.0068% (0.000067535 Decimal)
+    // Jitter: 0.0318% (0.0003179226 Decimal)
+    x = (ovrf * 12)  + (ovrf / 2) + (ovrf / 4) + (ovrf / 32) + (ovrf / 64) + (ovrf / 512) + (ovrf / 1024) + (ovrf / 8192) + (ovrf / 16384);
   #endif
 
 
-#elif (F_CPU / MILLIS_TIMER_PRESCALE) == 2000000UL
-  // 2 MHz
-  //  Error: 0.0000% (0 Decimal)
-  // Jitter: 0.0000% (0 Decimal)
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 19200000UL
+  // 19.2 MHz
+  //     Best Error Possible: 0.0065%  (0.0000651144 Decimal)
+  //    Worst Error Possible: 2.5000% (0.025 Decimal)
 
-  x = (ovrf * 128) ;
-
-
-#elif (F_CPU / MILLIS_TIMER_PRESCALE) == 2400000UL
-  // 2.4 MHz
-  //     Best Error Possible: 0.0059%  (0.0000591303 Decimal)
-  //    Worst Error Possible: 0.6257% (0.00625683 Decimal)
-
-  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 6257UL
-    //  Error: 0.6257% (0.00625683 Decimal)
-    // Jitter: 0.0030% (0.0000301493 Decimal)
-    x = (ovrf * 106) ;
-  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 1575UL
-    //  Error: 0.1575% (0.0015753006 Decimal)
-    // Jitter: 0.0085% (0.0000849592 Decimal)
-    x = (ovrf * 106)  + (ovrf / 2);
-  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 413UL
-    //  Error: 0.0413% (0.0004128806 Decimal)
-    // Jitter: 0.0157% (0.0001567544 Decimal)
-    x = (ovrf * 106)  + (ovrf / 2) + (ovrf / 8);
+  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 25000UL
+    //  Error: 2.5000% (0.025 Decimal)
+    // Jitter: 0.0000% (0 Decimal)
+    x = (ovrf * 13) ;
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 6258UL
+    //  Error: 0.6258% (0.0062577905 Decimal)
+    // Jitter: 0.0058% (0.0000576923 Decimal)
+    x = (ovrf * 13)  + (ovrf / 4);
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 1580UL
+    //  Error: 0.1580% (0.0015803789 Decimal)
+    // Jitter: 0.0138% (0.0001375 Decimal)
+    x = (ovrf * 13)  + (ovrf / 4) + (ovrf / 16);
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 419UL
+    //  Error: 0.0419% (0.0004190177 Decimal)
+    // Jitter: 0.0209% (0.000209375 Decimal)
+    x = (ovrf * 13)  + (ovrf / 4) + (ovrf / 16) + (ovrf / 64);
   #else
-    //  Error: 0.0059% (0.0000591303 Decimal)
-    // Jitter: 0.0334% (0.00033427019999999997 Decimal)
-    x = (ovrf * 106)  + (ovrf / 2) + (ovrf / 8) + (ovrf / 32) + (ovrf / 128) + (ovrf / 512) + (ovrf / 2048) + (ovrf / 8192) + (ovrf / 32768);
+    //  Error: 0.0065% (0.0000651144 Decimal)
+    // Jitter: 0.0384% (0.000384375 Decimal)
+    x = (ovrf * 13)  + (ovrf / 4) + (ovrf / 16) + (ovrf / 64) + (ovrf / 256) + (ovrf / 1024) + (ovrf / 4096) + (ovrf / 16384) + (ovrf / 65536);
   #endif
 
 
-#elif (F_CPU / MILLIS_TIMER_PRESCALE) == 4000000UL
-  // 4 MHz
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 16000000UL
+  // 16 MHz
   //  Error: 0.0000% (0 Decimal)
   // Jitter: 0.0000% (0 Decimal)
 
-  x = (ovrf * 64) ;
+  x = (ovrf * 16) ;
 
 
-#elif (F_CPU / MILLIS_TIMER_PRESCALE) == 4800000UL
-  // 4.8 MHz
-  //     Best Error Possible: 0.0054%  (0.0000543994 Decimal)
-  //    Worst Error Possible: 0.6250% (0.006250170100000001 Decimal)
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 15360000UL
+  // 15.36 MHz
+  //     Best Error Possible: 0.0055%  (0.0000552607 Decimal)
+  //    Worst Error Possible: 4.0000% (0.04 Decimal)
 
-  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 6250UL
-    //  Error: 0.6250% (0.006250170100000001 Decimal)
-    // Jitter: 0.0056% (0.0000556046 Decimal)
-    x = (ovrf * 53) ;
-  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 1571UL
-    //  Error: 0.1571% (0.0015707754 Decimal)
-    // Jitter: 0.0113% (0.0001130754 Decimal)
-    x = (ovrf * 53)  + (ovrf / 4);
-  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 409UL
-    //  Error: 0.0409% (0.00040873 Decimal)
-    // Jitter: 0.0166% (0.00016610730000000002 Decimal)
-    x = (ovrf * 53)  + (ovrf / 4) + (ovrf / 16);
+  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 40000UL
+    //  Error: 4.0000% (0.04 Decimal)
+    // Jitter: 0.0000% (0 Decimal)
+    x = (ovrf * 16) ;
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 10000UL
+    //  Error: 1.0000% (0.01 Decimal)
+    // Jitter: 0.0000% (0 Decimal)
+    x = (ovrf * 16)  + (ovrf / 2);
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 2505UL
+    //  Error: 0.2505% (0.0025051230999999998 Decimal)
+    // Jitter: 0.0045% (0.0000454545 Decimal)
+    x = (ovrf * 16)  + (ovrf / 2) + (ovrf / 8);
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 639UL
+    //  Error: 0.0639% (0.0006394506 Decimal)
+    // Jitter: 0.0102% (0.0001022727 Decimal)
+    x = (ovrf * 16)  + (ovrf / 2) + (ovrf / 8) + (ovrf / 32);
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 181UL
+    //  Error: 0.0181% (0.00018074170000000002 Decimal)
+    // Jitter: 0.0144% (0.00014375 Decimal)
+    x = (ovrf * 16)  + (ovrf / 2) + (ovrf / 8) + (ovrf / 32) + (ovrf / 128);
   #else
-    //  Error: 0.0054% (0.0000543994 Decimal)
-    // Jitter: 0.0341% (0.0003409332 Decimal)
-    x = (ovrf * 53)  + (ovrf / 4) + (ovrf / 16) + (ovrf / 64) + (ovrf / 256) + (ovrf / 1024) + (ovrf / 4096) + (ovrf / 16384) + (ovrf / 65536);
+    //  Error: 0.0055% (0.0000552607 Decimal)
+    // Jitter: 0.0221% (0.00022069560000000002 Decimal)
+    x = (ovrf * 16)  + (ovrf / 2) + (ovrf / 8) + (ovrf / 32) + (ovrf / 128) + (ovrf / 512) + (ovrf / 2048) + (ovrf / 8192) + (ovrf / 32768);
   #endif
 
 
-#elif (F_CPU / MILLIS_TIMER_PRESCALE) == 6400000UL
-  // 6.4 MHz
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 12800000UL
+  // 12.8 MHz
   //  Error: 0.0000% (0 Decimal)
   // Jitter: 0.0000% (0 Decimal)
 
-  x = (ovrf * 40) ;
+  x = (ovrf * 20) ;
 
 
-#elif (F_CPU / MILLIS_TIMER_PRESCALE) == 8000000UL
-  // 8 MHz
-  //  Error: 0.0000% (0 Decimal)
-  // Jitter: 0.0000% (0 Decimal)
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 12000000UL
+  // 12 MHz
+  //     Best Error Possible: 0.0060%  (0.0000600665 Decimal)
+  //    Worst Error Possible: 1.5625% (0.0156250974 Decimal)
 
-  x = (ovrf * 32) ;
+  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 15625UL
+    //  Error: 1.5625% (0.0156250974 Decimal)
+    // Jitter: 0.0057% (0.0000572337 Decimal)
+    x = (ovrf * 21) ;
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 3914UL
+    //  Error: 0.3914% (0.0039141093 Decimal)
+    // Jitter: 0.0117% (0.0001169239 Decimal)
+    x = (ovrf * 21)  + (ovrf / 4);
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 994UL
+    //  Error: 0.0994% (0.0009938101 Decimal)
+    // Jitter: 0.0127% (0.00012672400000000002 Decimal)
+    x = (ovrf * 21)  + (ovrf / 4) + (ovrf / 16);
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 272UL
+    //  Error: 0.0272% (0.0002715227 Decimal)
+    // Jitter: 0.0167% (0.0001670341 Decimal)
+    x = (ovrf * 21)  + (ovrf / 4) + (ovrf / 16) + (ovrf / 64);
+  #else
+    //  Error: 0.0060% (0.0000600665 Decimal)
+    // Jitter: 0.0258% (0.00025756650000000004 Decimal)
+    x = (ovrf * 21)  + (ovrf / 4) + (ovrf / 16) + (ovrf / 64) + (ovrf / 256) + (ovrf / 1024) + (ovrf / 4096) + (ovrf / 16384) + (ovrf / 65536);
+  #endif
 
 
-#elif (F_CPU / MILLIS_TIMER_PRESCALE) == 9600000UL
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 9600000UL
   // 9.6 MHz
   //     Best Error Possible: 0.0068%  (0.0000677557 Decimal)
   //    Worst Error Possible: 2.5000% (0.0249999037 Decimal)
@@ -823,74 +1860,640 @@ MillisMicrosTime_t micros()
   #endif
 
 
-#elif (F_CPU / MILLIS_TIMER_PRESCALE) == 12000000UL
-  // 12 MHz
-  //     Best Error Possible: 0.0060%  (0.000059592599999999996 Decimal)
-  //    Worst Error Possible: 1.5625% (0.0156250709 Decimal)
-
-  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 15625UL
-    //  Error: 1.5625% (0.0156250709 Decimal)
-    // Jitter: 0.0053% (0.0000525339 Decimal)
-    x = (ovrf * 21) ;
-  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 3914UL
-    //  Error: 0.3914% (0.0039139441 Decimal)
-    // Jitter: 0.0108% (0.0001075354 Decimal)
-    x = (ovrf * 21)  + (ovrf / 4);
-  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 994UL
-    //  Error: 0.0994% (0.0009935546 Decimal)
-    // Jitter: 0.0116% (0.0001164998 Decimal)
-    x = (ovrf * 21)  + (ovrf / 4) + (ovrf / 16);
-  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 271UL
-    //  Error: 0.0271% (0.0002709633 Decimal)
-    // Jitter: 0.0176% (0.0001763528 Decimal)
-    x = (ovrf * 21)  + (ovrf / 4) + (ovrf / 16) + (ovrf / 64);
-  #else
-    //  Error: 0.0060% (0.000059592599999999996 Decimal)
-    // Jitter: 0.0241% (0.00024061930000000002 Decimal)
-    x = (ovrf * 21)  + (ovrf / 4) + (ovrf / 16) + (ovrf / 64) + (ovrf / 256) + (ovrf / 1024) + (ovrf / 4096) + (ovrf / 16384) + (ovrf / 65536);
-  #endif
-
-
-#elif (F_CPU / MILLIS_TIMER_PRESCALE) == 16000000UL
-  // 16 MHz
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 8000000UL
+  // 8 MHz
   //  Error: 0.0000% (0 Decimal)
   // Jitter: 0.0000% (0 Decimal)
 
-  x = (ovrf * 16) ;
+  x = (ovrf * 32) ;
 
 
-#elif (F_CPU / MILLIS_TIMER_PRESCALE) == 20000000UL
-  // 20 MHz
-  //     Best Error Possible: 0.0077%  (0.0000766896 Decimal)
-  //    Worst Error Possible: 6.2500% (0.0625000096 Decimal)
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 6400000UL
+  // 6.4 MHz
+  //  Error: 0.0000% (0 Decimal)
+  // Jitter: 0.0000% (0 Decimal)
 
-  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 62500UL
-    //  Error: 6.2500% (0.0625000096 Decimal)
-    // Jitter: 0.0058% (0.000058070500000000006 Decimal)
-    x = (ovrf * 12) ;
-  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 23448UL
-    //  Error: 2.3448% (0.0234480564 Decimal)
-    // Jitter: 0.0073% (0.0000734384 Decimal)
-    x = (ovrf * 12)  + (ovrf / 2);
-  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 3927UL
-    //  Error: 0.3927% (0.0039272088 Decimal)
-    // Jitter: 0.0094% (0.00009441930000000001 Decimal)
-    x = (ovrf * 12)  + (ovrf / 2) + (ovrf / 4);
-  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 1496UL
-    //  Error: 0.1496% (0.0014961941999999998 Decimal)
-    // Jitter: 0.0167% (0.0001671609 Decimal)
-    x = (ovrf * 12)  + (ovrf / 2) + (ovrf / 4) + (ovrf / 32);
-  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 286UL
-    //  Error: 0.0286% (0.0002857473 Decimal)
-    // Jitter: 0.0211% (0.0002114706 Decimal)
-    x = (ovrf * 12)  + (ovrf / 2) + (ovrf / 4) + (ovrf / 32) + (ovrf / 64);
+  x = (ovrf * 40) ;
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 4800000UL
+  // 4.8 MHz
+  //     Best Error Possible: 0.0054%  (0.0000540151 Decimal)
+  //    Worst Error Possible: 0.6250% (0.0062499106 Decimal)
+
+  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 6250UL
+    //  Error: 0.6250% (0.0062499106 Decimal)
+    // Jitter: 0.0063% (0.0000633639 Decimal)
+    x = (ovrf * 53) ;
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 1570UL
+    //  Error: 0.1570% (0.0015704186 Decimal)
+    // Jitter: 0.0103% (0.0001027703 Decimal)
+    x = (ovrf * 53)  + (ovrf / 4);
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 408UL
+    //  Error: 0.0408% (0.00040835000000000003 Decimal)
+    // Jitter: 0.0162% (0.0001622073 Decimal)
+    x = (ovrf * 53)  + (ovrf / 4) + (ovrf / 16);
   #else
-    //  Error: 0.0077% (0.0000766896 Decimal)
-    // Jitter: 0.0368% (0.00036802030000000004 Decimal)
-    x = (ovrf * 12)  + (ovrf / 2) + (ovrf / 4) + (ovrf / 32) + (ovrf / 64) + (ovrf / 512) + (ovrf / 1024) + (ovrf / 8192) + (ovrf / 16384);
+    //  Error: 0.0054% (0.0000540151 Decimal)
+    // Jitter: 0.0292% (0.0002917454 Decimal)
+    x = (ovrf * 53)  + (ovrf / 4) + (ovrf / 16) + (ovrf / 64) + (ovrf / 256) + (ovrf / 1024) + (ovrf / 4096) + (ovrf / 16384) + (ovrf / 65536);
   #endif
-#else
-  #error This CPU frequency is not defined
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 4608000UL
+  // 4.608 MHz
+  //     Best Error Possible: 0.0045%  (0.000044749499999999996 Decimal)
+  //    Worst Error Possible: 1.0000% (0.01 Decimal)
+
+  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 10000UL
+    //  Error: 1.0000% (0.01 Decimal)
+    // Jitter: 0.0000% (0 Decimal)
+    x = (ovrf * 55) ;
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 1000UL
+    //  Error: 0.1000% (0.001 Decimal)
+    // Jitter: 0.0000% (0 Decimal)
+    x = (ovrf * 55)  + (ovrf / 2);
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 446UL
+    //  Error: 0.0447% (0.0004473254 Decimal)
+    // Jitter: 0.0062% (0.0000625 Decimal)
+    x = (ovrf * 55)  + (ovrf / 2) + (ovrf / 32);
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 176UL
+    //  Error: 0.0176% (0.0001762551 Decimal)
+    // Jitter: 0.0144% (0.00014375 Decimal)
+    x = (ovrf * 55)  + (ovrf / 2) + (ovrf / 32) + (ovrf / 64);
+  #else
+    //  Error: 0.0045% (0.000044749499999999996 Decimal)
+    // Jitter: 0.0206% (0.0002064732 Decimal)
+    x = (ovrf * 55)  + (ovrf / 2) + (ovrf / 32) + (ovrf / 64) + (ovrf / 128) + (ovrf / 2048) + (ovrf / 4096) + (ovrf / 8192);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 4000000UL
+  // 4 MHz
+  //  Error: 0.0000% (0 Decimal)
+  // Jitter: 0.0000% (0 Decimal)
+
+  x = (ovrf * 64) ;
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 3000000UL
+  // 3 MHz
+  //     Best Error Possible: 0.0046%  (0.0000462079 Decimal)
+  //    Worst Error Possible: 0.3906% (0.00390625 Decimal)
+
+  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 3906UL
+    //  Error: 0.3906% (0.00390625 Decimal)
+    // Jitter: 0.0000% (0 Decimal)
+    x = (ovrf * 85) ;
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 982UL
+    //  Error: 0.0982% (0.000981706 Decimal)
+    // Jitter: 0.0023% (0.0000232548 Decimal)
+    x = (ovrf * 85)  + (ovrf / 4);
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 258UL
+    //  Error: 0.0258% (0.00025814269999999996 Decimal)
+    // Jitter: 0.0086% (0.0000860414 Decimal)
+    x = (ovrf * 85)  + (ovrf / 4) + (ovrf / 16);
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 85UL
+    //  Error: 0.0085% (0.00008495610000000001 Decimal)
+    // Jitter: 0.0137% (0.0001366749 Decimal)
+    x = (ovrf * 85)  + (ovrf / 4) + (ovrf / 16) + (ovrf / 64);
+  #else
+    //  Error: 0.0046% (0.0000462079 Decimal)
+    // Jitter: 0.0191% (0.0001911724 Decimal)
+    x = (ovrf * 85)  + (ovrf / 4) + (ovrf / 16) + (ovrf / 64) + (ovrf / 256) + (ovrf / 1024) + (ovrf / 4096) + (ovrf / 16384) + (ovrf / 65536);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 2500000UL
+  // 2.5 MHz
+  //     Best Error Possible: 0.0059%  (0.0000587247 Decimal)
+  //    Worst Error Possible: 0.3910% (0.0039103564 Decimal)
+
+  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 3910UL
+    //  Error: 0.3910% (0.0039103564 Decimal)
+    // Jitter: 0.0019% (0.0000186331 Decimal)
+    x = (ovrf * 102) ;
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 1479UL
+    //  Error: 0.1479% (0.0014791701 Decimal)
+    // Jitter: 0.0083% (0.00008343949999999999 Decimal)
+    x = (ovrf * 102)  + (ovrf / 4);
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 269UL
+    //  Error: 0.0269% (0.00026853840000000005 Decimal)
+    // Jitter: 0.0136% (0.0001361274 Decimal)
+    x = (ovrf * 102)  + (ovrf / 4) + (ovrf / 8);
+  #else
+    //  Error: 0.0059% (0.0000587247 Decimal)
+    // Jitter: 0.0293% (0.0002925152 Decimal)
+    x = (ovrf * 102)  + (ovrf / 4) + (ovrf / 8) + (ovrf / 64) + (ovrf / 128) + (ovrf / 1024) + (ovrf / 2048) + (ovrf / 16384) + (ovrf / 32768);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 2400000UL
+  // 2.4 MHz
+  //     Best Error Possible: 0.0056%  (0.0000559561 Decimal)
+  //    Worst Error Possible: 0.6250% (0.0062500981 Decimal)
+
+  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 6250UL
+    //  Error: 0.6250% (0.0062500981 Decimal)
+    // Jitter: 0.0058% (0.0000576321 Decimal)
+    x = (ovrf * 106) ;
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 1573UL
+    //  Error: 0.1573% (0.0015726446 Decimal)
+    // Jitter: 0.0075% (0.0000746327 Decimal)
+    x = (ovrf * 106)  + (ovrf / 2);
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 411UL
+    //  Error: 0.0411% (0.00041096 Decimal)
+    // Jitter: 0.0153% (0.00015339150000000002 Decimal)
+    x = (ovrf * 106)  + (ovrf / 2) + (ovrf / 8);
+  #else
+    //  Error: 0.0056% (0.0000559561 Decimal)
+    // Jitter: 0.0288% (0.00028813900000000003 Decimal)
+    x = (ovrf * 106)  + (ovrf / 2) + (ovrf / 8) + (ovrf / 32) + (ovrf / 128) + (ovrf / 512) + (ovrf / 2048) + (ovrf / 8192) + (ovrf / 32768);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 2000000UL
+  // 2 MHz
+  //  Error: 0.0000% (0 Decimal)
+  // Jitter: 0.0000% (0 Decimal)
+
+  x = (ovrf * 128) ;
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 1920000UL
+  // 1.92 MHz
+  //     Best Error Possible: 0.0053%  (0.0000526943 Decimal)
+  //    Worst Error Possible: 0.2500% (0.0025000978 Decimal)
+
+  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 2500UL
+    //  Error: 0.2500% (0.0025000978 Decimal)
+    // Jitter: 0.0057% (0.000057448900000000005 Decimal)
+    x = (ovrf * 133) ;
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 640UL
+    //  Error: 0.0640% (0.0006401234 Decimal)
+    // Jitter: 0.0095% (0.0000949614 Decimal)
+    x = (ovrf * 133)  + (ovrf / 4);
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 180UL
+    //  Error: 0.0180% (0.0001802345 Decimal)
+    // Jitter: 0.0140% (0.0001395345 Decimal)
+    x = (ovrf * 133)  + (ovrf / 4) + (ovrf / 16);
+  #else
+    //  Error: 0.0053% (0.0000526943 Decimal)
+    // Jitter: 0.0203% (0.0002029726 Decimal)
+    x = (ovrf * 133)  + (ovrf / 4) + (ovrf / 16) + (ovrf / 64) + (ovrf / 256) + (ovrf / 1024) + (ovrf / 4096) + (ovrf / 16384) + (ovrf / 65536);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 1600000UL
+  // 1.6 MHz
+  //  Error: 0.0000% (0 Decimal)
+  // Jitter: 0.0000% (0 Decimal)
+
+  x = (ovrf * 160) ;
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 1500000UL
+  // 1.5 MHz
+  //     Best Error Possible: 0.0046%  (0.0000463401 Decimal)
+  //    Worst Error Possible: 0.3913% (0.0039131025 Decimal)
+
+  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 3913UL
+    //  Error: 0.3913% (0.0039131025 Decimal)
+    // Jitter: 0.0031% (0.0000311693 Decimal)
+    x = (ovrf * 170) ;
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 983UL
+    //  Error: 0.0983% (0.0009834352 Decimal)
+    // Jitter: 0.0031% (0.000031261 Decimal)
+    x = (ovrf * 170)  + (ovrf / 2);
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 259UL
+    //  Error: 0.0259% (0.0002586137 Decimal)
+    // Jitter: 0.0088% (0.0000882548 Decimal)
+    x = (ovrf * 170)  + (ovrf / 2) + (ovrf / 8);
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 85UL
+    //  Error: 0.0085% (0.0000851365 Decimal)
+    // Jitter: 0.0138% (0.0001383519 Decimal)
+    x = (ovrf * 170)  + (ovrf / 2) + (ovrf / 8) + (ovrf / 32);
+  #else
+    //  Error: 0.0046% (0.0000463401 Decimal)
+    // Jitter: 0.0193% (0.0001928854 Decimal)
+    x = (ovrf * 170)  + (ovrf / 2) + (ovrf / 8) + (ovrf / 32) + (ovrf / 128) + (ovrf / 512) + (ovrf / 2048) + (ovrf / 8192) + (ovrf / 32768);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 1200000UL
+  // 1.2 MHz
+  //     Best Error Possible: 0.0042%  (0.0000424244 Decimal)
+  //    Worst Error Possible: 0.1562% (0.0015623082 Decimal)
+
+  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 1562UL
+    //  Error: 0.1562% (0.0015623082 Decimal)
+    // Jitter: 0.0062% (0.0000617729 Decimal)
+    x = (ovrf * 213) ;
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 398UL
+    //  Error: 0.0398% (0.00039814280000000004 Decimal)
+    // Jitter: 0.0092% (0.0000920643 Decimal)
+    x = (ovrf * 213)  + (ovrf / 4);
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 115UL
+    //  Error: 0.0115% (0.0001147225 Decimal)
+    // Jitter: 0.0112% (0.000112258 Decimal)
+    x = (ovrf * 213)  + (ovrf / 4) + (ovrf / 16);
+  #else
+    //  Error: 0.0042% (0.0000424244 Decimal)
+    // Jitter: 0.0204% (0.0002038113 Decimal)
+    x = (ovrf * 213)  + (ovrf / 4) + (ovrf / 16) + (ovrf / 64) + (ovrf / 256) + (ovrf / 1024) + (ovrf / 4096) + (ovrf / 16384) + (ovrf / 65536);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 1000000UL
+  // 1 MHz
+  //  Error: 0.0000% (0 Decimal)
+  // Jitter: 0.0000% (0 Decimal)
+
+  x = (ovrf * 256) ;
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 800000UL
+  // 800 kHz
+  //  Error: 0.0000% (0 Decimal)
+  // Jitter: 0.0000% (0 Decimal)
+
+  x = (ovrf * 320) ;
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 600000UL
+  // 600 kHz
+  //     Best Error Possible: 0.0030%  (0.0000295508 Decimal)
+  //    Worst Error Possible: 0.1557% (0.0015565354 Decimal)
+
+  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 1557UL
+    //  Error: 0.1557% (0.0015565354 Decimal)
+    // Jitter: 0.0032% (0.0000319847 Decimal)
+    x = (ovrf * 426) ;
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 388UL
+    //  Error: 0.0389% (0.0003892342 Decimal)
+    // Jitter: 0.0047% (0.0000470348 Decimal)
+    x = (ovrf * 426)  + (ovrf / 2);
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 104UL
+    //  Error: 0.0104% (0.000104255 Decimal)
+    // Jitter: 0.0131% (0.0001305673 Decimal)
+    x = (ovrf * 426)  + (ovrf / 2) + (ovrf / 8);
+  #else
+    //  Error: 0.0030% (0.0000295508 Decimal)
+    // Jitter: 0.0204% (0.0002038113 Decimal)
+    x = (ovrf * 426)  + (ovrf / 2) + (ovrf / 8) + (ovrf / 32) + (ovrf / 128) + (ovrf / 512) + (ovrf / 2048) + (ovrf / 8192) + (ovrf / 32768);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 576000UL
+  // 576 kHz
+  //     Best Error Possible: 0.0034%  (0.0000339005 Decimal)
+  //    Worst Error Possible: 0.0998% (0.0009982545 Decimal)
+
+  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 998UL
+    //  Error: 0.0998% (0.0009982545 Decimal)
+    // Jitter: 0.0058% (0.000058383899999999995 Decimal)
+    x = (ovrf * 444) ;
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 442UL
+    //  Error: 0.0442% (0.0004422686 Decimal)
+    // Jitter: 0.0110% (0.00010955200000000001 Decimal)
+    x = (ovrf * 444)  + (ovrf / 4);
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 168UL
+    //  Error: 0.0169% (0.000168827 Decimal)
+    // Jitter: 0.0166% (0.000166184 Decimal)
+    x = (ovrf * 444)  + (ovrf / 4) + (ovrf / 8);
+  #else
+    //  Error: 0.0034% (0.0000339005 Decimal)
+    // Jitter: 0.0218% (0.0002177384 Decimal)
+    x = (ovrf * 444)  + (ovrf / 4) + (ovrf / 8) + (ovrf / 16) + (ovrf / 256) + (ovrf / 512) + (ovrf / 1024) + (ovrf / 16384) + (ovrf / 32768) + (ovrf / 65536);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 500000UL
+  // 500 kHz
+  //  Error: 0.0000% (0 Decimal)
+  // Jitter: 0.0000% (0 Decimal)
+
+  x = (ovrf * 512) ;
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 375000UL
+  // 375 kHz
+  //     Best Error Possible: 0.0026%  (0.0000256368 Decimal)
+  //    Worst Error Possible: 0.0976% (0.0009764631 Decimal)
+
+  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 976UL
+    //  Error: 0.0976% (0.0009764631 Decimal)
+    // Jitter: 0.0065% (0.0000653312 Decimal)
+    x = (ovrf * 682) ;
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 244UL
+    //  Error: 0.0244% (0.0002440412 Decimal)
+    // Jitter: 0.0065% (0.00006537909999999999 Decimal)
+    x = (ovrf * 682)  + (ovrf / 2);
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 68UL
+    //  Error: 0.0068% (0.0000675028 Decimal)
+    // Jitter: 0.0087% (0.00008738760000000001 Decimal)
+    x = (ovrf * 682)  + (ovrf / 2) + (ovrf / 8);
+  #else
+    //  Error: 0.0026% (0.0000256368 Decimal)
+    // Jitter: 0.0133% (0.0001331647 Decimal)
+    x = (ovrf * 682)  + (ovrf / 2) + (ovrf / 8) + (ovrf / 32) + (ovrf / 128) + (ovrf / 512) + (ovrf / 2048) + (ovrf / 8192) + (ovrf / 32768);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 312500UL
+  // 312.5 kHz
+  //     Best Error Possible: 0.0024%  (0.0000237285 Decimal)
+  //    Worst Error Possible: 0.0244% (0.0002439502 Decimal)
+
+  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 244UL
+    //  Error: 0.0244% (0.0002439502 Decimal)
+    // Jitter: 0.0068% (0.0000678012 Decimal)
+    x = (ovrf * 819) ;
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 97UL
+    //  Error: 0.0097% (0.0000972144 Decimal)
+    // Jitter: 0.0098% (0.000098088 Decimal)
+    x = (ovrf * 819)  + (ovrf / 8);
+  #else
+    //  Error: 0.0024% (0.0000237285 Decimal)
+    // Jitter: 0.0174% (0.00017438310000000002 Decimal)
+    x = (ovrf * 819)  + (ovrf / 8) + (ovrf / 16) + (ovrf / 128) + (ovrf / 256) + (ovrf / 2048) + (ovrf / 4096) + (ovrf / 32768) + (ovrf / 65536);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 300000UL
+  // 300 kHz
+  //     Best Error Possible: 0.0028%  (0.0000281963 Decimal)
+  //    Worst Error Possible: 0.0391% (0.0003907308 Decimal)
+
+  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 391UL
+    //  Error: 0.0391% (0.0003907308 Decimal)
+    // Jitter: 0.0066% (0.0000655335 Decimal)
+    x = (ovrf * 853) ;
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 105UL
+    //  Error: 0.0105% (0.0001053768 Decimal)
+    // Jitter: 0.0123% (0.00012291370000000002 Decimal)
+    x = (ovrf * 853)  + (ovrf / 4);
+  #else
+    //  Error: 0.0028% (0.0000281963 Decimal)
+    // Jitter: 0.0209% (0.00020863839999999998 Decimal)
+    x = (ovrf * 853)  + (ovrf / 4) + (ovrf / 16) + (ovrf / 64) + (ovrf / 256) + (ovrf / 1024) + (ovrf / 4096) + (ovrf / 16384) + (ovrf / 65536);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 250000UL
+  // 250 kHz
+  //  Error: 0.0000% (0 Decimal)
+  // Jitter: 0.0000% (0 Decimal)
+
+  x = (ovrf * 1024) ;
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 240000UL
+  // 240 kHz
+  //     Best Error Possible: 0.0033%  (0.0000330737 Decimal)
+  //    Worst Error Possible: 0.0625% (0.0006251015 Decimal)
+
+  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 625UL
+    //  Error: 0.0625% (0.0006251015 Decimal)
+    // Jitter: 0.0060% (0.0000596216 Decimal)
+    x = (ovrf * 1066) ;
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 162UL
+    //  Error: 0.0162% (0.0001615346 Decimal)
+    // Jitter: 0.0082% (0.0000824094 Decimal)
+    x = (ovrf * 1066)  + (ovrf / 2);
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 53UL
+    //  Error: 0.0053% (0.0000530336 Decimal)
+    // Jitter: 0.0115% (0.00011493009999999999 Decimal)
+    x = (ovrf * 1066)  + (ovrf / 2) + (ovrf / 8);
+  #else
+    //  Error: 0.0033% (0.0000330737 Decimal)
+    // Jitter: 0.0144% (0.00014422730000000002 Decimal)
+    x = (ovrf * 1066)  + (ovrf / 2) + (ovrf / 8) + (ovrf / 32) + (ovrf / 128) + (ovrf / 512) + (ovrf / 2048) + (ovrf / 8192) + (ovrf / 32768);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 200000UL
+  // 200 kHz
+  //  Error: 0.0000% (0 Decimal)
+  // Jitter: 0.0000% (0 Decimal)
+
+  x = (ovrf * 1280) ;
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 187500UL
+  // 187.5 kHz
+  //     Best Error Possible: 0.0026%  (0.0000256368 Decimal)
+  //    Worst Error Possible: 0.0244% (0.0002440412 Decimal)
+
+  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 244UL
+    //  Error: 0.0244% (0.0002440412 Decimal)
+    // Jitter: 0.0065% (0.00006537909999999999 Decimal)
+    x = (ovrf * 1365) ;
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 68UL
+    //  Error: 0.0068% (0.0000675028 Decimal)
+    // Jitter: 0.0087% (0.00008738760000000001 Decimal)
+    x = (ovrf * 1365)  + (ovrf / 4);
+  #else
+    //  Error: 0.0026% (0.0000256368 Decimal)
+    // Jitter: 0.0133% (0.0001331647 Decimal)
+    x = (ovrf * 1365)  + (ovrf / 4) + (ovrf / 16) + (ovrf / 64) + (ovrf / 256) + (ovrf / 1024) + (ovrf / 4096) + (ovrf / 16384) + (ovrf / 65536);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 150000UL
+  // 150 kHz
+  //     Best Error Possible: 0.0023%  (0.000023453 Decimal)
+  //    Worst Error Possible: 0.0390% (0.0003903993 Decimal)
+
+  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 390UL
+    //  Error: 0.0390% (0.0003903993 Decimal)
+    // Jitter: 0.0067% (0.00006693890000000001 Decimal)
+    x = (ovrf * 1706) ;
+  #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 101UL
+    //  Error: 0.0101% (0.00010142050000000001 Decimal)
+    // Jitter: 0.0094% (0.00009416209999999999 Decimal)
+    x = (ovrf * 1706)  + (ovrf / 2);
+  #else
+    //  Error: 0.0023% (0.000023453 Decimal)
+    // Jitter: 0.0167% (0.00016740600000000002 Decimal)
+    x = (ovrf * 1706)  + (ovrf / 2) + (ovrf / 8) + (ovrf / 32) + (ovrf / 128) + (ovrf / 512) + (ovrf / 2048) + (ovrf / 8192) + (ovrf / 32768);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 128000UL
+  // 128 kHz
+  //  Error: 0.0000% (0 Decimal)
+  // Jitter: 0.0000% (0 Decimal)
+
+  x = (ovrf * 2000) ;
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 125000UL
+  // 125 kHz
+  //  Error: 0.0000% (0 Decimal)
+  // Jitter: 0.0000% (0 Decimal)
+
+  x = (ovrf * 2048) ;
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 100000UL
+  // 100 kHz
+  //  Error: 0.0000% (0 Decimal)
+  // Jitter: 0.0000% (0 Decimal)
+
+  x = (ovrf * 2560) ;
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 75000UL
+  // 75 kHz
+  //     Best Error Possible: 0.0013%  (0.00001288 Decimal)
+  //    Worst Error Possible: 0.0098% (0.0000979598 Decimal)
+
+  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 98UL
+    //  Error: 0.0098% (0.0000979598 Decimal)
+    // Jitter: 0.0073% (0.0000732332 Decimal)
+    x = (ovrf * 3413) ;
+  #else
+    //  Error: 0.0013% (0.00001288 Decimal)
+    // Jitter: 0.0146% (0.00014647720000000001 Decimal)
+    x = (ovrf * 3413)  + (ovrf / 4) + (ovrf / 16) + (ovrf / 64) + (ovrf / 256) + (ovrf / 1024) + (ovrf / 4096) + (ovrf / 16384) + (ovrf / 65536);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 72000UL
+  // 72 kHz
+  //     Best Error Possible: 0.0011%  (0.000010869300000000001 Decimal)
+  //    Worst Error Possible: 0.0156% (0.000156231 Decimal)
+
+  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 156UL
+    //  Error: 0.0156% (0.000156231 Decimal)
+    // Jitter: 0.0047% (0.000046866900000000004 Decimal)
+    x = (ovrf * 3555) ;
+  #else
+    //  Error: 0.0011% (0.000010869300000000001 Decimal)
+    // Jitter: 0.0094% (0.0000937471 Decimal)
+    x = (ovrf * 3555)  + (ovrf / 2) + (ovrf / 32) + (ovrf / 64) + (ovrf / 128) + (ovrf / 2048) + (ovrf / 4096) + (ovrf / 8192);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 62500UL
+  // 62.5 kHz
+  //  Error: 0.0000% (0 Decimal)
+  // Jitter: 0.0000% (0 Decimal)
+
+  x = (ovrf * 4096) ;
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 37500UL
+  // 37.5 kHz
+  //     Best Error Possible: 0.0008%  (0.0000076401 Decimal)
+  //    Worst Error Possible: 0.0098% (0.00009788590000000001 Decimal)
+
+  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 98UL
+    //  Error: 0.0098% (0.00009788590000000001 Decimal)
+    // Jitter: 0.0073% (0.0000732332 Decimal)
+    x = (ovrf * 6826) ;
+  #else
+    //  Error: 0.0008% (0.0000076401 Decimal)
+    // Jitter: 0.0146% (0.00014647720000000001 Decimal)
+    x = (ovrf * 6826)  + (ovrf / 2) + (ovrf / 8) + (ovrf / 32) + (ovrf / 128) + (ovrf / 512) + (ovrf / 2048) + (ovrf / 8192) + (ovrf / 32768);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 32768UL
+  // 32.768 kHz
+  //     Best Error Possible: 0.0003%  (0.0000030611000000000002 Decimal)
+  //    Worst Error Possible: 0.0066% (0.0000655305 Decimal)
+
+  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 66UL
+    //  Error: 0.0066% (0.0000655305 Decimal)
+    // Jitter: 0.0064% (0.00006399179999999999 Decimal)
+    x = (ovrf * 7812) ;
+  #else
+    //  Error: 0.0003% (0.0000030611000000000002 Decimal)
+    // Jitter: 0.0128% (0.0001279918 Decimal)
+    x = (ovrf * 7812)  + (ovrf / 2);
+  #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 31250UL
+  // 31.25 kHz
+  //  Error: 0.0000% (0 Decimal)
+  // Jitter: 0.0000% (0 Decimal)
+
+  x = (ovrf * 8192) ;
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 18750UL
+  // 18.75 kHz
+  //  Error: 0.0003% (0.0000032111 Decimal)
+  // Jitter: 0.0037% (0.000036620600000000006 Decimal)
+
+  x = (ovrf * 13653)  + (ovrf / 4) + (ovrf / 16) + (ovrf / 64) + (ovrf / 256) + (ovrf / 1024) + (ovrf / 4096) + (ovrf / 16384) + (ovrf / 65536);
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 16000UL
+  // 16 kHz
+  //  Error: 0.0000% (0 Decimal)
+  // Jitter: 0.0000% (0 Decimal)
+
+  x = (ovrf * 16000) ;
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 15625UL
+  // 15.625 kHz
+  //  Error: 0.0000% (0 Decimal)
+  // Jitter: 0.0000% (0 Decimal)
+
+  x = (ovrf * 16384) ;
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 12500UL
+  // 12.5 kHz
+  //  Error: 0.0000% (0 Decimal)
+  // Jitter: 0.0000% (0 Decimal)
+
+  x = (ovrf * 20480) ;
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 9375UL
+  // 9.375 kHz
+  //  Error: 0.0002% (0.00000191 Decimal)
+  // Jitter: 0.0037% (0.000036620600000000006 Decimal)
+
+  x = (ovrf * 27306)  + (ovrf / 2) + (ovrf / 8) + (ovrf / 32) + (ovrf / 128) + (ovrf / 512) + (ovrf / 2048) + (ovrf / 8192) + (ovrf / 32768);
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 4096UL
+  // 4.096 kHz
+  //  Error: 0.0000% (0 Decimal)
+  // Jitter: 0.0000% (0 Decimal)
+
+  x = (ovrf * 62500) ;
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 2000UL
+  // 2 kHz
+  //  Error: 0.0000% (0 Decimal)
+  // Jitter: 0.0000% (0 Decimal)
+
+  x = (ovrf * 128000) ;
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 1953UL
+  // 1.953 kHz
+  //  Error: 0.0000% (3.3800000000000004e-7 Decimal)
+  // Jitter: 0.0004% (0.0000038144 Decimal)
+
+  x = (ovrf * 131080)  + (ovrf / 4) + (ovrf / 8) + (ovrf / 128) + (ovrf / 256) + (ovrf / 512) + (ovrf / 4096) + (ovrf / 8192) + (ovrf / 16384) + (ovrf / 32768) + (ovrf / 65536);
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 512UL
+  // 0.512 kHz
+  //  Error: 0.0000% (0 Decimal)
+  // Jitter: 0.0000% (0 Decimal)
+
+  x = (ovrf * 500000) ;
 #endif
   
   SREG = oldSREG;
@@ -1012,6 +2615,27 @@ void delayMicrosecondsWithoutMillisInterruptAdjustment(DelayMicrosecondsTime_t u
   us -= 16;
 
 
+#elif F_CPU >= 19200000UL
+  // 19.2MHz
+
+  // Initialisation Overhead: 5 Clocks (Average)
+
+  // Minimum us we can achieve
+  //        Comparison Takes: 3 Clocks
+  if(us <= 4) return;
+
+  // Convert us into a loop-counter for a busy-wait loop we will do.
+  //   the following approximates 4.8000 * us
+  //        Adjustment Takes: 75 Clocks (Approx)
+  us = ( us * 4) + (us / 2) + (us / 4) + (us / 32) + (us / 64) ;
+
+  // Compensate for the combined overhead time of 4.4271us
+  // by subtracting 21 Loop Cycles
+  // us at this point is at least 23 Loops - 5us
+  //       Subtraction Takes: 2 Clocks
+  us -= 21;
+
+
 #elif F_CPU >= 16000000UL
   // 16MHz
 
@@ -1031,6 +2655,48 @@ void delayMicrosecondsWithoutMillisInterruptAdjustment(DelayMicrosecondsTime_t u
   // us at this point is at least 8 Loops - 2us
   //       Subtraction Takes: 2 Clocks
   us -= 4;
+
+
+#elif F_CPU >= 15360000UL
+  // 15.36MHz
+
+  // Initialisation Overhead: 5 Clocks (Average)
+
+  // Minimum us we can achieve
+  //        Comparison Takes: 3 Clocks
+  if(us <= 9) return;
+
+  // Convert us into a loop-counter for a busy-wait loop we will do.
+  //   the following approximates 3.8400 * us
+  //        Adjustment Takes: 123 Clocks (Approx)
+  us = ( us * 3) + (us / 2) + (us / 4) + (us / 16) + (us / 64) + (us / 128) + (us / 256);
+
+  // Compensate for the combined overhead time of 8.6589us
+  // by subtracting 33 Loop Cycles
+  // us at this point is at least 37 Loops - 10us
+  //       Subtraction Takes: 2 Clocks
+  us -= 33;
+
+
+#elif F_CPU >= 12800000UL
+  // 12.8MHz
+
+  // Initialisation Overhead: 5 Clocks (Average)
+
+  // Minimum us we can achieve
+  //        Comparison Takes: 3 Clocks
+  if(us <= 9) return;
+
+  // Convert us into a loop-counter for a busy-wait loop we will do.
+  //   the following approximates 3.2000 * us
+  //        Adjustment Takes: 100 Clocks (Approx)
+  us = ( us * 3) + (us / 8) + (us / 16) + (us / 128) + (us / 256);
+
+  // Compensate for the combined overhead time of 8.5938us
+  // by subtracting 27 Loop Cycles
+  // us at this point is at least 31 Loops - 10us
+  //       Subtraction Takes: 2 Clocks
+  us -= 27;
 
 
 #elif F_CPU >= 12000000UL
@@ -1136,6 +2802,27 @@ void delayMicrosecondsWithoutMillisInterruptAdjustment(DelayMicrosecondsTime_t u
   // us at this point is at least 19 Loops - 16us
   //       Subtraction Takes: 2 Clocks
   us -= 16;
+
+
+#elif F_CPU >= 4608000UL
+  // 4.608MHz
+
+  // Initialisation Overhead: 5 Clocks (Average)
+
+  // Minimum us we can achieve
+  //        Comparison Takes: 3 Clocks
+  if(us <= 16) return;
+
+  // Convert us into a loop-counter for a busy-wait loop we will do.
+  //   the following approximates 1.1520 * us
+  //        Adjustment Takes: 60 Clocks (Approx)
+  us = ( us * 1) + (us / 8) + (us / 64) + (us / 128) ;
+
+  // Compensate for the combined overhead time of 15.1910us
+  // by subtracting 17 Loop Cycles
+  // us at this point is at least 19 Loops - 17us
+  //       Subtraction Takes: 2 Clocks
+  us -= 17;
 
 
 #elif F_CPU >= 4000000UL
@@ -1271,7 +2958,7 @@ void delayMicrosecondsWithoutMillisInterruptAdjustment(DelayMicrosecondsTime_t u
 
   // Minimum us we can achieve
   //        Comparison Takes: 3 Clocks
-  if(us <= 131) return;
+  if(us <= 130) return;
 
   // Convert us into a loop-counter for a busy-wait loop we will do.
   //   the following approximates 0.1500 * us
@@ -1280,7 +2967,7 @@ void delayMicrosecondsWithoutMillisInterruptAdjustment(DelayMicrosecondsTime_t u
 
   // Compensate for the combined overhead time of 110.0000us
   // by subtracting 16 Loop Cycles
-  // us at this point is at least 19 Loops - 132us
+  // us at this point is at least 19 Loops - 131us
   //       Subtraction Takes: 2 Clocks
   us -= 16;
 
@@ -1371,6 +3058,8 @@ void delayMicrosecondsWithoutMillisInterruptAdjustment(DelayMicrosecondsTime_t u
 
 #endif
 
+
+
 #if ! ( defined( REDUCED_CORE_TINYAVR ) && REDUCED_CORE_TINYAVR )
   // The 4/5/9/10 "Reduced Core" have problems with GCC compiling this    
   __asm__ __volatile__ (
@@ -1432,6 +3121,27 @@ void delayMicrosecondsAdjustedForMillisInterrupt(DelayMicrosecondsTime_t us)
   us -= 24;
 
 
+#elif F_CPU >= 19200000UL
+  // 19.2MHz
+
+  // Initialisation Overhead: 5 Clocks (Average)
+
+  // Minimum us we can achieve
+  //        Comparison Takes: 3 Clocks
+  if(us <= 10) return;
+
+  // Convert us into a loop-counter for a busy-wait loop we will do.
+  //   the following approximates 1.9492 * us
+  //        Adjustment Takes: 62 Clocks (Approx)
+  us = ( us * 1) + (us / 2) + (us / 4) + (us / 8) + (us / 16) + (us / 128) + (us / 256);
+
+  // Compensate for the combined overhead time of 3.7500us
+  // by subtracting 18 Loop Cycles
+  // us at this point is at least 19 Loops - 11us
+  //       Subtraction Takes: 2 Clocks
+  us -= 18;
+
+
 #elif F_CPU >= 16000000UL
   // 16MHz
 
@@ -1451,6 +3161,48 @@ void delayMicrosecondsAdjustedForMillisInterrupt(DelayMicrosecondsTime_t us)
   // us at this point is at least 22 Loops - 13us
   //       Subtraction Takes: 2 Clocks
   us -= 21;
+
+
+#elif F_CPU >= 15360000UL
+  // 15.36MHz
+
+  // Initialisation Overhead: 5 Clocks (Average)
+
+  // Minimum us we can achieve
+  //        Comparison Takes: 3 Clocks
+  if(us <= 6) return;
+
+  // Convert us into a loop-counter for a busy-wait loop we will do.
+  //   the following approximates 2.9432 * us
+  //        Adjustment Takes: 57 Clocks (Approx)
+  us = ( us * 2) + (us / 2) + (us / 4) + (us / 8) + (us / 16) + (us / 256);
+
+  // Compensate for the combined overhead time of 5.6910us
+  // by subtracting 17 Loop Cycles
+  // us at this point is at least 18 Loops - 7us
+  //       Subtraction Takes: 2 Clocks
+  us -= 17;
+
+
+#elif F_CPU >= 12800000UL
+  // 12.8MHz
+
+  // Initialisation Overhead: 5 Clocks (Average)
+
+  // Minimum us we can achieve
+  //        Comparison Takes: 3 Clocks
+  if(us <= 17) return;
+
+  // Convert us into a loop-counter for a busy-wait loop we will do.
+  //   the following approximates 1.6203 * us
+  //        Adjustment Takes: 94 Clocks (Approx)
+  us = ( us * 1) + (us / 2) + (us / 16) + (us / 32) + (us / 64) + (us / 128) ;
+
+  // Compensate for the combined overhead time of 8.1250us
+  // by subtracting 26 Loop Cycles
+  // us at this point is at least 28 Loops - 18us
+  //       Subtraction Takes: 2 Clocks
+  us -= 26;
 
 
 #elif F_CPU >= 12000000UL
@@ -1481,18 +3233,18 @@ void delayMicrosecondsAdjustedForMillisInterrupt(DelayMicrosecondsTime_t us)
 
   // Minimum us we can achieve
   //        Comparison Takes: 3 Clocks
-  if(us <= 12) return;
+  if(us <= 8) return;
 
   // Convert us into a loop-counter for a busy-wait loop we will do.
-  //   the following approximates 1.8395 * us
-  //        Adjustment Takes: 73 Clocks (Approx)
-  us = ( us * 1) + (us / 2) + (us / 4) + (us / 16) + (us / 64) + (us / 128) ;
+  //   the following approximates 1.3863 * us
+  //        Adjustment Takes: 34 Clocks (Approx)
+  us = ( us * 1) + (us / 4) + (us / 8) + (us / 128) ;
 
-  // Compensate for the combined overhead time of 11.2801us
-  // by subtracting 21 Loop Cycles
-  // us at this point is at least 22 Loops - 13us
+  // Compensate for the combined overhead time of 4.5833us
+  // by subtracting 11 Loop Cycles
+  // us at this point is at least 12 Loops - 9us
   //       Subtraction Takes: 2 Clocks
-  us -= 21;
+  us -= 11;
 
 
 #elif F_CPU >= 8000000UL
@@ -1556,6 +3308,27 @@ void delayMicrosecondsAdjustedForMillisInterrupt(DelayMicrosecondsTime_t us)
   // us at this point is at least 10 Loops - 12us
   //       Subtraction Takes: 2 Clocks
   us -= 8;
+
+
+#elif F_CPU >= 4608000UL
+  // 4.608MHz
+
+  // Initialisation Overhead: 5 Clocks (Average)
+
+  // Minimum us we can achieve
+  //        Comparison Takes: 3 Clocks
+  if(us <= 14) return;
+
+  // Convert us into a loop-counter for a busy-wait loop we will do.
+  //   the following approximates 0.8830 * us
+  //        Adjustment Takes: 32 Clocks (Approx)
+  us = ( us * 0) + (us / 2) + (us / 4) + (us / 8) + (us / 128) ;
+
+  // Compensate for the combined overhead time of 11.8917us
+  // by subtracting 10 Loop Cycles
+  // us at this point is at least 11 Loops - 15us
+  //       Subtraction Takes: 2 Clocks
+  us -= 10;
 
 
 #elif F_CPU >= 4000000UL
@@ -1628,18 +3401,18 @@ void delayMicrosecondsAdjustedForMillisInterrupt(DelayMicrosecondsTime_t us)
 
   // Minimum us we can achieve
   //        Comparison Takes: 3 Clocks
-  if(us <= 105) return;
+  if(us <= 56) return;
 
   // Convert us into a loop-counter for a busy-wait loop we will do.
-  //   the following approximates 0.2299 * us
-  //        Adjustment Takes: 73 Clocks (Approx)
-  us = ( us * 0) + (us / 8) + (us / 16) + (us / 32) + (us / 128) ;
+  //   the following approximates 0.2749 * us
+  //        Adjustment Takes: 45 Clocks (Approx)
+  us = ( us * 0) + (us / 4) + (us / 64) + (us / 128) ;
 
-  // Compensate for the combined overhead time of 90.2409us
-  // by subtracting 20 Loop Cycles
-  // us at this point is at least 22 Loops - 106us
+  // Compensate for the combined overhead time of 45.8333us
+  // by subtracting 13 Loop Cycles
+  // us at this point is at least 14 Loops - 57us
   //       Subtraction Takes: 2 Clocks
-  us -= 20;
+  us -= 13;
 
 
 #elif F_CPU >= 1000000UL
@@ -1833,6 +3606,27 @@ void delayMicrosecondsAdjustedForMillisInterrupt(DelayMicrosecondsTime_t us)
   us -= 17;
 
 
+#elif F_CPU >= 19200000UL
+  // 19.2MHz
+
+  // Initialisation Overhead: 5 Clocks (Average)
+
+  // Minimum us we can achieve
+  //        Comparison Takes: 3 Clocks
+  if(us <= 5) return;
+
+  // Convert us into a loop-counter for a busy-wait loop we will do.
+  //   the following approximates 4.0581 * us
+  //        Adjustment Takes: 74 Clocks (Approx)
+  us = ( us * 4) + (us / 32) + (us / 64) + (us / 128) ;
+
+  // Compensate for the combined overhead time of 4.3750us
+  // by subtracting 21 Loop Cycles
+  // us at this point is at least 24 Loops - 6us
+  //       Subtraction Takes: 2 Clocks
+  us -= 21;
+
+
 #elif F_CPU >= 16000000UL
   // 16MHz
 
@@ -1852,6 +3646,48 @@ void delayMicrosecondsAdjustedForMillisInterrupt(DelayMicrosecondsTime_t us)
   // us at this point is at least 36 Loops - 11us
   //       Subtraction Takes: 2 Clocks
   us -= 33;
+
+
+#elif F_CPU >= 15360000UL
+  // 15.36MHz
+
+  // Initialisation Overhead: 5 Clocks (Average)
+
+  // Minimum us we can achieve
+  //        Comparison Takes: 3 Clocks
+  if(us <= 7) return;
+
+  // Convert us into a loop-counter for a busy-wait loop we will do.
+  //   the following approximates 3.6991 * us
+  //        Adjustment Takes: 98 Clocks (Approx)
+  us = ( us * 3) + (us / 2) + (us / 8) + (us / 16) + (us / 128) ;
+
+  // Compensate for the combined overhead time of 7.2990us
+  // by subtracting 27 Loop Cycles
+  // us at this point is at least 29 Loops - 8us
+  //       Subtraction Takes: 2 Clocks
+  us -= 27;
+
+
+#elif F_CPU >= 12800000UL
+  // 12.8MHz
+
+  // Initialisation Overhead: 5 Clocks (Average)
+
+  // Minimum us we can achieve
+  //        Comparison Takes: 3 Clocks
+  if(us <= 7) return;
+
+  // Convert us into a loop-counter for a busy-wait loop we will do.
+  //   the following approximates 2.8524 * us
+  //        Adjustment Takes: 70 Clocks (Approx)
+  us = ( us * 2) + (us / 2) + (us / 4) + (us / 16) + (us / 32) + (us / 128) ;
+
+  // Compensate for the combined overhead time of 6.2500us
+  // by subtracting 20 Loop Cycles
+  // us at this point is at least 22 Loops - 8us
+  //       Subtraction Takes: 2 Clocks
+  us -= 20;
 
 
 #elif F_CPU >= 12000000UL
@@ -1882,18 +3718,18 @@ void delayMicrosecondsAdjustedForMillisInterrupt(DelayMicrosecondsTime_t us)
 
   // Minimum us we can achieve
   //        Comparison Takes: 3 Clocks
-  if(us <= 10) return;
+  if(us <= 7) return;
 
   // Convert us into a loop-counter for a busy-wait loop we will do.
-  //   the following approximates 2.3119 * us
-  //        Adjustment Takes: 82 Clocks (Approx)
-  us = ( us * 2) + (us / 4) + (us / 32) + (us / 64) + (us / 128) + (us / 256);
+  //   the following approximates 2.1990 * us
+  //        Adjustment Takes: 52 Clocks (Approx)
+  us = ( us * 2) + (us / 8) + (us / 16) + (us / 128) ;
 
-  // Compensate for the combined overhead time of 9.9483us
-  // by subtracting 23 Loop Cycles
-  // us at this point is at least 24 Loops - 11us
+  // Compensate for the combined overhead time of 6.4583us
+  // by subtracting 15 Loop Cycles
+  // us at this point is at least 17 Loops - 8us
   //       Subtraction Takes: 2 Clocks
-  us -= 23;
+  us -= 15;
 
 
 #elif F_CPU >= 8000000UL
@@ -1957,6 +3793,27 @@ void delayMicrosecondsAdjustedForMillisInterrupt(DelayMicrosecondsTime_t us)
   // us at this point is at least 18 Loops - 16us
   //       Subtraction Takes: 2 Clocks
   us -= 16;
+
+
+#elif F_CPU >= 4608000UL
+  // 4.608MHz
+
+  // Initialisation Overhead: 5 Clocks (Average)
+
+  // Minimum us we can achieve
+  //        Comparison Takes: 3 Clocks
+  if(us <= 23) return;
+
+  // Convert us into a loop-counter for a busy-wait loop we will do.
+  //   the following approximates 1.1097 * us
+  //        Adjustment Takes: 85 Clocks (Approx)
+  us = ( us * 1) + (us / 16) + (us / 32) + (us / 64) ;
+
+  // Compensate for the combined overhead time of 21.4015us
+  // by subtracting 23 Loop Cycles
+  // us at this point is at least 25 Loops - 24us
+  //       Subtraction Takes: 2 Clocks
+  us -= 23;
 
 
 #elif F_CPU >= 4000000UL
@@ -2029,18 +3886,18 @@ void delayMicrosecondsAdjustedForMillisInterrupt(DelayMicrosecondsTime_t us)
 
   // Minimum us we can achieve
   //        Comparison Takes: 3 Clocks
-  if(us <= 49) return;
+  if(us <= 56) return;
 
   // Convert us into a loop-counter for a busy-wait loop we will do.
-  //   the following approximates 0.2890 * us
-  //        Adjustment Takes: 37 Clocks (Approx)
-  us = ( us * 0) + (us / 4) + (us / 32) + (us / 256);
+  //   the following approximates 0.2966 * us
+  //        Adjustment Takes: 44 Clocks (Approx)
+  us = ( us * 0) + (us / 4) + (us / 32) + (us / 128) + (us / 256);
 
-  // Compensate for the combined overhead time of 40.6584us
-  // by subtracting 11 Loop Cycles
-  // us at this point is at least 13 Loops - 50us
+  // Compensate for the combined overhead time of 45.0000us
+  // by subtracting 13 Loop Cycles
+  // us at this point is at least 15 Loops - 57us
   //       Subtraction Takes: 2 Clocks
-  us -= 11;
+  us -= 13;
 
 
 #elif F_CPU >= 1000000UL
@@ -2234,6 +4091,27 @@ void delayMicrosecondsAdjustedForMillisInterrupt(DelayMicrosecondsTime_t us)
   us -= 12;
 
 
+#elif F_CPU >= 19200000UL
+  // 19.2MHz
+
+  // Initialisation Overhead: 5 Clocks (Average)
+
+  // Minimum us we can achieve
+  //        Comparison Takes: 3 Clocks
+  if(us <= 3) return;
+
+  // Convert us into a loop-counter for a busy-wait loop we will do.
+  //   the following approximates 4.6928 * us
+  //        Adjustment Takes: 53 Clocks (Approx)
+  us = ( us * 4) + (us / 2) + (us / 8) + (us / 16) + (us / 256);
+
+  // Compensate for the combined overhead time of 3.2813us
+  // by subtracting 15 Loop Cycles
+  // us at this point is at least 18 Loops - 4us
+  //       Subtraction Takes: 2 Clocks
+  us -= 15;
+
+
 #elif F_CPU >= 16000000UL
   // 16MHz
 
@@ -2253,6 +4131,48 @@ void delayMicrosecondsAdjustedForMillisInterrupt(DelayMicrosecondsTime_t us)
   // us at this point is at least 38 Loops - 10us
   //       Subtraction Takes: 2 Clocks
   us -= 36;
+
+
+#elif F_CPU >= 15360000UL
+  // 15.36MHz
+
+  // Initialisation Overhead: 5 Clocks (Average)
+
+  // Minimum us we can achieve
+  //        Comparison Takes: 3 Clocks
+  if(us <= 7) return;
+
+  // Convert us into a loop-counter for a busy-wait loop we will do.
+  //   the following approximates 3.8218 * us
+  //        Adjustment Takes: 87 Clocks (Approx)
+  us = ( us * 3) + (us / 2) + (us / 4) + (us / 16) + (us / 128) ;
+
+  // Compensate for the combined overhead time of 6.3452us
+  // by subtracting 24 Loop Cycles
+  // us at this point is at least 30 Loops - 8us
+  //       Subtraction Takes: 2 Clocks
+  us -= 24;
+
+
+#elif F_CPU >= 12800000UL
+  // 12.8MHz
+
+  // Initialisation Overhead: 5 Clocks (Average)
+
+  // Minimum us we can achieve
+  //        Comparison Takes: 3 Clocks
+  if(us <= 9) return;
+
+  // Convert us into a loop-counter for a busy-wait loop we will do.
+  //   the following approximates 3.1520 * us
+  //        Adjustment Takes: 106 Clocks (Approx)
+  us = ( us * 3) + (us / 8) + (us / 64) + (us / 128) ;
+
+  // Compensate for the combined overhead time of 9.0625us
+  // by subtracting 29 Loop Cycles
+  // us at this point is at least 31 Loops - 10us
+  //       Subtraction Takes: 2 Clocks
+  us -= 29;
 
 
 #elif F_CPU >= 12000000UL
@@ -2283,18 +4203,18 @@ void delayMicrosecondsAdjustedForMillisInterrupt(DelayMicrosecondsTime_t us)
 
   // Minimum us we can achieve
   //        Comparison Takes: 3 Clocks
-  if(us <= 6) return;
+  if(us <= 12) return;
 
   // Convert us into a loop-counter for a busy-wait loop we will do.
-  //   the following approximates 2.3886 * us
-  //        Adjustment Takes: 40 Clocks (Approx)
-  us = ( us * 2) + (us / 4) + (us / 8) + (us / 128) + (us / 256);
+  //   the following approximates 2.3729 * us
+  //        Adjustment Takes: 104 Clocks (Approx)
+  us = ( us * 2) + (us / 4) + (us / 16) + (us / 32) + (us / 64) + (us / 128) + (us / 256);
 
-  // Compensate for the combined overhead time of 5.2331us
-  // by subtracting 13 Loop Cycles
-  // us at this point is at least 15 Loops - 7us
+  // Compensate for the combined overhead time of 11.8750us
+  // by subtracting 28 Loop Cycles
+  // us at this point is at least 29 Loops - 13us
   //       Subtraction Takes: 2 Clocks
-  us -= 13;
+  us -= 28;
 
 
 #elif F_CPU >= 8000000UL
@@ -2358,6 +4278,27 @@ void delayMicrosecondsAdjustedForMillisInterrupt(DelayMicrosecondsTime_t us)
   // us at this point is at least 16 Loops - 15us
   //       Subtraction Takes: 2 Clocks
   us -= 14;
+
+
+#elif F_CPU >= 4608000UL
+  // 4.608MHz
+
+  // Initialisation Overhead: 5 Clocks (Average)
+
+  // Minimum us we can achieve
+  //        Comparison Takes: 3 Clocks
+  if(us <= 15) return;
+
+  // Convert us into a loop-counter for a busy-wait loop we will do.
+  //   the following approximates 1.1465 * us
+  //        Adjustment Takes: 57 Clocks (Approx)
+  us = ( us * 1) + (us / 8) + (us / 64) + (us / 256);
+
+  // Compensate for the combined overhead time of 14.6092us
+  // by subtracting 16 Loop Cycles
+  // us at this point is at least 18 Loops - 16us
+  //       Subtraction Takes: 2 Clocks
+  us -= 16;
 
 
 #elif F_CPU >= 4000000UL
@@ -2433,11 +4374,11 @@ void delayMicrosecondsAdjustedForMillisInterrupt(DelayMicrosecondsTime_t us)
   if(us <= 70) return;
 
   // Convert us into a loop-counter for a busy-wait loop we will do.
-  //   the following approximates 0.2986 * us
+  //   the following approximates 0.2996 * us
   //        Adjustment Takes: 65 Clocks (Approx)
   us = ( us * 0) + (us / 4) + (us / 32) + (us / 64) ;
 
-  // Compensate for the combined overhead time of 62.7975us
+  // Compensate for the combined overhead time of 62.5000us
   // by subtracting 18 Loop Cycles
   // us at this point is at least 20 Loops - 71us
   //       Subtraction Takes: 2 Clocks
@@ -2593,6 +4534,7 @@ void delayMicrosecondsAdjustedForMillisInterrupt(DelayMicrosecondsTime_t us)
 
 #endif
 #endif
+
 #if ! ( defined( REDUCED_CORE_TINYAVR ) && REDUCED_CORE_TINYAVR )
   // The 4/5/9/10 "Reduced Core" have problems with GCC compiling this    
   __asm__ __volatile__ (

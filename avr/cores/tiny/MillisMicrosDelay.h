@@ -387,6 +387,92 @@ MillisMicrosTime_t micros();
     #endif
 
 
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 19200000UL
+  // 19.2 MHz
+  //     Best Error Possible: 0.0992%  (0.0009916172 Decimal)
+  //    Worst Error Possible: 41.4072% (0.4140718057 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 414072UL
+    //  Error: 41.4072% (0.4140718057 Decimal)
+    // Jitter: 0.0055% (0.0000551471 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.414072))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 585928ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 585928ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 585928ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 121113UL
+    //  Error: 12.1113% (0.1211131569 Decimal)
+    // Jitter: 0.0106% (0.00010625 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.121113))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 878887ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 878887ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 878887ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 47881UL
+    //  Error: 4.7881% (0.0478814326 Decimal)
+    // Jitter: 0.0148% (0.0001484375 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.047881))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 952119ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 952119ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 952119ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 11271UL
+    //  Error: 1.1271% (0.011270545 Decimal)
+    // Jitter: 0.0223% (0.0002229665 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.011271))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 988729ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 988729ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 988729ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 2126UL
+    //  Error: 0.2126% (0.0021257332 Decimal)
+    // Jitter: 0.0283% (0.0002829912 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.002126))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 997874ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 997874ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 997874ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #else
+    //  Error: 0.0992% (0.0009916172 Decimal)
+    // Jitter: 0.0329% (0.0003291789 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.000992))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 999008ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 999008ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 999008ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #endif
+
+
 #elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 16000000UL
   // 16 MHz
   //     Best Error Possible: 0.0580%  (0.0005804791 Decimal)
@@ -428,6 +514,139 @@ MillisMicrosTime_t micros();
        (   ( ((uint64_t)(AVR_MILLIS)) * 999420ULL )%1000000ULL >= 500000ULL )     \
        ? ((( ((uint64_t)(AVR_MILLIS)) * 999420ULL )/1000000ULL)+1)                \
        : ( ( ((uint64_t)(AVR_MILLIS)) * 999420ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 15360000UL
+  // 15.36 MHz
+  //     Best Error Possible: 0.0271%  (0.0002705402 Decimal)
+  //    Worst Error Possible: 6.2505% (0.06250512309999999 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 62505UL
+    //  Error: 6.2505% (0.06250512309999999 Decimal)
+    // Jitter: 0.0045% (0.0000454545 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.062505))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 937495ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 937495ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 937495ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 3922UL
+    //  Error: 0.3922% (0.0039217042 Decimal)
+    // Jitter: 0.0094% (0.00009375 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.003922))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 996078ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 996078ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 996078ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #else
+    //  Error: 0.0271% (0.0002705402 Decimal)
+    // Jitter: 0.0154% (0.00015423730000000001 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.000271))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 999729ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 999729ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 999729ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 12800000UL
+  // 12.8 MHz
+  //     Best Error Possible: 0.0608%  (0.0006080995 Decimal)
+  //    Worst Error Possible: 21.8758% (0.21875796979999998 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 218758UL
+    //  Error: 21.8758% (0.21875796979999998 Decimal)
+    // Jitter: 0.0068% (0.00006818179999999999 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.218758))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 781242ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 781242ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 781242ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 23455UL
+    //  Error: 2.3455% (0.023454928400000002 Decimal)
+    // Jitter: 0.0108% (0.0001079545 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.023455))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 976545ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 976545ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 976545ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 11258UL
+    //  Error: 1.1258% (0.0112578935 Decimal)
+    // Jitter: 0.0136% (0.0001362782 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.011258))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 988742ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 988742ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 988742ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 5164UL
+    //  Error: 0.5164% (0.0051639588 Decimal)
+    // Jitter: 0.0186% (0.00018647909999999998 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.005164))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 994836ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 994836ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 994836ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 2123UL
+    //  Error: 0.2123% (0.0021232221 Decimal)
+    // Jitter: 0.0238% (0.0002382033 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.002123))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 997877ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 997877ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 997877ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #else
+    //  Error: 0.0608% (0.0006080995 Decimal)
+    // Jitter: 0.0290% (0.0002903811 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.000608))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 999392ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 999392ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 999392ULL )/1000000ULL   )                \
     ))                                                                            \
   
   
@@ -903,6 +1122,92 @@ MillisMicrosTime_t micros();
     #endif
 
 
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 4608000UL
+  // 4.608 MHz
+  //     Best Error Possible: 0.0299%  (0.000298618 Decimal)
+  //    Worst Error Possible: 43.7505% (0.4375051231 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 437505UL
+    //  Error: 43.7505% (0.4375051231 Decimal)
+    // Jitter: 0.0045% (0.0000454545 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.437505))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 562495ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 562495ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 562495ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 156263UL
+    //  Error: 15.6263% (0.15626309289999998 Decimal)
+    // Jitter: 0.0114% (0.0001136364 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.156263))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 843737ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 843737ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 843737ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 15647UL
+    //  Error: 1.5647% (0.0156472925 Decimal)
+    // Jitter: 0.0193% (0.0001931818 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.015647))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 984353ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 984353ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 984353ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 6869UL
+    //  Error: 0.6869% (0.0068689933 Decimal)
+    // Jitter: 0.0255% (0.0002549716 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.006869))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 993131ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 993131ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 993131ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 2485UL
+    //  Error: 0.2485% (0.0024850979000000002 Decimal)
+    // Jitter: 0.0285% (0.000284965 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.002485))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 997515ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 997515ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 997515ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #else
+    //  Error: 0.0299% (0.000298618 Decimal)
+    // Jitter: 0.0350% (0.00035 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.000299))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 999701ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 999701ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 999701ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #endif
+
+
 #elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 4000000UL
   // 4 MHz
   //     Best Error Possible: 0.0114%  (0.0001138951 Decimal)
@@ -1327,6 +1632,178 @@ MillisMicrosTime_t micros();
        (   ( ((uint64_t)(AVR_MILLIS)) * 999887ULL )%1000000ULL >= 500000ULL )     \
        ? ((( ((uint64_t)(AVR_MILLIS)) * 999887ULL )/1000000ULL)+1)                \
        : ( ( ((uint64_t)(AVR_MILLIS)) * 999887ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 1920000UL
+  // 1.92 MHz
+  //     Best Error Possible: 0.0052%  (0.000052218699999999995 Decimal)
+  //    Worst Error Possible: 6.2505% (0.06250512309999999 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 62505UL
+    //  Error: 6.2505% (0.06250512309999999 Decimal)
+    // Jitter: 0.0045% (0.0000454545 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.062505))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 937495ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 937495ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 937495ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 3922UL
+    //  Error: 0.3922% (0.0039217042 Decimal)
+    // Jitter: 0.0094% (0.00009375 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.003922))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 996078ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 996078ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 996078ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 271UL
+    //  Error: 0.0271% (0.0002705402 Decimal)
+    // Jitter: 0.0154% (0.00015423730000000001 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.000271))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 999729ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 999729ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 999729ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #else
+    //  Error: 0.0052% (0.000052218699999999995 Decimal)
+    // Jitter: 0.0214% (0.0002138201 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.000052))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 999948ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 999948ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 999948ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 1600000UL
+  // 1.6 MHz
+  //     Best Error Possible: 0.0152%  (0.0001516764 Decimal)
+  //    Worst Error Possible: 21.8758% (0.21875796979999998 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 218758UL
+    //  Error: 21.8758% (0.21875796979999998 Decimal)
+    // Jitter: 0.0068% (0.00006818179999999999 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.218758))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 781242ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 781242ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 781242ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 23455UL
+    //  Error: 2.3455% (0.023454928400000002 Decimal)
+    // Jitter: 0.0108% (0.0001079545 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.023455))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 976545ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 976545ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 976545ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 11258UL
+    //  Error: 1.1258% (0.0112578935 Decimal)
+    // Jitter: 0.0136% (0.0001362782 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.011258))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 988742ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 988742ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 988742ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 5164UL
+    //  Error: 0.5164% (0.0051639588 Decimal)
+    // Jitter: 0.0186% (0.00018647909999999998 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.005164))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 994836ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 994836ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 994836ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 2123UL
+    //  Error: 0.2123% (0.0021232221 Decimal)
+    // Jitter: 0.0238% (0.0002382033 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.002123))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 997877ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 997877ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 997877ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 608UL
+    //  Error: 0.0608% (0.0006080995 Decimal)
+    // Jitter: 0.0290% (0.0002903811 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.000608))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 999392ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 999392ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 999392ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 237UL
+    //  Error: 0.0237% (0.0002371862 Decimal)
+    // Jitter: 0.0301% (0.0003012704 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.000237))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 999763ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 999763ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 999763ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #else
+    //  Error: 0.0152% (0.0001516764 Decimal)
+    // Jitter: 0.0343% (0.00034346640000000004 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.000152))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 999848ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 999848ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 999848ULL )/1000000ULL   )                \
     ))                                                                            \
   
   
@@ -1854,6 +2331,118 @@ MillisMicrosTime_t micros();
     #endif
 
 
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 576000UL
+  // 576 kHz
+  //     Best Error Possible: 0.0090%  (0.000090388 Decimal)
+  //    Worst Error Possible: 43.7505% (0.4375051231 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 437505UL
+    //  Error: 43.7505% (0.4375051231 Decimal)
+    // Jitter: 0.0045% (0.0000454545 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.437505))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 562495ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 562495ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 562495ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 156263UL
+    //  Error: 15.6263% (0.15626309289999998 Decimal)
+    // Jitter: 0.0114% (0.0001136364 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.156263))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 843737ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 843737ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 843737ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 15647UL
+    //  Error: 1.5647% (0.0156472925 Decimal)
+    // Jitter: 0.0193% (0.0001931818 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.015647))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 984353ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 984353ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 984353ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 6869UL
+    //  Error: 0.6869% (0.0068689933 Decimal)
+    // Jitter: 0.0255% (0.0002549716 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.006869))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 993131ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 993131ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 993131ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 2485UL
+    //  Error: 0.2485% (0.0024850979000000002 Decimal)
+    // Jitter: 0.0285% (0.000284965 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.002485))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 997515ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 997515ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 997515ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 299UL
+    //  Error: 0.0299% (0.000298618 Decimal)
+    // Jitter: 0.0350% (0.00035 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.000299))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 999701ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 999701ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 999701ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 172UL
+    //  Error: 0.0172% (0.0001717264 Decimal)
+    // Jitter: 0.0386% (0.0003863636 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.000172))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 999828ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 999828ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 999828ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #else
+    //  Error: 0.0090% (0.000090388 Decimal)
+    // Jitter: 0.0485% (0.0004848485 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.00009))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 999910ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 999910ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 999910ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #endif
+
+
 #elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 500000UL
   // 500 kHz
   //     Best Error Possible: 0.0066%  (0.0000656635 Decimal)
@@ -2291,6 +2880,178 @@ MillisMicrosTime_t micros();
        (   ( ((uint64_t)(AVR_MILLIS)) * 999945ULL )%1000000ULL >= 500000ULL )     \
        ? ((( ((uint64_t)(AVR_MILLIS)) * 999945ULL )/1000000ULL)+1)                \
        : ( ( ((uint64_t)(AVR_MILLIS)) * 999945ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 240000UL
+  // 240 kHz
+  //     Best Error Possible: 0.0043%  (0.000042799 Decimal)
+  //    Worst Error Possible: 6.2500% (0.0625004542 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 62500UL
+    //  Error: 6.2500% (0.0625004542 Decimal)
+    // Jitter: 0.0058% (0.000057993000000000005 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.0625))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 937500ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 937500ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 937500ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 3917UL
+    //  Error: 0.3917% (0.0039173927 Decimal)
+    // Jitter: 0.0104% (0.0001040625 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.003917))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 996083ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 996083ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 996083ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 266UL
+    //  Error: 0.0266% (0.0002664493 Decimal)
+    // Jitter: 0.0158% (0.0001580094 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.000266))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 999734ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 999734ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 999734ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #else
+    //  Error: 0.0043% (0.000042799 Decimal)
+    // Jitter: 0.0223% (0.0002228636 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.000043))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 999957ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 999957ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 999957ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 200000UL
+  // 200 kHz
+  //     Best Error Possible: 0.0087%  (0.00008692650000000001 Decimal)
+  //    Worst Error Possible: 21.8749% (0.21874940969999998 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 218749UL
+    //  Error: 21.8749% (0.21874940969999998 Decimal)
+    // Jitter: 0.0040% (0.0000402168 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.218749))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 781251ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 781251ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 781251ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 23442UL
+    //  Error: 2.3442% (0.0234418821 Decimal)
+    // Jitter: 0.0066% (0.0000663896 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.023442))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 976558ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 976558ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 976558ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 11245UL
+    //  Error: 1.1245% (0.0112446471 Decimal)
+    // Jitter: 0.0105% (0.0001048328 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.011245))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 988755ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 988755ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 988755ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 5151UL
+    //  Error: 0.5151% (0.0051506819 Decimal)
+    // Jitter: 0.0133% (0.00013293700000000002 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.005151))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 994849ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 994849ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 994849ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 2110UL
+    //  Error: 0.2110% (0.0021097311 Decimal)
+    // Jitter: 0.0160% (0.0001601772 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.00211))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 997890ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 997890ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 997890ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 594UL
+    //  Error: 0.0594% (0.0005942365 Decimal)
+    // Jitter: 0.0217% (0.0002168587 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.000594))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 999406ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 999406ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 999406ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 223UL
+    //  Error: 0.0223% (0.0002234391 Decimal)
+    // Jitter: 0.0288% (0.00028770170000000004 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.000223))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 999777ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 999777ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 999777ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #else
+    //  Error: 0.0087% (0.00008692650000000001 Decimal)
+    // Jitter: 0.0373% (0.0003726614 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.000087))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 999913ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 999913ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 999913ULL )/1000000ULL   )                \
     ))                                                                            \
   
   
@@ -2781,6 +3542,105 @@ MillisMicrosTime_t micros();
        (   ( ((uint64_t)(AVR_MILLIS)) * 999932ULL )%1000000ULL >= 500000ULL )     \
        ? ((( ((uint64_t)(AVR_MILLIS)) * 999932ULL )/1000000ULL)+1)                \
        : ( ( ((uint64_t)(AVR_MILLIS)) * 999932ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 72000UL
+  // 72 kHz
+  //     Best Error Possible: 0.0069%  (0.0000690607 Decimal)
+  //    Worst Error Possible: 15.6252% (0.1562517948 Decimal)
+
+  #if      ACCEPTABLE_MILLIS_ERROR_PPM >= 156252UL
+    //  Error: 15.6252% (0.1562517948 Decimal)
+    // Jitter: 0.0050% (0.000049993299999999994 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.156252))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 843748ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 843748ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 843748ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 15627UL
+    //  Error: 1.5627% (0.015627093999999998 Decimal)
+    // Jitter: 0.0058% (0.0000583256 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.015627))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 984373ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 984373ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 984373ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 6848UL
+    //  Error: 0.6848% (0.0068482214999999996 Decimal)
+    // Jitter: 0.0098% (0.0000981721 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.006848))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 993152ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 993152ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 993152ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 2464UL
+    //  Error: 0.2464% (0.0024640803999999997 Decimal)
+    // Jitter: 0.0164% (0.00016422329999999998 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.002464))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 997536ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 997536ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 997536ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 277UL
+    //  Error: 0.0277% (0.0002771324 Decimal)
+    // Jitter: 0.0260% (0.00026046429999999996 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.000277))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 999723ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 999723ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 999723ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MILLIS_ERROR_PPM >= 150UL
+    //  Error: 0.0150% (0.0001502798 Decimal)
+    // Jitter: 0.0290% (0.0002902523 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.00015))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 999850ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 999850ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 999850ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #else
+    //  Error: 0.0069% (0.0000690607 Decimal)
+    // Jitter: 0.0389% (0.0003888704 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MILLIS * (1-0.000069))
+    #define REAL_MILLIS(AVR_MILLIS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MILLIS)) * 999931ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MILLIS)) * 999931ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MILLIS)) * 999931ULL )/1000000ULL   )                \
     ))                                                                            \
   
   
@@ -3685,8 +4545,175 @@ MillisMicrosTime_t micros();
     #endif
 
 
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 19200000UL
+  // 19.2 MHz
+  //     Best Error Possible: 0.0065%  (0.0000651144 Decimal)
+  //    Worst Error Possible: 2.5000% (0.025 Decimal)
+
+  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 25000UL
+    //  Error: 2.5000% (0.025 Decimal)
+    // Jitter: 0.0000% (0 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MICROS * (1-0.025))
+    #define REAL_MICROS(AVR_MICROS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MICROS)) * 975000ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MICROS)) * 975000ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MICROS)) * 975000ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 6258UL
+    //  Error: 0.6258% (0.0062577905 Decimal)
+    // Jitter: 0.0058% (0.0000576923 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MICROS * (1-0.006258))
+    #define REAL_MICROS(AVR_MICROS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MICROS)) * 993742ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MICROS)) * 993742ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MICROS)) * 993742ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 1580UL
+    //  Error: 0.1580% (0.0015803789 Decimal)
+    // Jitter: 0.0138% (0.0001375 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MICROS * (1-0.00158))
+    #define REAL_MICROS(AVR_MICROS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MICROS)) * 998420ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MICROS)) * 998420ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MICROS)) * 998420ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 419UL
+    //  Error: 0.0419% (0.0004190177 Decimal)
+    // Jitter: 0.0209% (0.000209375 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MICROS * (1-0.000419))
+    #define REAL_MICROS(AVR_MICROS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MICROS)) * 999581ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MICROS)) * 999581ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MICROS)) * 999581ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #else
+    //  Error: 0.0065% (0.0000651144 Decimal)
+    // Jitter: 0.0384% (0.000384375 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MICROS * (1-0.000065))
+    #define REAL_MICROS(AVR_MICROS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MICROS)) * 999935ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MICROS)) * 999935ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MICROS)) * 999935ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #endif
+
+
 #elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 16000000UL
   // 16 MHz
+  //  Error: 0.0000% (0 Decimal)
+  // Jitter: 0.0000% (0 Decimal)
+
+  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS))
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 15360000UL
+  // 15.36 MHz
+  //     Best Error Possible: 0.0055%  (0.0000552607 Decimal)
+  //    Worst Error Possible: 4.0000% (0.04 Decimal)
+
+  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 40000UL
+    //  Error: 4.0000% (0.04 Decimal)
+    // Jitter: 0.0000% (0 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MICROS * (1-0.04))
+    #define REAL_MICROS(AVR_MICROS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MICROS)) * 960000ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MICROS)) * 960000ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MICROS)) * 960000ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 10000UL
+    //  Error: 1.0000% (0.01 Decimal)
+    // Jitter: 0.0000% (0 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MICROS * (1-0.01))
+    #define REAL_MICROS(AVR_MICROS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MICROS)) * 990000ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MICROS)) * 990000ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MICROS)) * 990000ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 2505UL
+    //  Error: 0.2505% (0.0025051230999999998 Decimal)
+    // Jitter: 0.0045% (0.0000454545 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MICROS * (1-0.002505))
+    #define REAL_MICROS(AVR_MICROS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MICROS)) * 997495ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MICROS)) * 997495ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MICROS)) * 997495ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 639UL
+    //  Error: 0.0639% (0.0006394506 Decimal)
+    // Jitter: 0.0102% (0.0001022727 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MICROS * (1-0.000639))
+    #define REAL_MICROS(AVR_MICROS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MICROS)) * 999361ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MICROS)) * 999361ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MICROS)) * 999361ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 181UL
+    //  Error: 0.0181% (0.00018074170000000002 Decimal)
+    // Jitter: 0.0144% (0.00014375 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MICROS * (1-0.000181))
+    #define REAL_MICROS(AVR_MICROS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MICROS)) * 999819ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MICROS)) * 999819ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MICROS)) * 999819ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #else
+    //  Error: 0.0055% (0.0000552607 Decimal)
+    // Jitter: 0.0221% (0.00022069560000000002 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MICROS * (1-0.000055))
+    #define REAL_MICROS(AVR_MICROS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MICROS)) * 999945ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MICROS)) * 999945ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MICROS)) * 999945ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 12800000UL
+  // 12.8 MHz
   //  Error: 0.0000% (0 Decimal)
   // Jitter: 0.0000% (0 Decimal)
 
@@ -3915,6 +4942,79 @@ MillisMicrosTime_t micros();
     #endif
 
 
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 4608000UL
+  // 4.608 MHz
+  //     Best Error Possible: 0.0045%  (0.000044749499999999996 Decimal)
+  //    Worst Error Possible: 1.0000% (0.01 Decimal)
+
+  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 10000UL
+    //  Error: 1.0000% (0.01 Decimal)
+    // Jitter: 0.0000% (0 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MICROS * (1-0.01))
+    #define REAL_MICROS(AVR_MICROS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MICROS)) * 990000ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MICROS)) * 990000ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MICROS)) * 990000ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 1000UL
+    //  Error: 0.1000% (0.001 Decimal)
+    // Jitter: 0.0000% (0 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MICROS * (1-0.001))
+    #define REAL_MICROS(AVR_MICROS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MICROS)) * 999000ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MICROS)) * 999000ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MICROS)) * 999000ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 446UL
+    //  Error: 0.0447% (0.0004473254 Decimal)
+    // Jitter: 0.0062% (0.0000625 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MICROS * (1-0.000447))
+    #define REAL_MICROS(AVR_MICROS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MICROS)) * 999553ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MICROS)) * 999553ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MICROS)) * 999553ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 176UL
+    //  Error: 0.0176% (0.0001762551 Decimal)
+    // Jitter: 0.0144% (0.00014375 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MICROS * (1-0.000176))
+    #define REAL_MICROS(AVR_MICROS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MICROS)) * 999824ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MICROS)) * 999824ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MICROS)) * 999824ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #else
+    //  Error: 0.0045% (0.000044749499999999996 Decimal)
+    // Jitter: 0.0206% (0.0002064732 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MICROS * (1-0.000045))
+    #define REAL_MICROS(AVR_MICROS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MICROS)) * 999955ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MICROS)) * 999955ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MICROS)) * 999955ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #endif
+
+
 #elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 4000000UL
   // 4 MHz
   //  Error: 0.0000% (0 Decimal)
@@ -4118,6 +5218,74 @@ MillisMicrosTime_t micros();
 
 #elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 2000000UL
   // 2 MHz
+  //  Error: 0.0000% (0 Decimal)
+  // Jitter: 0.0000% (0 Decimal)
+
+  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS))
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 1920000UL
+  // 1.92 MHz
+  //     Best Error Possible: 0.0053%  (0.0000526943 Decimal)
+  //    Worst Error Possible: 0.2500% (0.0025000978 Decimal)
+
+  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 2500UL
+    //  Error: 0.2500% (0.0025000978 Decimal)
+    // Jitter: 0.0057% (0.000057448900000000005 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MICROS * (1-0.0025))
+    #define REAL_MICROS(AVR_MICROS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MICROS)) * 997500ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MICROS)) * 997500ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MICROS)) * 997500ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 640UL
+    //  Error: 0.0640% (0.0006401234 Decimal)
+    // Jitter: 0.0095% (0.0000949614 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MICROS * (1-0.00064))
+    #define REAL_MICROS(AVR_MICROS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MICROS)) * 999360ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MICROS)) * 999360ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MICROS)) * 999360ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 180UL
+    //  Error: 0.0180% (0.0001802345 Decimal)
+    // Jitter: 0.0140% (0.0001395345 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MICROS * (1-0.00018))
+    #define REAL_MICROS(AVR_MICROS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MICROS)) * 999820ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MICROS)) * 999820ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MICROS)) * 999820ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #else
+    //  Error: 0.0053% (0.0000526943 Decimal)
+    // Jitter: 0.0203% (0.0002029726 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MICROS * (1-0.000053))
+    #define REAL_MICROS(AVR_MICROS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MICROS)) * 999947ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MICROS)) * 999947ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MICROS)) * 999947ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 1600000UL
+  // 1.6 MHz
   //  Error: 0.0000% (0 Decimal)
   // Jitter: 0.0000% (0 Decimal)
 
@@ -4333,6 +5501,66 @@ MillisMicrosTime_t micros();
     #endif
 
 
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 576000UL
+  // 576 kHz
+  //     Best Error Possible: 0.0034%  (0.0000339005 Decimal)
+  //    Worst Error Possible: 0.0998% (0.0009982545 Decimal)
+
+  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 998UL
+    //  Error: 0.0998% (0.0009982545 Decimal)
+    // Jitter: 0.0058% (0.000058383899999999995 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MICROS * (1-0.000998))
+    #define REAL_MICROS(AVR_MICROS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MICROS)) * 999002ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MICROS)) * 999002ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MICROS)) * 999002ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 442UL
+    //  Error: 0.0442% (0.0004422686 Decimal)
+    // Jitter: 0.0110% (0.00010955200000000001 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MICROS * (1-0.000442))
+    #define REAL_MICROS(AVR_MICROS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MICROS)) * 999558ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MICROS)) * 999558ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MICROS)) * 999558ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 168UL
+    //  Error: 0.0169% (0.000168827 Decimal)
+    // Jitter: 0.0166% (0.000166184 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MICROS * (1-0.000169))
+    #define REAL_MICROS(AVR_MICROS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MICROS)) * 999831ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MICROS)) * 999831ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MICROS)) * 999831ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #else
+    //  Error: 0.0034% (0.0000339005 Decimal)
+    // Jitter: 0.0218% (0.0002177384 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MICROS * (1-0.000034))
+    #define REAL_MICROS(AVR_MICROS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MICROS)) * 999966ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MICROS)) * 999966ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MICROS)) * 999966ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #endif
+
+
 #elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 500000UL
   // 500 kHz
   //  Error: 0.0000% (0 Decimal)
@@ -4503,6 +5731,74 @@ MillisMicrosTime_t micros();
   #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS))
 
 
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 240000UL
+  // 240 kHz
+  //     Best Error Possible: 0.0033%  (0.0000330737 Decimal)
+  //    Worst Error Possible: 0.0625% (0.0006251015 Decimal)
+
+  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 625UL
+    //  Error: 0.0625% (0.0006251015 Decimal)
+    // Jitter: 0.0060% (0.0000596216 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MICROS * (1-0.000625))
+    #define REAL_MICROS(AVR_MICROS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MICROS)) * 999375ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MICROS)) * 999375ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MICROS)) * 999375ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 162UL
+    //  Error: 0.0162% (0.0001615346 Decimal)
+    // Jitter: 0.0082% (0.0000824094 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MICROS * (1-0.000162))
+    #define REAL_MICROS(AVR_MICROS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MICROS)) * 999838ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MICROS)) * 999838ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MICROS)) * 999838ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #elif    ACCEPTABLE_MICROS_ERROR_PPM >= 53UL
+    //  Error: 0.0053% (0.0000530336 Decimal)
+    // Jitter: 0.0115% (0.00011493009999999999 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MICROS * (1-0.000053))
+    #define REAL_MICROS(AVR_MICROS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MICROS)) * 999947ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MICROS)) * 999947ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MICROS)) * 999947ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #else
+    //  Error: 0.0033% (0.0000330737 Decimal)
+    // Jitter: 0.0144% (0.00014422730000000002 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MICROS * (1-0.000033))
+    #define REAL_MICROS(AVR_MICROS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MICROS)) * 999967ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MICROS)) * 999967ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MICROS)) * 999967ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 200000UL
+  // 200 kHz
+  //  Error: 0.0000% (0 Decimal)
+  // Jitter: 0.0000% (0 Decimal)
+
+  #define REAL_MICROS(AVR_MICROS) ((uint32_t) (AVR_MICROS))
+
+
 #elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 187500UL
   // 187.5 kHz
   //     Best Error Possible: 0.0026%  (0.0000256368 Decimal)
@@ -4649,6 +5945,40 @@ MillisMicrosTime_t micros();
        (   ( ((uint64_t)(AVR_MICROS)) * 999987ULL )%1000000ULL >= 500000ULL )     \
        ? ((( ((uint64_t)(AVR_MICROS)) * 999987ULL )/1000000ULL)+1)                \
        : ( ( ((uint64_t)(AVR_MICROS)) * 999987ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #endif
+
+
+#elif (F_CPU / MILLIS_TIMER_PRESCALE) >= 72000UL
+  // 72 kHz
+  //     Best Error Possible: 0.0011%  (0.000010869300000000001 Decimal)
+  //    Worst Error Possible: 0.0156% (0.000156231 Decimal)
+
+  #if      ACCEPTABLE_MICROS_ERROR_PPM >= 156UL
+    //  Error: 0.0156% (0.000156231 Decimal)
+    // Jitter: 0.0047% (0.000046866900000000004 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MICROS * (1-0.000156))
+    #define REAL_MICROS(AVR_MICROS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MICROS)) * 999844ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MICROS)) * 999844ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MICROS)) * 999844ULL )/1000000ULL   )                \
+    ))                                                                            \
+  
+  
+    #else
+    //  Error: 0.0011% (0.000010869300000000001 Decimal)
+    // Jitter: 0.0094% (0.0000937471 Decimal)
+
+    // The below define is equivalent to ROUND(AVR_MICROS * (1-0.000011))
+    #define REAL_MICROS(AVR_MICROS)                                               \
+    ((uint32_t)(                                                                  \
+       (   ( ((uint64_t)(AVR_MICROS)) * 999989ULL )%1000000ULL >= 500000ULL )     \
+       ? ((( ((uint64_t)(AVR_MICROS)) * 999989ULL )/1000000ULL)+1)                \
+       : ( ( ((uint64_t)(AVR_MICROS)) * 999989ULL )/1000000ULL   )                \
     ))                                                                            \
   
   
