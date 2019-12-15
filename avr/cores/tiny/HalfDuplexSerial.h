@@ -75,7 +75,7 @@ extern "C" {
 
 #define RXSTART_CYCLES DIVIDE_ROUNDED(3*F_CPU,2*BAUD_RATE) 
 // 1st bit sampled 3*RXDELAY + 11 cycles after start bit begins
-#define RXSTARTCOUNT DIVIDE_ROUNDED(RXSTART_CYCLES - 13, 3)
+#define RXSTARTCOUNT DIVIDE_ROUNDED(RXSTART_CYCLES - 15, 3)
 // rxbit takes 3*RXDELAY + 12 cycles
 #define RXDELAYCOUNT DIVIDE_ROUNDED(BIT_CYCLES - 13, 3)
 

@@ -71,8 +71,7 @@ RxByte:
   sbic UART_Port-2, UART_Rx   ; wait for start edge  
   rjmp RxByte    
 GotStartBit:
-  push r16
-  in r16, SREG; Save status register 
+  in r19, SREG; Save status register 
   cli ; Clear interrupts - if we allow interrupts here (eg for millis) we lose bits
   ldi r24, 0x80         ; bit shift counter
   ldi delayArg, RXSTART     ; 1.5 bit delay
@@ -86,8 +85,7 @@ RxBit:
     nop                             ; match 7-cycle Tx loop
   brcc RxBit
   ; fall into delay for stop bit
-  out SREG, r16 ; Return status register, this enables interrupts again
-  pop r16
+  out SREG, r19 ; Return status register, this enables interrupts again
 
 ; delay (3 cycle * delayArg) -1 + 4 cycles (ret instruction)
 Delay3Cycle:
