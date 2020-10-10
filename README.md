@@ -50,9 +50,13 @@ The tinyAVR 0-series and 1-series ATtiny parts (x12/x14/x16/x17/x02/x04/x06/x07)
 
 ## Quick Gotcha list:
 
+**Windows users must download and install Micronucleus drivers manually**
+If you want to use Micronucleus (VUSB) boards on Windows, you must manually install the drivers - Arduino does not run "post-install" tasks for third party libraries, due to obvious security considerations. The drivers are downloaded by the install process and buried in your Arduino15 folder, or they can be downloaded from the following URL. Unzip, run the installer.
+https://github.com/digistump/DigistumpArduino/releases/download/1.6.7/Digistump.Drivers.zip
+
 **This core includes part specific documentation - click the links above for your family of chips and READ IT** These describe issues and "gotchas" specific to certain chips. Be sure to review this documentation!
 
-**There is a bug in the IDE that causes compilation errors with some combinations of boards and submenu options** on 1.8.5 and earlier on windows. The symptom of this is an error ending in something like C:\Users\yourusername\AppData\Local\Temp\arduino_build_131884/..\arduino_cache_186227\core\core_ATTinyCore_avr_attinyx4_LTO_enable,chip_84,clock_8internal,eesave_aenable,bod_disable,pinmapping_anew,millis_enabled,neopixelport_porta_1bc5d2d7fe299bbd4d4a668366e76c74.a: No such file or directory - this is caused by the way it includes all options in the name of the file; where there are many menu options, this will exceed the maximum file name length under windows. This issue impacts many parts on ATTinyCore 1.3.0 and later, and the 841/441 on ATTinyCore 1.2.2 and later. To fix this issue without downgrading ATTinyCore, update to 1.8.6 or later of the IDE - 1.8.9 or later is recommended (it is also the most recent version of the IDE which supports Windows XP)
+**There is a bug in the IDE that causes compilation errors with some combinations of boards and submenu options** on 1.8.5 and earlier on Windows. The symptom of this is an error ending in something like C:\Users\yourusername\AppData\Local\Temp\arduino_build_131884/..\arduino_cache_186227\core\core_ATTinyCore_avr_attinyx4_LTO_enable,chip_84,clock_8internal,eesave_aenable,bod_disable,pinmapping_anew,millis_enabled,neopixelport_porta_1bc5d2d7fe299bbd4d4a668366e76c74.a: No such file or directory - this is caused by the way it includes all options in the name of the file; where there are many menu options, this will exceed the maximum file name length under windows. This issue impacts many parts on ATTinyCore 1.3.0 and later, and the 841/441 on ATTinyCore 1.2.2 and later. To fix this issue without downgrading ATTinyCore, update to 1.8.6 or later of the IDE - 1.8.9 or later is recommended (it is also the most recent version of the IDE which supports Windows XP)
 
 **Windows store version sometimes experiences strange issues**. The windows store issues are difficult to reproduce on other systems, and no reliable solutions to them are currently known. We recommend using the .zip package or standard installer version of the IDE, not the Windows Store version.
 
@@ -89,7 +93,7 @@ Virtual boot relies on rewriting the vector table, such that the RESET vector po
 
 See the [Programming Guide](Programming.md) for more information on programming parts using Optiboot.
 
-### Micronucleus - VUSB bootloader for 841, 167, 85, and 84/84a
+### Micronucleus - VUSB bootloader for 841, 167, 85, 88 and 84/84a
 It's finally here! As of 1.4.0, we now offer Micronucleus (aka Digispark) support for some of the more popular boards for these bootloaders. This allows sketches to be uploaded directly via USB, which many users find highly convenient. This comes at a cost in terms of flash - they typically use around 1.5k of flash, and they sometimes have problems connecting to specific USB ports. These boards are available from various vendors; see the part-specific documentation pages for more information on the implementation used on specific parts. For more information on using Micronucleus, see the [usage documentation](extras/UsingMicronucleus.md), and for more information on wiring up the hardware from scratch, see the [Micronucleus hardware docs](extras/MicronucleusHardware.md).
 
 ### Changing the ATtiny clock speed and other settings
@@ -114,7 +118,7 @@ Internal:
 * 8 MHz
 * 1 MHz
 * 16 MHz (PLL clock, x5, x61 only)
-* 16 MHz (aggressiovely configured 441/841, with caveats)
+* 16 MHz (aggressively configured 441/841, with caveats)
 * 4 MHz*** (except on x313, starts up at 1MHz and immediately switches to 4MHz before setup() is run)
 * 16.5MHz**** (PLL clock, tweaked, x5, x61 - for digiSpark-like boards)
 * 0.5 MHz** (x313 only)
@@ -168,7 +172,7 @@ The use of an external clock - that is, a single wire with an appropriate clock 
 #### Determining clock speed and source from within the sketch
 The clock speed is made available via the F_CPU #define - you can test this using #if macro
 
-In version 1.3.3 and later, the clock source is also made available via the CLOCK_SOURCE #define. CLOCK_SOURCE can take one of the following values:
+In version 1.3.3 and later, the clock source is also made available via the CLOCK_SOURCE #define. CLOCK_SOURCE can take one of the following values (as of 1.4.0, it is expanded to cover a few weird clocking situations: the low 4 bits identify the source, and high 4 bits identify special things regarding it:
 
 > 0 - Internal 8MHz oscillator (with or without prescaling to a speed lower than 8MHz)
 
@@ -183,6 +187,12 @@ In version 1.3.3 and later, the clock source is also made available via the CLOC
 > 5 - Internal 4MHz oscillator (present only on the x313 parts - if the 8MHz internal oscillator is prescaled to 4MHz, CLOCK_SOURCE will be 0, not 5)
 
 > 6 - Internal PLL (x5 and x61 only)
+
+> 17 (ie, 0x10 | 1) - External crystal at 16MHz, which may be prescaled to get lower frequencies (for Digispark Pro ATtiny167)
+
+> 18 (ie, 0x10 | 2) - External clock  at 16MHz, which may be prescaled to get lower frequencies (for MH Tiny ATtiny88)
+
+
 
 ### Refer to pins by port/pin
 Instead of referring to pins by the digital pin numbers, it is now (as of 1.4.0) possible to refer to pins based on their port and pin number within the port. **We recommend this method of referring to pins in all cases**, as it can be more easily cross-referenced with the datasheet, and is independent of pin mapping (for devices with multiple pin mapping options). It also helps to build good mental habits with regards to thinking about pins in the context of ports, which is helpful when writing code where more advanced techniques are needed. For every pin, the core supplies a constant of the form `PIN_Pxn`, where `x` is the port letter, and `n` is the bit of the pin within that port; this is a #define set to the digital pin number corresponding to it. For example, `PIN_PA2` refers to bit 2 in PORTA. On the ATtiny167, where there are three different pin mappings, all radically different, `analogWrite(PIN_PA2,128)` will always generate a squarewave on the same pin, and the code can be moved between pinmappings without concern.
@@ -325,8 +335,8 @@ ATTinyCore will never set lock bits automatically, nor will it set fuses to disa
 ![x7 Pin Mapping](avr/extras/Pinout_x7.jpg "Arduino Pin Mapping for ATtiny167/87")
 
 ### ATtiny48/88
-![x8 Pin Mapping](http://drazzy.com/e/img/PinoutT88.jpg "Arduino Pin Mapping for ATtiny88/48 in TQFP")
-![x8 Pin Mapping](avr/extras/Pinout_x8.jpg "Arduino Pin Mapping for ATtiny88/48 in DIP")
+![x8 SMD Pin Mapping](avr/extras/Pinout_x8.jpg "Arduino Pin Mapping for ATtiny88/48 in TQFP")
+![x8 DIP Pin Mapping](avr/extras/Pinout_x8_PU.jpg "Arduino Pin Mapping for ATtiny88/48 in DIP")
 
 ### ATtiny2313/4313
 ![x313 Pin Mapping](avr/extras/Pinout_x313.jpg "Arduino Pin Mapping for ATtiny4313/2313")
@@ -357,6 +367,8 @@ Except for the x5, x4, x61, and x313-family, these are only available in surface
 * Some people have problems programming the 841 and 1634 with USBAsp and TinyISP - but this is not readily reproducible. ArduinoAsISP works reliably. In some cases, it has been found that connecting reset to ground while using the ISP programmer fixes things (particularly when using the USBAsp with eXtremeBurner AVR) - if doing this, you must release reset (at least momentarily) after each programming operation. This may be due to bugs in USBAsp firmware - See this thread on the Arduino forums for information on updated USBAsp firmware: http://forum.arduino.cc/index.php?topic=363772 (Links to the new firmware are on pages 5~6 of that thread - the beginning is largely a discussion of the inadequacies of the existing firmware)
 * At >4v, the speed of the internal oscillator on 828R, 1634R and 841 parts increases significantly - enough that serial (and hence the bootloader) does not work. Significant enhancements have been made on this front in 1.4.0; reburning bootloader should sort it out.
 
+## License
+ATTinyCore is released under the [LGPL 2.1](LICENSE.md). It may be used, modified, and distributed, and it may be used as part of an application which, itself, is not open source (though any modifications to these libraries must be released under the LGPL as well). Unlike LGPLv3, if this is used in a commercial product, you are not required to provide means for user to update it. A historical investigation has determined that versions of this core have been released under the LGPLv2.1 in the past - it was an oversight on our part that the license file was omitted from this core previously.
 
 ## Acknowledgements
 
