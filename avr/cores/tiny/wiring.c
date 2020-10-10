@@ -30,6 +30,9 @@
 #if !(defined(USE_WIRING_LITE) && USE_WIRING_LITE )
 
 #include "wiring_private.h"
+#if (F_CPU == 16500000L && CLOCK_SOURCE==6)
+  #include <avr/boot.h>
+#endif
 
 #if F_CPU >= 3000000L
 
@@ -669,6 +672,15 @@ PLLCSR |= PCKE;
   #define ADC_ARDUINO_PRESCALER   B010 //prescaler of 4
 #endif
 
+#if (F_CPU == 16500000L && CLOCK_SOURCE==6)
+byte read_factory_calibration(void)
+  {
+    byte SIGRD = 5;
+    byte value = boot_signature_byte_get(1);
+    return value;
+  }
+#endif
+
 void init(void)
 {
   #if (F_CPU==4000000L && CLOCK_SOURCE==0)
@@ -679,6 +691,17 @@ void init(void)
   CLKPR=1<<CLKPCE; //enable change of protected register
   #endif
   CLKPR=1; //prescale by 2 for 4MHz
+  #endif
+  #if (F_CPU == 16500000L && CLOCK_SOURCE==6)
+  if (OSCCAL == read_factory_calibration()) {
+    // adjust the calibration up from 16.0mhz to 16.5mhz
+    if (OSCCAL >= 128) {
+      // maybe 8 is better? oh well - only about 0.3% out anyway
+      OSCCAL += 7;
+    } else {
+      OSCCAL += 5;
+    }
+  }
   #endif
   sei();
 

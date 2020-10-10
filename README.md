@@ -83,7 +83,7 @@ The Optiboot bootloader is included for the ATtiny 441, 841, 44, 84, 45, 85, 461
 
 The ATtiny441/841, ATtiny1634, ATtiny44/84, ATtiny45/85, ATtiny461/861, ATtiny48/88 and the ATtiny x7 series do not have hardware bootloader support. To make the bootloader work, the "Virtual Boot" functionality of Optiboot is used. Because of this, another vector is used to point to point to the start of the applications - this interrupt cannot be used by the application - under the hood, the bootloader rewrites the reset and "save" interrupt vectors, pointing the save vector at the start of the program (where the reset vector would have pointed), and the reset vector to the bootloader (as there is no BOOTRST fuse). Up until version 1.2.0 of this core, the WDT vector was used for this purpose. In 1.2.0 and later, the EE_RDY vector (which is not used by anything in Arduino-land - the EEPROM library uses a busy-wait) is used instead. **If the bootloader was burned with 1.1.5 or earlier of this core, the WDT cannot be used to generate an interrupt** (WDT as reset source is fine) - re-burning bootloader with 1.2.0 or later will resolve this.
 
-See the [Programming Guide](Programming.md) for more information on programming parts using Optiboot. 
+See the [Programming Guide](Programming.md) for more information on programming parts using Optiboot.
 
 ### Changing the ATtiny clock speed and other settings
 
@@ -101,12 +101,14 @@ Changing the ATtiny clock speed, B.O.D. settings etc, is easy. When an ATTinyCor
 After changing the clock source, BOD settings, or whether to save EEPROM on chip erase), you must do "Burn Bootloader" with an ISP programmer. See [Programming Guide](Programming.md)
 
 #### Supported clock speeds:
+Supported clock speeds are shown in the menus in descending order of usefulness, ie, the popular clock speeds/sources are at the top, and the weird ones are at the bottom
 
 Internal:
 * 8 MHz
 * 1 MHz
 * 16 MHz (PLL clock,  x5, x61 only)
-* 4 MHz (x313, 43 only)
+* 4 MHz*** (except on x313, starts up at 1MHz and immediately switches to 4MHz before setup() is run)
+* 16.5MHz**** (PLL clock, tweaked, x5, x61 only - only use if you know you need this)
 * 0.5 MHz** (x313 only)
 * 512 kHz** (ULP - x41 only)
 * 256 kHz** (ULP - x41 only)
@@ -127,10 +129,16 @@ External crystal (all except 828, 43 and x8 series):
 * 6 MHz
 * 4 MHz
 
+
 All available clock options for the selected processor will be shown in the Tools -> Clock menu.
+
 Options marked with a * are "UART frequencies" - these divide evenly to common baud rates, so you can get a perfect match if this is required for your application - typical UART use cases do not require running at one of these UART frequencies. These are not available for chips without a UART in versions of ATTinyCore older than 1.1.5.
 
-**Warning** Options marked with ** are slow enough that many ISP programmers may not be able to program them. Depending on the ISP programmer (and in some cases the firmware on it), there may be a setting or jumper to slow the SCK frequency down for programming these parts, or it may automatically figure it out. The SCK frequency must be less than 1/6th of the system clock for ISP programming. Before using a such a low clock speed, consider whether you might be able to get lower power consumption by running at a higher base clock while staying in sleep most of the time - this results in fewer programming headaches, and in many (but not all) use cases results in comparable or lower power consumption.
+** **Warning** Options marked with ** are slow enough that many ISP programmers may not be able to program them. Depending on the ISP programmer (and in some cases the firmware on it), there may be a setting or jumper to slow the SCK frequency down for programming these parts, or it may automatically figure it out. The SCK frequency must be less than 1/6th of the system clock for ISP programming. Before using a such a low clock speed, consider whether you might be able to get lower power consumption by running at a higher base clock while staying in sleep most of the time - this results in fewer programming headaches, and in many (but not all) use cases results in comparable or lower power consumption.
+
+*** The 4MHz internal option is useful if you are running near the minimum voltage - the lowest voltage for most of these parts is 1.8v, and at that voltage, they are only rated for 4MHz maximum.
+
+`****` The 16.5MHz is specific to some digispark-related applications (though note that we do not support uploading via USB direct to a digispark) - see #349. Not recommended unless you understand that issue and know why you need it.
 
 **Warning** When using weird clock frequencies (those other than 16MHz, 8MHz, 4MHz, 2MHz, 1MHz, 0.5MHz), micros() is 4-5 times slower (~110 clocks) (It reports the time at the point when it was called, not the end, however, and the time it gives is pretty close to reality - w/in 1% or so). This combination of performance and accuracy is the result of hand tuning for these clock speeds. For other clock speeds (for example, if you add your own), it will be slower still - hundreds of clock cycles - though the numbers will be reasonably accurate. millis() is not effected, only micros() and delay().
 
