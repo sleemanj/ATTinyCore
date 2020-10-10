@@ -18,6 +18,11 @@ extern "C"{
 
 #define ATTINY_CORE 1
 
+#ifdef DISABLEMILLIS
+/* SpenceKonde named a define DISABLEMILLIS, we already called the same thing NO_MILLIS */
+#define NO_MILLIS 1
+#endif
+
 #ifdef NO_MILLIS
 #define ATTINY_CORE_NM 1
 #endif

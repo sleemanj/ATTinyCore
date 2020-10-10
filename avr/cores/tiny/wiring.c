@@ -295,14 +295,21 @@ void delay(unsigned long ms)
 }
 
 #else
-// delay() implementation without millis or micros
-void delay(unsigned long ms)
+
+static void __empty() {
+  // Empty
+}
+void yield(void) __attribute__ ((weak, alias("__empty")));
+
+void delay(unsigned long ms) //non-millis-timer-dependent delay()
 {
   while(ms--){
+    yield();
     delayMicroseconds(1000);
   }
 }
 #endif
+
 /* Delay for the given number of microseconds.  Assumes a 1, 8, 12, 16, 20 or 24 MHz clock. */
 void delayMicroseconds(unsigned int us)
 {
