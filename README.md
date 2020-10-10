@@ -14,15 +14,19 @@ using this, you should [install my DIY ATtiny Distribution](https://github.com/s
 Please also see [that page](https://github.com/sleemanj/optiboot/tree/master/dists#attiny) for pinouts and information about those processors and some extra features available in the DIY ATtiny distribution not present here in ATTinyCore itself.
 
 ATtiny Core - 1634, x313, x4, x41, x5, x61, x7, x8 and 828 for Arduino 1.6.5 and later (1.8.6+ strongly recommended, see gotchas section)
-============
 
+ATtiny Core - 1634, x313, x4, x41, x5, x61, x7, x8 and 828
+============
+Now with Micronucleus (USB) support!
+============
 [![Join the chat at https://gitter.im/SpenceKonde/ATTinyCore](https://badges.gitter.im/SpenceKonde/ATTinyCore.svg)](https://gitter.im/SpenceKonde/ATTinyCore?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ### Current recommended IDE version: 1.8.13
 
-### Read the first three guides - these explain the basics of installing ATTinyCore and using it with a supported ATtiny part
 ### [Installation](https://github.com/sleemanj/optiboot/tree/master/dists#attiny) 
+
 ### [Wiring and required external components](Wiring.md)
+### [Using with Micronucleus boards](avr/extras/UsingMicronucleus.md)
 ### [Programming Guide](Programming.md)
 ### [Migration Guide - moving to ATTinyCore from a different ATtiny board package](Migration.md)
 
@@ -38,7 +42,7 @@ This core supports the following processors - essentially every ATtiny processor
 * [ATtiny25, 45, 85](avr/extras/ATtiny_x5.md) (With or without Optiboot or Micronucleus bootloader)
 * [ATtiny261, 461, 861](avr/extras/ATtiny_x61.md) (With or without Optiboot bootloader)
 * [ATtiny87, 167](avr/extras/ATtiny_x7.md) (with or without Optiboot or Micronucleus bootloader)
-* [ATtiny48, 88](avr/extras/ATtiny_x8.md) (With or without Optiboot bootloader)
+* [ATtiny48, 88](avr/extras/ATtiny_x8.md) (With or without Optiboot or Micronucleus bootloader)
 * [ATtiny441, 841](avr/extras/ATtiny_x41.md) (With or without Optiboot or Micronucleus bootloader)
 * [ATtiny1634](avr/extras/ATtiny_1634.md)  (With or without Optiboot bootloader)
 * [ATtiny828](avr/extras/ATtiny_828.md) (With or without Optiboot bootloader)
@@ -63,6 +67,8 @@ https://github.com/digistump/DigistumpArduino/releases/download/1.6.7/Digistump.
 **When uploading sketches via ISP using the Arduino IDE, you must select a programmer marked ATTinyCore from the programmers menu (or any other programmer added by an installed third party core) in order to upload properly to most supported chips - this is due to a limitation in the IDE. This limitation has been sidestepped in Arduino 1.8.13, so that version is recommended**
 
 **When using a chip for the first time, or after changing the clock speed, EESAVE or BOD settings, you must do "burn bootloader" to set the fuses, even if you are not using the chip with a bootloader**
+
+**Chips sold as "ATtiny85" with wrong signature** - enable verbose upload output, and it will tell you what sig it actually saw. **0x1e9005** means you got scammed (all 0's or all F's is wiring problem, or bricked chip from choosing clock source that isn't present). Apparently one or more foreign sellers have been remarking the much cheaper ATtiny12 as an 85 and ripping people off on ebay/etc.
 
 **free(): invalid next size (normal) error** This error is due to a bug in AVRdude ( https://savannah.nongnu.org/bugs/?48776 ) - and it's a spurious error, as when it is displayed, the programming operation has actually completed successfully (you can see for yourself by enabling verbose upload, and noting the successful write before this error is shown. It is unknown under what conditions this error appears, though it has been recorded on a USBTinyISP on Linux when bootloading an attiny88 with optiboot.
 
@@ -94,7 +100,7 @@ Virtual boot relies on rewriting the vector table, such that the RESET vector po
 See the [Programming Guide](Programming.md) for more information on programming parts using Optiboot.
 
 ### Micronucleus - VUSB bootloader for 841, 167, 85, 88 and 84/84a
-It's finally here! As of 1.4.0, we now offer Micronucleus (aka Digispark) support for some of the more popular boards for these bootloaders. This allows sketches to be uploaded directly via USB, which many users find highly convenient. This comes at a cost in terms of flash - they typically use around 1.5k of flash, and they sometimes have problems connecting to specific USB ports. These boards are available from various vendors; see the part-specific documentation pages for more information on the implementation used on specific parts. For more information on using Micronucleus, see the [usage documentation](extras/UsingMicronucleus.md), and for more information on wiring up the hardware from scratch, see the [Micronucleus hardware docs](extras/MicronucleusHardware.md).
+It's finally here! As of 1.4.0, we now offer Micronucleus (aka Digispark) support for some of the more popular boards for these bootloaders. This allows sketches to be uploaded directly via USB, which many users find highly convenient. This comes at a cost in terms of flash - they typically use around 1.5k of flash, and they sometimes have problems connecting to specific USB ports. These boards are available from various vendors; see the part-specific documentation pages for more information on the implementation used on specific parts. For more information on using Micronucleus, see the [usage documentation](avr/extras/UsingMicronucleus.md).
 
 ### Changing the ATtiny clock speed and other settings
 
@@ -336,7 +342,7 @@ ATTinyCore will never set lock bits automatically, nor will it set fuses to disa
 
 ### ATtiny48/88
 ![x8 SMD Pin Mapping](avr/extras/Pinout_x8.jpg "Arduino Pin Mapping for ATtiny88/48 in TQFP")
-![x8 DIP Pin Mapping](avr/extras/Pinout_x8_PU.jpg "Arduino Pin Mapping for ATtiny88/48 in DIP")
+![x8 DIP Pin Mapping](avr/extras/Pinout_x8-PU.jpg "Arduino Pin Mapping for ATtiny88/48 in DIP")
 
 ### ATtiny2313/4313
 ![x313 Pin Mapping](avr/extras/Pinout_x313.jpg "Arduino Pin Mapping for ATtiny4313/2313")

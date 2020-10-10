@@ -94,8 +94,15 @@
 
 // the prescaler is set so that the millis timer ticks every MillisTimer_Prescale_Value (64) clock cycles, and the
 // the overflow handler is called every 256 ticks.
+#if (F_CPU==12800000)
+//#define MICROSECONDS_PER_MILLIS_OVERFLOW (clockCyclesToMicroseconds(MillisTimer_Prescale_Value * 256))
+//#define MICROSECONDS_PER_MILLIS_OVERFLOW ((64 * 256)/12.8) = 256*(64/12.8) = 256*5 = 1280
+#define MICROSECONDS_PER_MILLIS_OVERFLOW (1280)
+#elif (F_CPU==16500000)
+#define MICROSECONDS_PER_MILLIS_OVERFLOW (992)
+#else
 #define MICROSECONDS_PER_MILLIS_OVERFLOW (clockCyclesToMicroseconds(MillisTimer_Prescale_Value * 256))
-
+#endif
 // the whole number of milliseconds per millis timer overflow
 #define MILLIS_INC (MICROSECONDS_PER_MILLIS_OVERFLOW / 1000)
 
@@ -210,11 +217,14 @@ static void initToneTimerInternal(void);
   #if F_CPU < 1000000L
     return ((m << 8) + t) * MillisTimer_Prescale_Value * (1000000L/F_CPU);
   #else
-    #if (MillisTimer_Prescale_Value % clockCyclesPerMicrosecond() == 0 ) // Can we just do it the naive way? If so great!
+    #if (MillisTimer_Prescale_Value % clockCyclesPerMicrosecond() == 0 && (F_CPU % 1000000 == 0 )) // Can we just do it the naive way? If so great!
       return ((m << 8) + t) * (MillisTimer_Prescale_Value / clockCyclesPerMicrosecond());
       // Otherwise we do clock-specific calculations
     #elif (MillisTimer_Prescale_Value == 64 && F_CPU == 12800000L) //64/12.8=5, but the compiler wouldn't realize it because of integer math - this is a supported speed for Micronucleus.
       return ((m << 8) + t) * 5;
+    #elif (MillisTimer_Prescale_Value == 64 && F_CPU == 16500000L) //(16500000) - (16500000 >> 5) = approx 16000000
+      m = (((m << 8) + t) << 2 ); // multiply by 4 - this gives us the value it would be if it were 16 MHz
+      return (m - (m>>5));        // but it's not - we want 32/33nds of that. We can't divide an unsigned long by 33 in a time sewnsitive function. So we do 31/32nds, and that's goddamned close.
     #elif (MillisTimer_Prescale_Value == 64 && F_CPU == 24000000L) // 2.6875 vs real value 2.67
       m = (m << 8) + t;
       return (m<<1) + (m >> 1) + (m >> 3) + (m >> 4); // multiply by 2.6875
@@ -898,8 +908,10 @@ void init(void)
   #if (TIMER_TO_USE_FOR_MILLIS == 0)
     #if defined(WGM01) // if Timer0 has PWM
       TCCR0A = (1<<WGM01) | (1<<WGM00);
+    #endif
+    #if defined(TCCR0B) //The x61 has a wacky Timer0!
       TCCR0B = (MillisTimer_Prescale_Index << CS00);
-    #else //Timer0 does not have PWM - it's an x8
+    #else  //I think this means t's an x8
       TCCR0A = (MillisTimer_Prescale_Index << CS00);
     #endif
   #elif (TIMER_TO_USE_FOR_MILLIS == 1) && defined(TCCR1) //ATtiny x5
