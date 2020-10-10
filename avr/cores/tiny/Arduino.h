@@ -82,13 +82,16 @@ void yield(void);
 //  return 1;
 //}
   //WTF were they thinking?!
-#define clockCyclesPerMicrosecond() 1L
+#define clockCyclesPerMicrosecond() 1UL
 #else
-#define clockCyclesPerMicrosecond() ( F_CPU / 1000000L )
+#define clockCyclesPerMicrosecond() ( F_CPU / 1000000UL )
 #endif
 
-#define clockCyclesToMicroseconds(a) ( ((a) * 1000L) / (F_CPU / 1000L) )
-#define microsecondsToClockCycles(a) ( ((a) * (F_CPU / 1000L)) / 1000L )
+//#define clockCyclesToMicroseconds(a) ( ((a) * 1000L) / (F_CPU / 1000L) )
+//#define microsecondsToClockCycles(a) ( ((a) * (F_CPU / 1000L)) / 1000L )
+
+#define clockCyclesToMicroseconds(a) ( (a) / clockCyclesPerMicrosecond() )
+#define microsecondsToClockCycles(a) ( (a) * clockCyclesPerMicrosecond() )
 
 #define lowByte(w) ((uint8_t) ((w) & 0xff))
 #define highByte(w) ((uint8_t) ((w) >> 8))
@@ -112,6 +115,9 @@ void analogReference(uint8_t mode);
 
 
 unsigned long pulseIn(uint8_t pin, uint8_t state, unsigned long timeout);
+#ifndef NO_MILLIS
+unsigned long pulseInLong(uint8_t pin, uint8_t state, unsigned long timeout);
+#endif
 void shiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder, uint8_t val);
 uint8_t shiftIn(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder);
 
@@ -536,6 +542,9 @@ uint16_t makeWord(byte h, byte l);
 #define word(...) makeWord(__VA_ARGS__)
 
 unsigned long pulseIn(uint8_t pin, uint8_t state, unsigned long timeout = 1000000L);
+#ifndef NO_MILLIS
+unsigned long pulseInLong(uint8_t pin, uint8_t state, unsigned long timeout = 1000000L);
+#endif
 
 #if !defined(tone) && !defined(NO_TONE)
 void initToneTimer(void);
