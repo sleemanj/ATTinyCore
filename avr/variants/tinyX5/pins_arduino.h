@@ -246,7 +246,7 @@ static const uint8_t A3 = 0x80 | 3;
 #define PIN_PB4  ( 4)
 #define PIN_PB5  ( 5)
 
-#define LED_BUILTIN  ( 0)
+#define LED_BUILTIN  ( 1)
 
 // Pin Change Interrupt (PCI) Setup
 #define digitalPinToPCICR(p)    (((p) >= 0 && (p) <= 5) ? (&GIMSK) : ((uint8_t *)NULL))
