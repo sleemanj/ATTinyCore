@@ -319,7 +319,7 @@ size_t Print::println(const Printable& x)
   return n;
 }
 
-static size_t printf_putchar(char c, FILE *fp)
+static int16_t printf_putchar(char c, FILE *fp)
 {
   ((class Print *)(fdev_get_udata(fp)))->write((uint8_t)c);
   return 0;
@@ -458,7 +458,8 @@ size_t Print::printNumber(UNSIGNED_PRINT_INT_TYPE n, uint8_t base)
         write('b');
         base = 2;
         #endif
-    
+      __attribute__ ((fallthrough));
+        
       #ifdef PRINT_USE_BASE_HEX
         case 16: bt = base16; break;
       #endif
