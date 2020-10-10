@@ -215,6 +215,9 @@ static const uint8_t A7 = 0x80 | 7;
   ( (p-8) ))))          \
 )
 
+// External Interrupts on pins
+#define digitalPinToInterrupt(p) ( (p) == 5 ? 0 : NOT_AN_INTERRUPT )
+
 // The x4 has 2 ports
 //  we have to start from 1 because NOT_A_PIN and NOT_A_PORT are defined as 0 in Arduino.h
 //  annoyingly.

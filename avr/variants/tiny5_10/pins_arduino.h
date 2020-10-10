@@ -282,6 +282,9 @@ static const uint8_t A3 = 0x80 | 3;
 #define digitalPinToPCMSK(p)    (&PCMSK)
 #define digitalPinToPCMSKbit(p) (p)
 
+// External Interrupts on pins
+#define digitalPinToInterrupt(p) ( (p) == 2 ? 0 : NOT_AN_INTERRUPT )
+
 // We only have one port (PB) so we can simplify
 // everything to save wasting flash
 #undef  PB
