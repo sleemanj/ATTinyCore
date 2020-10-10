@@ -57,6 +57,8 @@ The megaAVR ATtiny parts (x12/x14/x16/x17/x02/x04/x06/x07) are be supported by h
 
 **When using a chip for the first time, or after changing the clock speed or BOD settings, you must do "burn bootloader" to set the fuses, even if you are not using the chip with a bootloader**
 
+**free(): invalid next size (normal) error** This error is due to a bug in AVRdude ( https://savannah.nongnu.org/bugs/?48776 ) - and it's a spurious error, as when it is displayed, the programming operation has actually completed successfully (you can see for yourself by enabling verbose upload, and noting the successful write before this error is shown. It is unknown under what conditions this error appears, though it has been recorded on a USBTinyISP on Linux when bootloading an attiny88 with optiboot.
+
 **When using analogRead(), use the A# constant to refer to the pin, not the digital pin number.** Analog channel number (see table in datasheet entry for ADMUX register) can also be used - unlike the official core, you can use analogRead() with the differential ADC channels (for example).
 
 **When using I2C on anything other than the ATTiny48/88** you **must** use an I2C pullup resistor on SCL and SDA (if there isn't already one on the I2C device you're working with - many breakout boards include them). 4.7k or 10k is a good default value. On parts with real hardware I2C, the internal pullups are used, and this is sometimes good enough to work without external pullups; this is not the case for devices without hardware I2C (all devices supported by this core except 48/88) - the internal pullups can't be used here, so you must use external ones. **That said, for maximum reliability, you should always use external pullups, even on the t48/88**, as the internal pullups are not as strong as the specification requires.
@@ -147,10 +149,15 @@ The clock speed is made available via the F_CPU #define - you can test this usin
 In version 1.3.3 and later, the clock source is also made available via the CLOCK_SOURCE #define. CLOCK_SOURCE can take one of the following values:
 
 > 0 - Internal 8MHz oscillator (with or without prescaling to a speed lower than 8MHz)
+
 > 1 - External Crystal
-> 2 - External Clock
-> 3 - Internal WDT or ULP clock
-> 4 - Internal 128KHz oscillator
+
+> 2 - External Clock (only available within the core on the 48, 88 and 828, as described above)
+
+> 3 - Internal WDT oscillator  (not available on the x41, 1634, and 828)
+
+> 4 - Internal ULP oscillator (available only on the x41, 1634, and 828)
+
 > 5 - Internal 4MHz oscillator (present only on the x313 parts - if the 8MHz internal oscillator is prescaled to 4MHz, CLOCK_SOURCE will be 0, not 5)
 
 
