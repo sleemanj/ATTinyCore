@@ -24,7 +24,11 @@
 #ifndef core_build_options_h
 #define core_build_options_h
 
-
+#if defined(ARDUINO) && (defined( __AVR_ATtiny441__ ) || defined( __AVR_ATtiny841__ ))
+#if (ARDUINO < 10806)
+#error "This version of the Arduino IDE is not supported for this part, upgrade Arduino 1.8.6 or higher or downgrade ATTinyCore to 1.2.1"
+#endif
+#endif
 /*=============================================================================
   Low power / smaller code options
 =============================================================================*/
