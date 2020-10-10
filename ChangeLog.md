@@ -1,6 +1,19 @@
 # This document lists significant changes and bugfixes, including those not in yet in a release.
 Any changes listed at the top, without a version number above thenm, have not been in a release yet, but can be downloaded from github for manual installation.
 
+### planned 1.4.2
+* Add new rationalized pinout for x61
+* Correct bug with pin definitions for I2C pins on the ATtiny x61 series.
+* Correct SCL/SDA definitions for x61
+* Improve timing calculations for Wire on USI devices
+* Correct name of bootloader file for 841 Micronucleus
+* Add missing bootloader options for 841/441 parts
+* Correct documentation for x313 parts to correctly reflect number of available PWM pins
+* Add several missing programmers, improve programmers list
+* Fix Timer1 PLL clock source menu option on x5, x61 (1.4.0 fix still didn't do it)
+* Fix x313 pinout image to reflect OC0B's existence
+* Add in new adafruit neopixel functions to tinyNeoPixel
+
 ### 1.4.1
 * Correct severe regression in timekeeping on 841, 441, 1634, and 828 in version 1.4.0 (#445, 447)
 * Correct issue with included bootloaders for MH ET tiny88 micronucleus boards actually not working... re-bootload with ISP programmer to fix with the new bootloaders. (#439)

@@ -17,6 +17,9 @@ extern "C"{
 #endif
 
 #define ATTINY_CORE 1
+#ifndef _NOPNOP
+  #define _NOPNOP() do { __asm__ volatile ("rjmp .+0"); } while (0)
+#endif
 
 #ifdef DISABLEMILLIS
 /* SpenceKonde named a define DISABLEMILLIS, we already called the same thing NO_MILLIS */
