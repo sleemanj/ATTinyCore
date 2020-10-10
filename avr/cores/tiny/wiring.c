@@ -220,36 +220,39 @@ unsigned long micros()
 
 
 #if F_CPU < 1000000L
-return ((m << 8) + t) * MillisTimer_Prescale_Value * (1000000L/F_CPU);
+  return ((m << 8) + t) * MillisTimer_Prescale_Value * (1000000L/F_CPU);
 #else
-#if (MillisTimer_Prescale_Value % clockCyclesPerMicrosecond() == 0 ) //Can we just do it the naive way? If so great!
+#if (MillisTimer_Prescale_Value % clockCyclesPerMicrosecond() == 0 ) // Can we just do it the naive way? If so great!
   return ((m << 8) + t) * (MillisTimer_Prescale_Value / clockCyclesPerMicrosecond());
-//Otherwise we have a problem.
-#elif (MillisTimer_Prescale_Value == 64 && clockCyclesPerMicrosecond() == 11) // 5.75 vs real value 5.818 (11mhz) 5.78 (11.059)
-  m=(m << 8) + t;
-  return m+(m<<2)+(m>>1)+(m>>2);
-#elif (MillisTimer_Prescale_Value == 64 && clockCyclesPerMicrosecond() == 12) // 5.3125 vs real value 5.333
-  m=(m << 8) + t;
-  return m+(m<<2)+(m>>2)+(m>>4);
+  // Otherwise we do clock-specific calculations
+#elif (MillisTimer_Prescale_Value == 64 && F_CPU == 24000000L) // 2.6875 vs real value 2.67 
+  m = (m << 8) + t;
+  return (m<<1) + (m >> 1) + (m >> 3) + (m >> 4); // multiply by 2.6875
 #elif (MillisTimer_Prescale_Value == 64 && clockCyclesPerMicrosecond() == 20) // 3.187 vs real value 3.2
   m=(m << 8) + t;
   return m+(m<<1)+(m>>2)-(m>>4);
 #elif (MillisTimer_Prescale_Value == 64 && F_CPU == 18432000L) // 3.5 vs real value 3.47
   m=(m << 8) + t;
-  return m+(m<<1)+(m>>1)
+  return m+(m<<1)+(m>>1);
 #elif (MillisTimer_Prescale_Value == 64 && F_CPU==14745600L) //4.375  vs real value 4.34
   m=(m << 8) + t;
   return (m<<2)+(m>>1)-(m>>3);
 #elif (MillisTimer_Prescale_Value == 64 && clockCyclesPerMicrosecond() == 14) //4.5 - actual 4.57 for 14.0mhz, 4.47 for the 14.3 crystals scrappable from everything
   m=(m << 8) + t;
-  return (m<<2)+(m>>1)
-#elif (MillisTimer_Prescale_Value == 64 && F_CPU==7372800L) //8.625, vs real value 8.68
+  return (m<<2)+(m>>1);
+#elif (MillisTimer_Prescale_Value == 64 && clockCyclesPerMicrosecond() == 12) // 5.3125 vs real value 5.333
+  m=(m << 8) + t;
+  return m+(m<<2)+(m>>2)+(m>>4);
+#elif (MillisTimer_Prescale_Value == 64 && clockCyclesPerMicrosecond() == 11) // 5.75 vs real value 5.818 (11mhz) 5.78 (11.059)
+  m=(m << 8) + t;
+  return m+(m<<2)+(m>>1)+(m>>2);
+#elif (MillisTimer_Prescale_Value == 64 && F_CPU==7372800L) // 8.625, vs real value 8.68
   m=(m << 8) + t;
   return (m<<3)+(m>>2)+(m>>3);
-#elif (MillisTimer_Prescale_Value == 64 && F_CPU==6000000L) //10.625, vs real value 10.67
+#elif (MillisTimer_Prescale_Value == 64 && F_CPU==6000000L) // 10.625, vs real value 10.67
   m=(m << 8) + t;
   return (m<<3)+(m<<1)+(m>>2)+(m>>3);
-#elif (MillisTimer_Prescale_Value == 64 && clockCyclesPerMicrosecond() == 9) //for 9mhz, this is a little off, but for 9.21, it's very close!
+#elif (MillisTimer_Prescale_Value == 64 && clockCyclesPerMicrosecond() == 9) // For 9mhz, this is a little off, but for 9.21, it's very close!
   return ((m << 8) + t) * (MillisTimer_Prescale_Value / clockCyclesPerMicrosecond());
 #else
   //return ((m << 8) + t) * (MillisTimer_Prescale_Value / clockCyclesPerMicrosecond());
@@ -261,13 +264,8 @@ return ((m << 8) + t) * MillisTimer_Prescale_Value * (1000000L/F_CPU);
   //the high part gets divided by cCPuS then multiplied by the prescaler. Then take the low 8 bits plus the high part modulo-cCPuS to correct for the division, then multiply that by the prescaler value first before dividing by cCPuS, and finally add the two together.
   //return ((m << 8 )/clockCyclesPerMicrosecond()* MillisTimer_Prescale_Value) + ((t+(((m<<8)%clockCyclesPerMicrosecond())) * MillisTimer_Prescale_Value / clockCyclesPerMicrosecond()));
   return ((m << 8 )/clockCyclesPerMicrosecond()* MillisTimer_Prescale_Value) + (t * MillisTimer_Prescale_Value / clockCyclesPerMicrosecond());
-  
-  //This doesn't work, and I don't know why:
-  //return ((m*(unsigned long)MillisTimer_Prescale_Value / (unsigned long)clockCyclesPerMicrosecond())<<8)+(((unsigned long)t+((m%11)<<8)) * (unsigned long)MillisTimer_Prescale_Value / (unsigned long)clockCyclesPerMicrosecond());
-  //This works without the loss of precision, but eats an extra 380 bytes of flash
-  //return (((long long)((m << 8) + t)) * MillisTimer_Prescale_Value / clockCyclesPerMicrosecond()); //very disappointing fix, eats an extra 380 bytes of flash because of long long
 #endif
-  #endif
+#endif
 }
 
 
@@ -351,6 +349,39 @@ void delayMicroseconds(unsigned int us)
   // us is at least 10 so we can substract 7
 	us -= 7; // 2 cycles
 
+#elif F_CPU >= 18432000L
+  // for a one-microsecond delay, simply return.  the overhead
+  // of the function call takes 17 (19) cycles, which is aprox. 1us
+  __asm__ __volatile__ (
+    "nop" "\n\t"
+    "nop" "\n\t"
+    "nop" "\n\t"
+    "nop"); //just waiting 4 cycles
+
+  if (us <= 1) return; //  = 3 cycles, (4 when true)
+
+  // the following loop takes nearly 1/5 (0.217%) of a microsecond (4 cycles)
+  // per iteration, so execute it five times for each microsecond of
+  // delay requested.
+  us = (us << 2) + us; // x5 us, = 7 cycles
+
+  // user wants to wait longer than 9us - here we can use approximation with multiplication
+  if (us > 36) { // 3 cycles
+    // Since the loop is not accurately 1/5 of a microsecond we need
+    // to multiply us by 0,9216 (18.432 / 20)
+    us = (us >> 1) + (us >> 2) + (us >> 3) + (us >> 4); // x0.9375 us, = 20 cycles (TODO: the cycle count needs to be validated)
+
+    // account for the time taken in the preceeding commands.
+    // we just burned 45 (47) cycles above, remove 12, (12*4=48) (TODO: calculate real number of cycles burned)
+    // additionaly, since we are not 100% precise (we are slower), subtract a bit more to fit for small values
+    // us is at least 46, so we can substract 18
+    us -= 19; // 2 cycles
+  } else { 
+    // account for the time taken in the preceeding commands.
+    // we just burned 30 (32) cycles above, remove 8, (8*4=32)
+    // us is at least 10, so we can substract 8
+    us -= 8; // 2 cycles
+  }
 #elif F_CPU >= 16000000L
 	// for the 16 MHz clock on most Arduino boards
 
