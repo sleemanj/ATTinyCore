@@ -30,7 +30,8 @@
 
 // this next line disables the entire HardwareSerial.cpp,
 // this is so I can support Attiny series and any other chip without a uart
-#if (USE_SERIAL_TYPE == SERIAL_TYPE_HARDWARE) && ( defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H) || defined(LINBRRH))
+
+#if (USE_SERIAL_TYPE == SERIAL_TYPE_HARDWARE) && ( defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H) || defined(LINBRRH)) && !(defined(DISABLE_UART) && DISABLE_UART)
 
 #include "HardwareSerial.h"
 
