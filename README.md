@@ -21,6 +21,7 @@ Please also see [that page](https://github.com/sleemanj/optiboot/tree/master/dis
 
 ### [Installation](https://github.com/sleemanj/optiboot/tree/master/dists#attiny) 
 ### [Basic Wiring](Wiring.md) 
+### [Migration Guide](Migration.md)
 
 #### ATtinyCore Universal
 This core supports the following processors - essentially every ATtiny processor that makes sense to use with Arduino. Click the processor name for part-specific information:
