@@ -42,9 +42,7 @@ This core supports the following processors - essentially every ATtiny processor
 
 Variants of these are also supported (such as the ATTiny1634R or ATTiny85V)
 
-**1.2.0 and later adds a lot of new bootloader related features. There are sure to be bugs. Please report them using the github "issues" feature or in Microcontrollers section of Arduino forum. 1.2.0 and 1.2.2 have serious bugs; it is recommended to upgrade to 1.2.3 for best results**
-
-This core will NOT support ATtiny x14/x17/x18 (ATtiny406, ATtiny212/412, ATtiny214/414/814/1614, ATtiny416/816/1616/3216, ATtiny417/817/1617/3217, etc) or other chips with the new CIP peripherals. A new core may be created to support these in the future, but it will be a different core, as basically everything about these parts is different. See [#288](https://github.com/SpenceKonde/ATTinyCore/issues/288) for details.
+The megaAVR ATtiny parts (x12/x14/x16/x17/x02/x04/x06/x07) are be supported by https://github.com/SpenceKonde/megaTinyCore - they are sufficiently different from the classic AVR ATtiny parts that they need a separate core.
 
 ### Quick Gotcha list:
 
@@ -58,13 +56,15 @@ This core will NOT support ATtiny x14/x17/x18 (ATtiny406, ATtiny212/412, ATtiny2
 
 **When using analogRead(), use the A# constant to refer to the pin, not the digital pin number.** Analog channel number (see table in datasheet entry for ADMUX register) can also be used - unlike the official core, you can use analogRead() with the differential ADC channels (for example).
 
-**When using I2C on anything other than the ATTiny88** you **must** use an I2C pullup resistor on SCL and SDA (if there isn't already one on the I2C device you're working with - many breakout boards include them). On parts with real hardware I2C, the internal pullups are used, and this is sometimes good enough to work without external pullups; this is not the case for devices without hardware I2C (all devices supported by this core except 48/88) - the internal pullups can't be used here, so you must use external ones. **That said, for maximum reliability, you should always ensure than an external pullup is present**, even on devices with real hardware I2C (like the t88 and atmega devices) - while it often will work with the internal pullups, they are not as strong as the I2C spec requires.
+**When using I2C on anything other than the ATTiny48/88** you **must** use an I2C pullup resistor on SCL and SDA (if there isn't already one on the I2C device you're working with - many breakout boards include them). On parts with real hardware I2C, the internal pullups are used, and this is sometimes good enough to work without external pullups; this is not the case for devices without hardware I2C (all devices supported by this core except 48/88) - the internal pullups can't be used here, so you must use external ones. **That said, for maximum reliability, you should always use external pullups, even on the t48/88**, as the internal pullups are not as strong as the specification requires.
 
 **You cannot use the Pxn notation (ie, PB2, PA1, etc) to refer to pins** - these are defined by the compiler-supplied headers, and not to what an arduino user would expect. To refer to pins by port and bit, use PIN_xn (ex, PIN_B2); these are #defined to the Arduino pin number for the pin in question, and can be used wherever digital pin numbers can be used
 
 **All ATTiny chips (as well as the vast majority of digital integrated circuits) require a 0.1uF ceramic capacitor between Vcc and Gnd for decoupling; this should be located as close to the chip as possible (minimize length of wires to cap). Devices with multiple Vcc pins, or an AVcc pin, should use a cap on those pins too. Do not be fooled by poorly written tutorials or guides that omit these. Yes, I know that in some cases (ex, the x5 series) the datasheet doesn't mention these - but other users as well as myself have had problems when it was omitted on a t85.**
 
 **For low power applications, before entering sleep, remember to turn off the ADC (ADCSRA&=(~(1<<ADEN))) - otherwise it will waste ~270uA**
+
+**When in power down sleep mode, the clock is stopped - using a slower clock speed does not save power while sleeping** I am asked very frequently about using very low clock speeds in low-power applications. Almost invariably, upon further interrogation, the user reveals that they plan to have the part in power-down sleep mode almost all the time. In this case, there is often little to be gained from running at a lower clock speed, since it only effects power use in the brief moments that the chip is awake - even more so because these moments may well be shorter when running at a higher clock speed. Clock speeds below 1MHz can present problems while programming due to the programmer using an SCK clock speed too fast for the target chip running at such a low system clock speed.
 
 **When using the WDT as a reset source and NOT using a bootloader** remember that after reset the WDT will be enabled with minimum timeout. The very first thing your application must do upon restart is reset the WDT (`wdt_reset()`), clear WDRF flag in MCUSR (`MCUSR&=~(1<<WDRF)`) and then turn off or configure the WDT for your desired settings. If using the Optiboot bootloader, this is already done for you by the bootloader.
 
@@ -246,32 +246,35 @@ And the old style which reverses the digital pin numbering so that A0 is D10, A1
 
  ![ATtinyX5 Arduino Pin Mapping](https://rawgit.com/sleemanj/ArduinoOrientedChipPinoutCreator/master/x5.jpg)
 ### ATtiny 441/841
-![x41 pin mapping](http://drazzy.com/e/products/img/PinoutT841_fixed.png "Arduino Pin Mapping for ATTiny 841 and 441")
+![x41 pin mapping](avr/extras/Pinout_x41.jpg "Arduino Pin Mapping for ATTiny 841 and 441")
+
 ### ATtiny 1634
-![1634 pin mapping](http://drazzy.com/e/img/PinoutT1634a.jpg "Arduino Pin Mapping for ATTiny 1634")
+![1634 pin mapping](avr/extras/Pinout_1634.jpg "Arduino Pin Mapping for ATTiny 1634")
 
 ### ATtiny 828
-
-![828 Pin Mapping](http://drazzy.com/e/img/PinoutT828x.jpg "Arduino Pin Mapping for ATtiny 828")
+![828 Pin Mapping](avr/extras/Pinout_828.jpg "Arduino Pin Mapping for ATtiny 828")
 
 ### ATtiny 25/45/85
-![x5 pin mapping](http://drazzy.com/e/img/PinoutT85a.jpg "Arduino Pin Mapping for ATtiny 85/45/25")
+![x5 pin mapping](avr/extras/Pinout_x5.jpg "Arduino Pin Mapping for ATtiny 85/45/25")
 
 ### ATtiny 24/44/84
-![x4 Pin Mapping](http://drazzy.com/e/img/PinoutT84a.jpg "Arduino Pin Mapping for ATtiny 84/44/24")
+![x4 Pin Mapping](avr/extras/Pinout_x4.jpg "Arduino Pin Mapping for ATtiny 84/44/24")
 
 ### ATtiny 261/461/861
-![x61 Pin Mapping](http://drazzy.com/e/img/PinoutT861.jpg "Arduino Pin Mapping for ATtiny 861/461/261")
+![x61 Pin Mapping](avr/extras/Pinout_x61.jpg "Arduino Pin Mapping for ATtiny 861/461/261")
 
 ### ATtiny 87/167
-![x7 Pin Mapping](http://drazzy.com/e/img/PinoutT167.jpg "Arduino Pin Mapping for ATtiny 167/87")
+![x7 Pin Mapping](avr/extras/Pinout_x7.jpg "Arduino Pin Mapping for ATtiny 167/87")
 
 ### ATtiny 48/88
 ![x8 Pin Mapping](http://drazzy.com/e/img/PinoutT88.jpg "Arduino Pin Mapping for ATtiny 88/48 in TQFP")
-![x8 Pin Mapping](http://drazzy.com/e/img/PinoutT88-PU.jpg "Arduino Pin Mapping for ATtiny 88/48 in DIP")
+![x8 Pin Mapping](avr/extras/Pinout_x8.jpg "Arduino Pin Mapping for ATtiny 88/48 in DIP")
 
 ### ATtiny 2313/4313
-![x313 Pin Mapping](http://drazzy.com/e/img/PinoutT4313a.jpg "Arduino Pin Mapping for ATtiny 4313/2313")
+![x313 Pin Mapping](avr/extras/Pinout_x313.jpg "Arduino Pin Mapping for ATtiny 4313/2313")
+
+### ATtiny 43U
+![1634 pin mapping](avr/extras/Pinout_43.jpg "Arduino Pin Mapping for ATTiny 43")
 
 
 Note that two pin mappings are supported for some devices to retain backwards compatibility with other cores - the pin mapping may be chosen from a menu.
