@@ -3,24 +3,22 @@
   core_pins.h - Pin definitions.
 
   Copyright 2010 Rowdy Dog Software.
+  Copyright 2015~2018 Spence Konde
 
-  This file is part of Arduino-Tiny.
+  This file is part of ATTinyCore
 
-  Arduino-Tiny is free software: you can redistribute it and/or modify it
+  ATTinyCore is free software: you can redistribute it and/or modify it
   under the terms of the GNU Lesser General Public License as published by
   the Free Software Foundation, either version 3 of the License, or (at your
   option) any later version.
 
-  Arduino-Tiny is distributed in the hope that it will be useful, but
+  ATTinyCore is distributed in the hope that it will be useful, but
   WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
   or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
   License for more details.
 
   You should have received a copy of the GNU Lesser General Public License
-  along with Arduino-Tiny.  If not, see <http://www.gnu.org/licenses/>.
-
-  Modified 2015 by Spence Konde/Dr. Azzy to add support for new chips and remove 
-  entries suppoted in the other core I'm maintaining. 
+  along with ATTinyCore.  If not, see <http://www.gnu.org/licenses/>.
 
 ==============================================================================*/
 
@@ -58,6 +56,9 @@
 #define CORE_ANALOG_FIRST     (64)
 #define CORE_ANALOG_COUNT     (12)
 #define CORE_ANALOG_LAST      (CORE_ANALOG_FIRST+CORE_ANALOG_COUNT-1)
+
+#define NUM_DIGITAL_PINS            12
+#define NUM_ANALOG_INPUTS           12
 
 #define CORE_INT0_PIN  PIN_B1
 #define digitalPinToInterrupt(p)  ((p) == 1 ? 0 : NOT_AN_INTERRUPT)
@@ -134,6 +135,10 @@
 #define CORE_ANALOG_COUNT     (13) // 12 + internal temperature sensor
 #define CORE_ANALOG_LAST      (CORE_ANALOG_FIRST+CORE_ANALOG_COUNT-1)
 
+
+#define NUM_DIGITAL_PINS            18
+#define NUM_ANALOG_INPUTS           18
+
 #define CORE_INT0_PIN  PIN_C2
 
 #define CORE_OC0A_PIN  PIN_C0
@@ -204,6 +209,9 @@
 #define CORE_ANALOG_FIRST     (0)
 #define CORE_ANALOG_COUNT     (28)
 #define CORE_ANALOG_LAST      (CORE_ANALOG_FIRST+CORE_ANALOG_COUNT-1)
+
+#define NUM_DIGITAL_PINS            28
+#define NUM_ANALOG_INPUTS           28
 
 #define CORE_INT0_PIN  PIN_C1
 #define CORE_INT1_PIN  PIN_C2

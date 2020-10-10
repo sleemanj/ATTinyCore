@@ -3,6 +3,7 @@
   Part of Arduino - http://www.arduino.cc/
 
   Copyright (c) 2007 David A. Mellis
+  Copyright 2015~2018 Spence Konde
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -171,7 +172,7 @@ void _turnOffMillis();
 // See PinMapping.jpg
   
 #define NUM_DIGITAL_PINS            6
-#define NUM_ANALOG_INPUTS           4
+#define NUM_ANALOG_INPUTS           6
 
 // Notice here that p is the ADC reference and returns an Arduino
 // pin number
