@@ -270,6 +270,11 @@ static const uint8_t A3 = 0x80 | 3;
 #undef portOutputRegister
 #define portOutputRegister(P) ( (volatile uint8_t *)(&PORTB))
 
+//If Software Serial communications doesn't work, run the TinyTuner sketch provided with the core to give you a calibrated OSCCAL value.
+//Change the value here with the tuned value.
+//e.g
+//#define TUNED_OSCCAL_VALUE                        0x57
+
 #undef portInputRegister
 #define portInputRegister(P) ( (volatile uint8_t *)(&PINB))
 
@@ -328,11 +333,11 @@ const uint8_t PROGMEM digital_pin_to_bit_mask_PGM[] =
 
 const uint8_t PROGMEM digital_pin_to_timer_PGM[] = 
 {
-  TIMER0A, /* OC0A */
+  TIMER0A, 
   #ifdef TIMER1_PWM
-  TIMER1A, /* OC1A */
+  TIMER1A, 
   #else
-  TIMER0B, /* OC0B */
+  TIMER0B, 
   #endif
   NOT_ON_TIMER,
   NOT_ON_TIMER,
