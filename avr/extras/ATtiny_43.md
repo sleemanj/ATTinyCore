@@ -1,28 +1,24 @@
 
-### ATtiny 24/44/84
-![x4 pin mapping](http://drazzy.com/e/img/PinoutT84a.jpg "Arduino Pin Mapping for ATtiny x4 series")
+### ATtiny 43
+![43 pin mapping](http://drazzy.com/e/img/PinoutT43.jpg "Arduino Pin Mapping for ATtiny 43")
 
  Specifications |  .
 ------------ | -------------
-Flash (program memory)   | 2048b/4096b/8192b (3456b/7552b with optiboot)
-RAM  | 128/256/512 bytes
-EEPROM | 128/256/512 bytes
-Bootloader | Yes, Optiboot w/virtualboot
-GPIO Pins | 11
-ADC Channels | 12 (including the one on reset), many differential channels
+Flash (program memory)   | 4096b
+RAM  | 256 bytes
+EEPROM | 64 bytes
+Bootloader | No
+GPIO Pins | 15
+ADC Channels | 4
 PWM Channels | 4
 Interfaces | USI
-Clock options | Internal 1/8mhz, external crystal or clock up to 20mhz
+Special features | On-chip boost converter
+Clock options | Internal 1/4/8MHz
 
-Two pinouts are available - this provides compatibility with cores which use either layout. 
-
-### Optiboot Bootloader
-This core includes an Optiboot bootloader for the ATtiny84/44, operating using software serial at 19200 baud - the software serial uses the AIN0 and AIN1 pins (see UART section below). The bootloader uses 640b of space, leaving 3456 or7552b available for user code. In order to work on the 84, which does not have hardware bootloader support (hence no BOOTRST functionality), "Virtual Boot" is used. This works around this limitation by rewriting the vector table of the sketch as it's uploaded - the reset vector gets pointed at the start of the bootloader, while the EE_RDY vector gets pointed to the start of the application.
-
-Programming the ATTiny84/44 via ISP without the bootloader is fully supported; the 24 is supported only for ISP programming. 
+The ATtiny43 is a very unusual microcontroller - the featureset is unremarkable, inferior to just about anything else in the ATtiny product line - except for one thing: A built-in boost converter that allows it to run off of just ~1.1v (startup - it will keep running as low as 0.7v) - so you can run a project off a single alkaline battery. It generates ~3v while in active mode, and can provide up to 30mA for peripherals. When using the boost converter, you must run at 4MHz or less. See the datasheet for details of the layout, external components required, and further details of the boost converter operation.
 
 ### Tone Support
-Tone() uses timer1. For best results, use pin 6 and 5 (4 and 5 with alternate pinout - PA6 and PA5), as this will use the hardware output compare to generate the square wave instead of using interrupts. 
+Tone() uses timer1. For best results, use pin 6 and 5, as this will use the hardware output compare to generate the square wave instead of using interrupts. This will take out PWM on pins 5 amd 6. 
 
 ### I2C Support
 There is no hardware I2C peripheral. I2C functionality can be achieved with the hardware USI. As of version 1.1.3 this is handled transparently via the special version of the Wire library included with this core.
@@ -41,6 +37,5 @@ ACSR |=~(1<<ACD);
 
 ### ADC Reference options
 * DEFAULT: Vcc
-* EXTERNAL: Voltage applied to AREF pin
 * INTERNAL1V1: Internal 1.1v reference
 * INTERNAL: synonym for INTERNAL1V1
