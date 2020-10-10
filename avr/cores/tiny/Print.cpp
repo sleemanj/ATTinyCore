@@ -319,13 +319,13 @@ size_t Print::println(const Printable& x)
   return n;
 }
 
-static int16_t printf_putchar(char c, FILE *fp)
+static size_t printf_putchar(char c, FILE *fp)
 {
   ((class Print *)(fdev_get_udata(fp)))->write((uint8_t)c);
   return 0;
 }
 
-int16_t Print::printf(const char *ifsh, ...)
+size_t Print::printf(const char *ifsh, ...)
 {
   FILE f;
   va_list ap;
@@ -336,7 +336,7 @@ int16_t Print::printf(const char *ifsh, ...)
   return vfprintf(&f, ifsh, ap);
 }
 
-int16_t Print::printf(const __FlashStringHelper *ifsh, ...)
+size_t Print::printf(const __FlashStringHelper *ifsh, ...)
 {
   FILE f;
   va_list ap;

@@ -228,8 +228,8 @@ class Print
     size_t println(const Printable&);
     size_t println(void);
 
-    int16_t printf(const char *ifsh, ...);
-    int16_t printf(const __FlashStringHelper *ifsh, ...);
+    size_t printf(const char *ifsh, ...);
+    size_t printf(const __FlashStringHelper *ifsh, ...);
 };
 
 #endif
