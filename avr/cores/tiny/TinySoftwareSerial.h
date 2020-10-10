@@ -1,4 +1,3 @@
-
 #if (USE_SERIAL_TYPE == SERIAL_TYPE_SOFTWARE)
 #ifndef TinySoftwareSerial_h
 #define TinySoftwareSerial_h
@@ -30,7 +29,7 @@ struct soft_ring_buffer
 // need it after all (if it indeed did), adding used solves this
 // and doesn't *appear* to cause any problems... probably.
 extern "C"{
-  void uartDelay() __attribute__ ((naked,used));
+  void uartDelay() __attribute__ ((naked,used)); //used attribute needed to prevent LTO from throwing it out.
   uint8_t getch();
   void store_char(unsigned char c, soft_ring_buffer *buffer);
 }
@@ -38,11 +37,11 @@ extern "C"{
 class TinySoftwareSerial : public Stream
 {
   public: //should be private but needed by extern "C" {} functions.
-	uint8_t _rxmask;
-	uint8_t _txmask;
-	uint8_t _txunmask;
-	soft_ring_buffer *_rx_buffer;
-	uint8_t _delayCount;
+  uint8_t _rxmask;
+  uint8_t _txmask;
+  uint8_t _txunmask;
+  soft_ring_buffer *_rx_buffer;
+  uint8_t _delayCount;
   public:
     TinySoftwareSerial(soft_ring_buffer *rx_buffer, uint8_t txBit, uint8_t rxBit);
     void begin(long);

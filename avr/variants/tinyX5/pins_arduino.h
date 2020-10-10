@@ -286,21 +286,21 @@ const uint16_t PROGMEM port_to_mode_PGM[] =
   (uint16_t)&DDRB,
 };
 
-const uint16_t PROGMEM port_to_output_PGM[] = 
+const uint16_t PROGMEM port_to_output_PGM[] =
 {
   NOT_A_PORT,
   NOT_A_PORT,
   (uint16_t)&PORTB,
 };
 
-const uint16_t PROGMEM port_to_input_PGM[] = 
+const uint16_t PROGMEM port_to_input_PGM[] =
 {
   NOT_A_PIN,
   NOT_A_PIN,
   (uint16_t)&PINB,
 };
 
-const uint8_t PROGMEM digital_pin_to_port_PGM[] = 
+const uint8_t PROGMEM digital_pin_to_port_PGM[] =
 {
   PB, 
   PB,
@@ -311,7 +311,7 @@ const uint8_t PROGMEM digital_pin_to_port_PGM[] =
 
 };
 
-const uint8_t PROGMEM digital_pin_to_bit_mask_PGM[] = 
+const uint8_t PROGMEM digital_pin_to_bit_mask_PGM[] =
 {
   _BV(0), 
   _BV(1),
@@ -321,7 +321,6 @@ const uint8_t PROGMEM digital_pin_to_bit_mask_PGM[] =
   _BV(5),
 
 };
-
 
 const uint8_t PROGMEM digital_pin_to_timer_PGM[] = 
 {

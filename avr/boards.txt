@@ -1,4 +1,4 @@
-# Overhauled summer 2015 by Dr. Azzy (Spence Konde) and again in early 2016 to add support for more chips. 
+# Overhauled summer 2015 by Dr. Azzy (Spence Konde) and again in early 2016 to add support for more chips.
 
 menu.chip=Chip
 menu.clock=Clock
@@ -1745,5 +1745,3 @@ attiny5_diy.menu.millis_ppm.0p25.build.custom_flags.millis_ppm=-DACCEPTABLE_MILL
 
 attiny5_diy.menu.millis_ppm.0p1=Better Or Equal 0.1% Error (Highest Code Use)
 attiny5_diy.menu.millis_ppm.0p1.build.custom_flags.millis_ppm=-DACCEPTABLE_MILLIS_ERROR_PPM=1000UL
-
-

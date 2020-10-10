@@ -38,4 +38,3 @@ class Printable
 };
 
 #endif
-
