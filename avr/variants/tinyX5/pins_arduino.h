@@ -261,7 +261,11 @@ static const uint8_t A3 = 0x80 | 3;
 #define digitalPinToBitMask(P) ( (_BV(P)) )
 
 #undef digitalPinToTimer
+#ifdef TIMER1_PWM
+#define digitalPinToTimer(P) ( ( P == 0 ) ? TIMER0A : ( (P == 1 ) ? TIMER1A : ( (P == 4 ) ? TIMER1B : NOT_ON_TIMER ) ))
+#else
 #define digitalPinToTimer(P) ( ( P == 0 ) ? TIMER0A : ( (P == 1 ) ? TIMER0B : ( (P == 4 ) ? TIMER1B : NOT_ON_TIMER ) ))
+#endif
 
 #undef portOutputRegister
 #define portOutputRegister(P) ( (volatile uint8_t *)(&PORTB))
@@ -324,8 +328,12 @@ const uint8_t PROGMEM digital_pin_to_bit_mask_PGM[] =
 
 const uint8_t PROGMEM digital_pin_to_timer_PGM[] = 
 {
-  TIMER0A, // OC0A 
-  TIMER0B, // OC0B 
+  TIMER0A, /* OC0A */
+  #ifdef TIMER1_PWM
+  TIMER1A, /* OC1A */
+  #else
+  TIMER0B, /* OC0B */
+  #endif
   NOT_ON_TIMER,
   NOT_ON_TIMER,
   TIMER1B,
