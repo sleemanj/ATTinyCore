@@ -22,7 +22,7 @@ Please also see [that page](https://github.com/sleemanj/optiboot/tree/master/dis
 ### [Installation](https://github.com/sleemanj/optiboot/tree/master/dists#attiny) 
 ### [Basic Wiring](Wiring.md) 
 
-### ATtinyCore Universal
+#### ATtinyCore Universal
 This core supports the following processors - essentially every ATtiny processor that makes sense to use with Arduino. Click the processor name for part-specific information:
 
 * [ATtiny2313, 4313](avr/extras/ATtiny_x313.md)
@@ -39,6 +39,8 @@ This core supports the following processors - essentially every ATtiny processor
 * [ATTiny828](avr/extras/ATtiny_828.md) (With or without Optiboot bootloader)
 
 Variants of these are also supported (such as the ATTiny1634R or ATTiny85V)
+
+**1.2.0 adds a lot of new bootloader related features. There are sure to be bugs. Please report them using the github "issues" feature or in Microcontrollers section of Arduino forum**
 
 This core will NOT support ATtiny x14/x17/x18 (ATtiny406, ATtiny212/412, ATtiny214/414/814/1614, ATtiny416/816/1616/3216, ATtiny417/817/1617/3217, etc) or other chips with the "xMega-like" peripherals. A very large amount of work would be required to support these parts. See [#174](https://github.com/SpenceKonde/ATTinyCore/issues/174) for details. It looks like the Arduino team is planning to release an official board based on a part with similar peripherals; after this is done, work could begin on porting that to the similar ATTiny parts.
 
