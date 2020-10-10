@@ -115,6 +115,7 @@ void turnOffPWM(uint8_t timer)
   } else
   #endif
 
+  #ifndef __AVR_ATtinyX7__
   #if defined(TCCR1A) && defined(COM1A1)
   if( timer == TIMER1A){
     cbi(TCCR1A, COM1A1);
@@ -143,9 +144,6 @@ void turnOffPWM(uint8_t timer)
   if(timer == TIMER1A){
     cbi(TCCR1, COM1A1);
     //cbi(TCCR1, COM1A0);
-  #ifdef OC1AX
-    cbi(TCCR1D, OC1AX);
-  #endif
   } else
   #endif
 
@@ -153,9 +151,6 @@ void turnOffPWM(uint8_t timer)
   if( timer == TIMER1B){
     cbi(TCCR1A, COM1B1);
     //cbi(TCCR1A, COM1B0);
-  #ifdef OC1BV
-    cbi(TCCR1D, OC1BV);
-  #endif
   } else
   #endif
 
@@ -165,10 +160,14 @@ void turnOffPWM(uint8_t timer)
     //cbi(GTCCR, COM1B1);
   } else
   #endif
-
-    {
-    }
-
+  #else // then it IS an ATtiny x7
+  if (timer&0x10) {
+    TCCR1D&=(~(1<<(timer&0x07)));
+  }
+  #endif
+  {
+    // dummy block to fill in the else statement
+  }
 }
 #endif
 
@@ -233,15 +232,17 @@ void _digitalWrite(uint8_t pin, uint8_t val)
 uint8_t _digitalRead(uint8_t pin)
 {
   if (pin&128) {pin=analogInputToDigitalPin((pin&127));}
-  uint8_t timer = digitalPinToTimer(pin);
+  //uint8_t timer = digitalPinToTimer(pin);
   uint8_t bit = digitalPinToBitMask(pin);
   uint8_t port = digitalPinToPort(pin);
 
   if (port == NOT_A_PIN) return LOW;
 
-  // If the pin that support PWM output, we need to turn it off
-  // before getting a digital reading.
-  if (timer != NOT_ON_TIMER) turnOffPWM(timer);
+  // There is no need to turn off PWM on a pin before doing digitalRead().
+  // "read" should *NEVER* change the behavior of the thing you're using it on.
+  // That's why it's called "read" not "write". As an added bonus, sets the
+  // stage for auto-fast-digitalRead() for compile time known pins.
+  // if (timer != NOT_ON_TIMER) turnOffPWM(timer);
 
   if (*portInputRegister(port) & bit) return HIGH;
   return LOW;

@@ -74,7 +74,7 @@ void yield(void);
 
 #if F_CPU < 1000000L
 //Prevent a divide by 0 is
-#warning Clocks per microsecond < 1. To prevent divide by 0, it is rounded up to 1.
+#warning "Clocks per microsecond < 1. To prevent divide by 0, it is rounded up to 1."
 //static inline unsigned long clockCyclesPerMicrosecond() __attribute__ ((always_inline));
 //static inline unsigned long clockCyclesPerMicrosecond()
 //{//
@@ -170,6 +170,15 @@ extern const uint8_t PROGMEM digital_pin_to_timer_PGM[];
 #define TIMER1A 3
 #define TIMER1B 4
 #define TIMER1D 5
+#define TIM1AU (0x10)
+#define TIM1AV (0x11)
+#define TIM1AW (0x12)
+#define TIM1AX (0x13)
+#define TIM1BU (0x14)
+#define TIM1BV (0x15)
+#define TIM1BW (0x16)
+#define TIM1BX (0x17)
+
 
 #define SERIAL_TYPE_NONE      0x00
 #define SERIAL_TYPE_HARDWARE  0x01
@@ -478,15 +487,15 @@ void delayMicroseconds(unsigned int us);
 =============================================================================*/
 
 #ifndef TIMER_TO_USE_FOR_MILLIS
-#define TIMER_TO_USE_FOR_MILLIS                     0
+  #define TIMER_TO_USE_FOR_MILLIS                     0
 #endif
 /*
   Tone goes on whichever timer was not used for millis.
 */
 #if TIMER_TO_USE_FOR_MILLIS == 1
-#define TIMER_TO_USE_FOR_TONE                     0
+  #define TIMER_TO_USE_FOR_TONE                     0
 #else
-#define TIMER_TO_USE_FOR_TONE                     1
+  #define TIMER_TO_USE_FOR_TONE                     1
 #endif
 
 #if NUM_ANALOG_INPUTS > 0
@@ -616,6 +625,11 @@ unsigned int tiny_random();
   doesn't have to be riddled with #ifdefs.
 =============================================================================*/
 
+
+#if defined( TIM0_CAPT_vect ) && ! defined( TIMER0_CAPT_vect )
+#define TIMER0_CAPT_vect TIM0_CAPT_vect
+#endif
+
 #if defined( TIM0_COMPA_vect ) && ! defined( TIMER0_COMPA_vect )
 #define TIMER0_COMPA_vect TIM0_COMPA_vect
 #endif
@@ -626,6 +640,10 @@ unsigned int tiny_random();
 
 #if defined( TIM0_OVF_vect ) && ! defined( TIMER0_OVF_vect )
 #define TIMER0_OVF_vect TIM0_OVF_vect
+#endif
+
+#if defined( TIM1_CAPT_vect ) && ! defined( TIMER1_CAPT_vect )
+#define TIMER1_CAPT_vect TIM1_CAPT_vect
 #endif
 
 #if defined( TIM1_COMPA_vect ) && ! defined( TIMER1_COMPA_vect )
@@ -639,5 +657,22 @@ unsigned int tiny_random();
 #if defined( TIM1_OVF_vect ) && ! defined( TIMER1_OVF_vect )
 #define TIMER1_OVF_vect TIM1_OVF_vect
 #endif
+
+#if defined( TIM2_CAPT_vect ) && ! defined( TIMER2_CAPT_vect )
+#define TIMER2_CAPT_vect TIM2_CAPT_vect
+#endif
+
+#if defined( TIM2_COMPA_vect ) && ! defined( TIMER2_COMPA_vect )
+#define TIMER2_COMPA_vect TIM2_COMPA_vect
+#endif
+
+#if defined( TIM2_COMPB_vect ) && ! defined( TIMER2_COMPB_vect )
+#define TIMER2_COMPB_vect TIM2_COMPB_vect
+#endif
+
+#if defined( TIM2_OVF_vect ) && ! defined( TIMER2_OVF_vect )
+#define TIMER2_OVF_vect TIM2_OVF_vect
+#endif
+
 
 #endif

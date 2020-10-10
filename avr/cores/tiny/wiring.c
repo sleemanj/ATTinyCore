@@ -228,6 +228,8 @@ unsigned long micros()
 #if (MillisTimer_Prescale_Value % clockCyclesPerMicrosecond() == 0 ) // Can we just do it the naive way? If so great!
   return ((m << 8) + t) * (MillisTimer_Prescale_Value / clockCyclesPerMicrosecond());
   // Otherwise we do clock-specific calculations
+#elif (MillisTimer_Prescale_Value == 64 && F_CPU == 12800000L) //64/12.8=5, but the compiler wouldn't realize it because of integer math - this is a supported speed for Micronucleus.
+  return ((m << 8) + t) * 5;
 #elif (MillisTimer_Prescale_Value == 64 && F_CPU == 24000000L) // 2.6875 vs real value 2.67
   m = (m << 8) + t;
   return (m<<1) + (m >> 1) + (m >> 3) + (m >> 4); // multiply by 2.6875
@@ -322,7 +324,7 @@ void delayMicroseconds(unsigned int us)
   // 2 microseconds) gives delays longer than desired.
   //delay_us(us);
 #if F_CPU >= 24000000L
-  // for the 24 MHz clock for the aventurous ones, trying to overclock
+  // for the 24 MHz clock for the adventurous ones, trying to overclock
 
   // zero delay fix
   if (!us) return; //  = 3 cycles, (4 when true)
@@ -525,6 +527,9 @@ static void initToneTimerInternal(void)
   cbi(TCCR1D, WGM11);
   sbi(TCCR1D, WGM10);
   TCCR1B |= (ToneTimer_Prescale_Index << CS10);
+  #elif (TIMER_TO_USE_FOR_TONE == 1 ) && defined(__AVR_ATtinyX7__)
+  TCCR1A=(1<<COM1A1)|(1<<COM1B1)|(1<<WGM10);
+  TCCR1B |= (ToneTimer_Prescale_Index << CS10)|(1<<WGM12);
   #elif (TIMER_TO_USE_FOR_TONE == 1)
   TCCR1B &= ~((1<<CS12) | (1<<CS11) | (1<<CS10)); //stop the clock to configure
   // Use the Tone Timer for phase correct PWM
@@ -533,10 +538,12 @@ static void initToneTimerInternal(void)
   cbi(TCCR1B, WGM12);
   cbi(TCCR1B, WGM13);
   TCCR1B |= (ToneTimer_Prescale_Index << CS10); //set the clock
+
   #endif
 }
 #endif
  #endif
+
 
 #ifndef NO_TONE
 void initToneTimer(void)
@@ -675,7 +682,7 @@ PLLCSR |= PCKE;
 #if (F_CPU == 16500000L && CLOCK_SOURCE==6)
 byte read_factory_calibration(void)
   {
-    byte SIGRD = 5;
+    byte SIGRD = 5; //Yes, this stupid variable is needed. the io.h files for these parts don't include it.... they're macros so it all works, however dumb this looks.
     byte value = boot_signature_byte_get(1);
     return value;
   }
@@ -692,7 +699,7 @@ void init(void)
   #endif
   CLKPR=1; //prescale by 2 for 4MHz
   #endif
-  #if (F_CPU == 16500000L && CLOCK_SOURCE==6)
+  #if (F_CPU == 16500000L && CLOCK_SOURCE== 6 && (!defined(PRETUNED165)))
   if (OSCCAL == read_factory_calibration()) {
     // adjust the calibration up from 16.0mhz to 16.5mhz
     if (OSCCAL >= 128) {
@@ -702,11 +709,22 @@ void init(void)
       OSCCAL += 5;
     }
   }
+  #elif (F_CPU == 16000000L && CLOCK_SOURCE== 6 && (defined(PRETUNED165)))
+    OSCCAL = read_factory_calibration();
+    // adjust the calibration back to factory cal to lower clock back to 16.0 MHz
   #endif
   sei();
 
 #ifndef NO_MILLIS
+
+/*
+
   // In case the bootloader left our millis timer in a bad way
+  // Note that all occurrences of HAVE_BOOTLOADER are commented out, because all of the included bootloaders
+  // are known to be free of such bad behavior, so this just wastes flash setting things to values they are already set to.
+  // code retained in case a less polite bootloader is ever added to the core for some reason.
+  // but hidden behind a block comment for readability.
+
   #if defined( HAVE_BOOTLOADER ) && HAVE_BOOTLOADER
   // Ensure the timer is in the same state as power-up
   #if (TIMER_TO_USE_FOR_MILLIS == 0) && defined(WGM01)
@@ -833,6 +851,9 @@ void init(void)
 
   #endif
   #endif
+
+  // end of the code for clearing timer disruption left by errant bootloaded....
+  */
 
   // Use the Millis Timer for fast PWM (unless it doesn't have an output).
   #if (TIMER_TO_USE_FOR_MILLIS == 0) && defined(WGM01)

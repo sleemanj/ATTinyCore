@@ -123,6 +123,7 @@ static const uint8_t A10 = 0x80 | 10;
 #define PIN_B6  ( 14)
 #define PIN_B7  ( 15)
 
+#define PINMAPPING_NEW
 
 //----------------------------------------------------------
 //----------------------------------------------------------
@@ -139,7 +140,12 @@ static const uint8_t A10 = 0x80 | 10;
 
 #define TIMER_TO_USE_FOR_MILLIS                   0
 
-#define HAVE_BOOTLOADER                           1
+
+// This is commented out. The only place where HAVE_BOOTLOADER is checked is in wiring.c, where it wastes precious bytes of flash resetting timer-related registers out of fear that the bootloader has scribbled on them.
+// However, Optiboot does a WDR before jumping straight to app to start after running.
+// This means that optiboot leaves all the registers clean. Meanwhile, Micronucleus doesn't even USE any of the timers, and that's all the wiring.c code checks on (to make sure millis will work)
+// commenting out instead of setting to 0, as that would allow a hypothetical badly behaved bootloader to be supported in the future by having it add -DHAVE_BOOTLOADER from boards.txt
+// #define HAVE_BOOTLOADER                           1
 
 /*
   Where to put the software serial? (Arduino Digital pin numbers)
@@ -178,7 +184,7 @@ static const uint8_t A10 = 0x80 | 10;
 #define digitalPinToPCMSK(p)    ((p) >= 8 ?(&PCMSK1) : (&PCMSK0))
 #define digitalPinToPCMSKbit(p) (p&15)
 
-#define digitalPinToInterrupt(p)  ((p) == 14 ? 0 : ((p)==3?1: NOT_AN_INTERRUPT))
+#define digitalPinToInterrupt(p)  ((p) == PIN_PB6 ? 0 : ((p)==PIN_PA3?1: NOT_AN_INTERRUPT))
 #ifdef ARDUINO_MAIN
 
 // On the Arduino board, digital pins are also used
@@ -276,21 +282,19 @@ const uint8_t PROGMEM digital_pin_to_timer_PGM[] =
   NOT_ON_TIMER,
   NOT_ON_TIMER,
   NOT_ON_TIMER,
-  NOT_ON_TIMER,
-  NOT_ON_TIMER,
-  NOT_ON_TIMER,
-  TIMER1B,
-  NOT_ON_TIMER,
-  NOT_ON_TIMER,
-  TIMER1A,
-  NOT_ON_TIMER,
+  TIM1AU,
+  TIM1BU,
+  TIM1AV,
+  TIM1BV,
+  TIM1AW,
+  TIM1BW,
+  TIM1AX,
+  TIM1BX
 };
 
 #endif
 
 #endif
-
-
 
 
 //Old code, just here for temporary backup until I decide it is not needed.

@@ -100,7 +100,7 @@ void tone( uint8_t _pin, unsigned long frequency, unsigned long duration )
     TIFR1 |= ((1<<OCF1B) | (1<<OCF1A) | (1<<TOV1));
 
 
-#elif (TIMER_TO_USE_FOR_TONE == 1) && defined(TCCR1) //START OF ATTINY 85
+#elif (TIMER_TO_USE_FOR_TONE == 1) && defined(TCCR1) //START OF ATtiny85
     // Turn off Clear on Compare Match, turn off PWM A, disconnect the timer from the output pin, stop the clock
     TCCR1 = (0<<CTC1) | (0<<PWM1A) | (0<<COM1A1) | (0<<COM1A0) | (0<<CS13) | (0<<CS12) | (0<<CS11) | (0<<CS10);
     // Turn off PWM A, disconnect the timer from the output pin, no Force Output Compare Match, no Prescaler Reset
@@ -116,7 +116,7 @@ void tone( uint8_t _pin, unsigned long frequency, unsigned long duration )
     // Clear the Timer1 interrupt flags
     TIFR |= ((1<<OCF1A) | (1<<OCF1B) | (1<<TOV1));
 
-      //END OF ATTINY 85
+      //END OF ATtiny85
 #elif (TIMER_TO_USE_FOR_TONE == 1) && defined(TCCR1E) //
     TCCR1A = 0;
     TCCR1B = 0;
@@ -175,7 +175,7 @@ void tone( uint8_t _pin, unsigned long frequency, unsigned long duration )
   cbi(TCCR1B,WGM02);
 #else
   #if TIMER_TO_USE_FOR_TONE == 1
-    #if defined(TCCR1)//START OF ATTINY 85
+    #if defined(TCCR1)//START OF ATtiny85
   sbi(TCCR1,CTC1);
     cbi(TCCR1,PWM1A);
     cbi(GTCCR,PWM1B);
@@ -204,41 +204,11 @@ void tone( uint8_t _pin, unsigned long frequency, unsigned long duration )
       tone_timer_pin_register = NULL;
       tone_timer_pin_mask = 0;
       uint8_t tShiftAmount;
-  #if (digitalPinHasPWM(11))
-      // New pin layout
-      if(_pin >= 8) {
-          tShiftAmount = (_pin - 8) >> 1;
-          if(_pin & 0x01) {
-              tShiftAmount += 4; // odd pins are controlled by the B outputs
-              /* Compare Output Mode = Toggle OC1Bx on Compare Match. */
-              cbi(TCCR1A, COM1B1);
-              sbi(TCCR1A, COM1B0);
-          } else {
-              /* Compare Output Mode = Toggle OC1Ax on Compare Match. */
-              cbi(TCCR1A, COM1A1);
-              sbi(TCCR1A, COM1A0);
-          }
-          TCCR1D = 1 << tShiftAmount ;
-  #else
-      // Old pin layout
-      if((_pin >= 4 && _pin <= 9) || _pin == 2 || _pin == 15) {
-          if( _pin == 2 || _pin == 15) {
-              tShiftAmount = 3;
-          } else {
-              tShiftAmount = (_pin - 4) >> 1;
-          }
-          if(_pin & 0x01){
-              tShiftAmount += 4; // odd pins are controlled by the B outputs
-              /* Compare Output Mode = Toggle OC1Bx on Compare Match. */
-              cbi(TCCR1A, COM1B1);
-              sbi(TCCR1A, COM1B0);
-          } else {
-              /* Compare Output Mode = Toggle OC1Ax on Compare Match. */
-              cbi(TCCR1A, COM1A1);
-              sbi(TCCR1A, COM1A0);
-          }
-          TCCR1D = 1 << tShiftAmount ;
-  #endif
+      uint8_t timer=digitalPinToTimer(_pin);
+      if(timer&0x10) {
+          TCCR1D = 1 << (timer&0x07);
+          TCCR1A = 1 << ((timer&0x04)?COM1B0:COM1A0);
+
 #else
 #if (TIMER_TO_USE_FOR_TONE == 1) && defined(TCCR1E)
     if ( (digitalPinToTimer(_pin) == TIMER1A) || (digitalPinToTimer(_pin) == TIMER1B)  || (digitalPinToTimer(_pin) == TIMER1D) )

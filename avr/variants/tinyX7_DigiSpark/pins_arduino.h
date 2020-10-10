@@ -33,10 +33,11 @@
 
 #define NUM_DIGITAL_PINS            14
 #define NUM_ANALOG_INPUTS           10
-#define analogInputToDigitalPin(p)  ((p == 3) ? 23 : (p == 5) ? 21 : (p < 13 && p > 5) ? p+14 : (p ==13) ? 24 : -1)
+#define analogInputToDigitalPin(p)  (((p == 9) ? 3 : (p == 7) ? 5 : (p < 13 && p > 5) ? (p-6) : (p ==13) ? 13 : -1))
 #define ADC_TEMPERATURE 11
 
-#define digitalPinHasPWM(p)         ((p) == 0 || (p) == 1)
+#define digitalPinHasPWM(p)         ((p) == 3 || (p) == 1 || (p)==8)
+
 
 #define SS   12
 #define MOSI 10
@@ -67,19 +68,41 @@
 #  define USI_START_COND_INT USISIF
 #endif
 
-//Ax constants cannot be used for digitalRead/digitalWrite/analogWrite functions, only analogRead().
-static const uint8_t A3 = NUM_DIGITAL_PINS+9;
-static const uint8_t A5 = NUM_DIGITAL_PINS+7;
-static const uint8_t A6 = NUM_DIGITAL_PINS+0;
-static const uint8_t A7 = NUM_DIGITAL_PINS+1;
-static const uint8_t A8 = NUM_DIGITAL_PINS+2;
-static const uint8_t A9 = NUM_DIGITAL_PINS+3;
-static const uint8_t A10 = NUM_DIGITAL_PINS+4;
-static const uint8_t A11 = NUM_DIGITAL_PINS+5;
-static const uint8_t A12 = NUM_DIGITAL_PINS+6;
-static const uint8_t A13 = NUM_DIGITAL_PINS+10;
+static const uint8_t A3 = 0x80|9;
+static const uint8_t A5 = 0x80|7;
+static const uint8_t A6 = 0x80|0;
+static const uint8_t A7 = 0x80|1;
+static const uint8_t A8 = 0x80|2;
+static const uint8_t A9 = 0x80|3;
+static const uint8_t A10 = 0x80|4;
+static const uint8_t A11 = 0x80|5;
+static const uint8_t A12 = 0x80|6;
+static const uint8_t A13 = 0x80|10;
 
-#define LED_BUILTIN (4)
+
+
+#define PIN_PB0  ( 0 )
+#define PIN_PB1  ( 1 )
+#define PIN_PB2  ( 2 )
+#define PIN_PB6  ( 3 )
+#define PIN_PB3  ( 4 )
+#define PIN_PA7  ( 5 )
+#define PIN_PA0  ( 6 )
+#define PIN_PA1  ( 7 )
+#define PIN_PA2  ( 8 )
+#define PIN_PA3  ( 9 )
+#define PIN_PA4  ( 10 )
+#define PIN_PA5  ( 11 )
+#define PIN_PA6  ( 12 )
+#define PIN_PB7  ( 13 )
+#define PIN_PB4  ( 14 )
+#define PIN_PB5  ( 15 )
+
+#define LED_BUILTIN (PIN_PB1)
+
+#define Serial1 Serial
+
+#define PINMAPPING_DIGI
 
 //----------------------------------------------------------
 //----------------------------------------------------------
@@ -96,7 +119,11 @@ static const uint8_t A13 = NUM_DIGITAL_PINS+10;
 
 #define TIMER_TO_USE_FOR_MILLIS                   0
 
-#define HAVE_BOOTLOADER                           1
+// This is commented out. The only place where HAVE_BOOTLOADER is checked is in wiring.c, where it wastes precious bytes of flash resetting timer-related registers out of fear that the bootloader has scribbled on them.
+// However, Optiboot does a WDR before jumping straight to app to start after running.
+// This means that optiboot leaves all the registers clean. Meanwhile, Micronucleus doesn't even USE any of the timers, and that's all the wiring.c code checks on (to make sure millis will work)
+// commenting out instead of setting to 0, as that would allow a hypothetical badly behaved bootloader to be supported in the future by having it add -DHAVE_BOOTLOADER from boards.txt
+// #define HAVE_BOOTLOADER                           1
 
 /*
   Where to put the software serial? (Arduino Digital pin numbers)
@@ -141,27 +168,27 @@ static const uint8_t A13 = NUM_DIGITAL_PINS+10;
                                 ( 7) ) ) ) ) /* pin 5 */
 
 
-#define digitalPinToInterrupt(p)  ((p) == 2 ? 0 : ((p)==11?1: NOT_AN_INTERRUPT))
+#define digitalPinToInterrupt(p)  ((p) == PIN_PB6 ? 0 : ((p)==PIN_PA3?1: NOT_AN_INTERRUPT))
 
 #ifdef ARDUINO_MAIN
 
-// On the Arduino board, digital pins are also used
+// On the DigiSpark board, digital pins are also used
 // for the analog output (software PWM).  Analog input
 // pins are a separate set.
 
 // ATMEL ATTINY167
 //
 //                   +-\/-+
-// RX   (D  0) PA0  1|    |20  PB0 (D  4)
-// TX   (D  1) PA1  2|    |19  PB1 (D  5)
-//     *(D 12) PA2  3|    |18  PB2 (D  6)
-//      (D  3) PA3  4|    |17  PB3 (D  7)*
+// RX   (D  6) PA0  1|    |20  PB0 (D  0)
+// TX   (D  7) PA1  2|    |19  PB1 (D  1)
+//     *(D  8) PA2  3|    |18  PB2 (D  2)
+//      (D  9) PA3  4|    |17  PB3 (D  4)*
 //            AVCC  5|    |16  GND
 //            AGND  6|    |15  VCC
-// INT1 (D 11) PA4  7|    |14  PB4 (D  8)
-//      (D 13) PA5  8|    |13  PB5 (D  9)
-//      (D 10) PA6  9|    |12  PB6 (D  2)* INT0
-//      (D 14) PA7 10|    |11  PB7 (D 15)
+// INT1 (D 10) PA4  7|    |14  PB4 (D 14) XTAL1
+//      (D 11) PA5  8|    |13  PB5 (D 15) XTAL2
+//      (D 12) PA6  9|    |12  PB6 (D  3)* INT0
+//      (D  5) PA7 10|    |11  PB7 (D 13)
 //                   +----+
 //
 // * indicates PWM pin.
@@ -192,73 +219,66 @@ const uint16_t PROGMEM port_to_input_PGM[] =
 
 const uint8_t PROGMEM digital_pin_to_port_PGM[] =
 {
-	PB, /* 0 */
-	PB,
-	PB, /* 2 */
-	PB, /* 3 */
-	PB, /* 4 */
-	PA,
-	PA,
-	PA,
-	PA,
-	PA,
-	PA, /* 10 */
-	PA,
-	PA,
-	PB, /* RESET */
+  PB, /* 0 */
+  PB,
+  PB, /* 2 */
+  PB, /* 3 */
+  PB, /* 4 */
+  PA,
+  PA,
+  PA,
+  PA,
+  PA,
+  PA, /* 10 */
+  PA,
+  PA,
+  PB, /* RESET */
+  PB,
+  PB,
 };
 
 const uint8_t PROGMEM digital_pin_to_bit_mask_PGM[] =
 {
-	_BV(0), /* 0 */
-	_BV(1),
-	_BV(2), /* 2 */
-	_BV(6), /* 3 */
-	_BV(3), /* 4 */
-	_BV(7),
-	_BV(0),
-	_BV(1),
-	_BV(2),
-	_BV(3),
-	_BV(4), /* 10 */
-	_BV(5),
-	_BV(6),
-	_BV(7),
+  _BV(0), /* 0 */
+  _BV(1),
+  _BV(2), /* 2 */
+  _BV(6), /* 3 */
+  _BV(3), /* 4 */
+  _BV(7),
+  _BV(0),
+  _BV(1),
+  _BV(2),
+  _BV(3),
+  _BV(4), /* 10 */
+  _BV(5),
+  _BV(6),
+  _BV(7),
+  _BV(4),
+  _BV(5),
 };
 
 const uint8_t PROGMEM digital_pin_to_timer_PGM[] =
 {
-	TIMER1A, 
-	TIMER1B,
-	TIMER1A,
-	TIMER1A,
-	TIMER1B,
-	NOT_ON_TIMER,
-	NOT_ON_TIMER,
-	NOT_ON_TIMER,
-	TIMER0A,
-	NOT_ON_TIMER,
-	NOT_ON_TIMER,
-	NOT_ON_TIMER,
-	NOT_ON_TIMER,
-	NOT_ON_TIMER,
-	NOT_ON_TIMER,
-	NOT_ON_TIMER,
+  TIM1AU,
+  TIM1BU,
+  TIM1AV,
+  TIM1AX,
+  TIM1BV,
+  NOT_ON_TIMER,
+  NOT_ON_TIMER,
+  NOT_ON_TIMER,
+  TIMER0A,
+  NOT_ON_TIMER,
+  NOT_ON_TIMER,
+  NOT_ON_TIMER,
+  NOT_ON_TIMER,
+  NOT_ON_TIMER,
+  NOT_ON_TIMER,
+  TIM1BX,
+  TIM1AW,
+  TIM1BW,
 };
 
 #endif
 
 #endif
-
-
-
-
-//Old code, just here for temporary backup until I decide it is not needed.
-//WARNING, if using software, RX must be on a pin which has a Pin change interrupt <= 7 (e.g. PCINT6, or PCINT1, but not PCINT8)
-/*#define USE_SOFTWARE_SERIAL             1
-//These are set to match Optiboot pins.
-
-#define SOFTWARE_SERIAL_PORT            PORTB
-#define SOFTWARE_SERIAL_TX              0
-#define SOFTWARE_SERIAL_PIN             PINB
-#define SOFTWARE_SERIAL_RX              1*/
