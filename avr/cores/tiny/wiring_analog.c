@@ -195,7 +195,7 @@ void _analogWrite(uint8_t pin, uint8_t val)
   if( timer == TIMER0A){
     // connect pwm to pin on timer 0, channel A
     sbi(TCCR0A, COM0A1);
-    cbi(TCCR0A, COM0A0);
+    //cbi(TCCR0A, COM0A0);
     OCR0A = val; // set pwm duty
   } else
   #endif
@@ -204,7 +204,7 @@ void _analogWrite(uint8_t pin, uint8_t val)
   if( timer == TIMER0B){
     // connect pwm to pin on timer 0, channel B
     sbi(TCCR0A, COM0B1);
-    cbi(TCCR0A, COM0B0);
+    //cbi(TCCR0A, COM0B0);
     OCR0B = val; // set pwm duty
   } else
   #endif
@@ -215,7 +215,7 @@ void _analogWrite(uint8_t pin, uint8_t val)
   if( timer == TIMER1A){
     // connect pwm to pin on timer 1, channel A
     sbi(TCCR1A, COM1A1);
-    cbi(TCCR1A, COM1A0);
+    //cbi(TCCR1A, COM1A0);
   #ifdef OC1AX
     cbi(TCCR1D, OC1AV);
     cbi(TCCR1D, OC1AU);
@@ -252,7 +252,7 @@ void _analogWrite(uint8_t pin, uint8_t val)
   if(timer == TIMER1A){
     // connect pwm to pin on timer 1, channel A
     sbi(TCCR1, COM1A1);
-    cbi(TCCR1, COM1A0);
+    //cbi(TCCR1, COM1A0);
     OCR1A = val; // set pwm duty
   } else
   #endif
@@ -261,7 +261,7 @@ void _analogWrite(uint8_t pin, uint8_t val)
   if( timer == TIMER1B){
     // connect pwm to pin on timer 1, channel B
     sbi(TCCR1A, COM1B1);
-    cbi(TCCR1A, COM1B0);
+    //cbi(TCCR1A, COM1B0);
   #ifdef OC1BV
     sbi(TCCR1D, OC1BV);
     cbi(TCCR1D, OC1BU);
@@ -276,7 +276,7 @@ void _analogWrite(uint8_t pin, uint8_t val)
   if( timer == TIMER1B){
     // connect pwm to pin on timer 1, channel B
     sbi(GTCCR, COM1B1);
-    cbi(GTCCR, COM1B0);
+    //cbi(GTCCR, COM1B0);
     OCR1B = val; // set pwm duty
   } else
   #endif
