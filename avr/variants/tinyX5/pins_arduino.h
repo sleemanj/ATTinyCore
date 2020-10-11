@@ -255,7 +255,7 @@ static const uint8_t A3 = 0x80 | 3;
 #define digitalPinToPCMSKbit(p) (p)
 
 // External Interrupts on pins
-#define digitalPinToInterrupt(p) ( (p) == 1 ? 0 : NOT_AN_INTERRUPT )
+#define digitalPinToInterrupt(p) ( (p) == 2 ? 0 : NOT_AN_INTERRUPT )
 
 // The x5 is super small, we only have one port (PB) so we can simplify
 // everything to save wasting flash
