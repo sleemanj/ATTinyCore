@@ -254,6 +254,13 @@ static const uint8_t A3 = 0x80 | 3;
 #define digitalPinToPCMSK(p)    (((p) >= 0 && (p) <= 5) ? (&PCMSK) : ((uint8_t *)NULL))
 #define digitalPinToPCMSKbit(p) (p)
 
+//----------------------------------------------------------
+//----------------------------------------------------------
+//Core Configuration (used to be in core_build_options.h)
+
+//Why not? It's one of the special features of these parts, why not use it?
+#define TIMER1_PWM
+
 // External Interrupts on pins
 #define digitalPinToInterrupt(p) ( (p) == 2 ? 0 : NOT_AN_INTERRUPT )
 
