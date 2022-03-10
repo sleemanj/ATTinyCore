@@ -28,6 +28,11 @@ extern "C"{
 
 #ifdef NO_MILLIS
 #define ATTINY_CORE_NM 1
+
+/* For backcompat with SpenceKonde's define. */
+#ifndef DISABLEMILLIS
+  #define DISABLEMILLIS 1
+#endif
 #endif
   
 void yield(void);
