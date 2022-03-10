@@ -15,12 +15,18 @@ Please also see [that page](https://github.com/sleemanj/optiboot/tree/master/dis
 
 # ATTinyCore **Universal**
 Arduino support for almost every classic tinyAVR device! Supports ATtiny 1634, 2313/4313, 24/44/84, 441/841, 25/45/85, 261/461/861, 87/167, 48/88, 43 and 828.
+## State of ATTinyCore
+Development of ATTinyCore is proceeding in the v2.0.0-dev branch. It's not usable presently due to incomplete work, but that is what all future releases will be made from. Notably, I belive the variant pins_arduino.h files are complete, showcasing both the range of new information available to the core and user code for all parts, and the new, consisitent formatting. 
+
+ATtiny26 support looks like it may be coming after all....
 
 Supports programming vis ISP, Serial (Optiboot) or VUSB (Micronucleus)
 ## [Check it out, we have "discussions" now!](https://github.com/SpenceKonde/ATTinyCore/discussions)
 Let's use that, not gitter.
 
 ### Current **strongly** recommended IDE version: 1.8.13
+Users of 1.6.x versions should use caution with any board manager packages as the handling of dependency versions, at least under 1.6.9, appears to be severely broken, such that installing one packages can break others. For example, DxCore won't work if ATYTinyCore is installed on 1.6.9! - both cores correctly specify their requirements, but the IDE does not use the correct versions of the toochain. It is likely that similar bugs involving other tools also manifest here. Use 1.8.13 or similar recent version if at all possible; if you are unwilling or unable to update your main Arduino IDE version, a "portable" installation is recommended - the separate copy of IDE *with portable installation* should ensure that what you do in that version does not effect the other version - if you can't use 1.8.13, a portable 1.6.9 version will achieve the same thing, only without the other fixes and improvements that went into the IDE since then.
+
 
 ### [Installation](https://github.com/sleemanj/optiboot/tree/master/dists#attiny) 
 
@@ -57,10 +63,21 @@ Variants of these are also supported (such as the ATtiny1634R, ATtiny2313A or AT
 ## Quick Gotcha list - having trouble, read these!
 
 **Windows users must install Micronucleus drivers manually**
-If you want to use Micronucleus (VUSB) boards on Windows, you must manually install the drivers - Arduino does not run "post-install" tasks for third party libraries, due to "security" considerations, despite the fact that it will happily run arbitrary shell commands as the current user once the core to compile or upload. Just not to install! Total nonsense!  
+If you want to use Micronucleus (VUSB) boards on Windows, you must manually install the drivers - Arduino does not run "post-install" tasks for third party libraries (though I am told they recognized how nonsensical this is - a malicious core could still run whatever commands it wanted to by telling the IDE that was how to compile sketches for these boards - and will be changing this in the future. Note also that the 1.5.0 release does not include working micronucleus upload tool for Windows, this is resolved in 1.5.2.
 
 During the install process it will print the path of a post_install.bat that it skipped running. Running that will install the drivers - it's easiest if you copy/paste it, as after installation the drivers will be located in `C:\Users\YourUserName\AppData\Local\Arduino15\packages\ATTinyCore\tools\micronucleus\2.5-azd1\`  Or they can be downloaded from the following URL https://azduino.com/bin/micronucleus/Drivers-Digistump(win).zip . Unzip, run the installation batch file.
 
+
+**avrdude: error: could not find USB device with vid=0x16c0 pid=0x5dc vendor=`www.fischl.de` product='USBasp'**
+Vaguely recent versions of AVRdude appear to have dropped a few versions of the firmware. If this is the first time you'd installed something that triggered an update here, you may have problems with AVRdude. The solution, thankfully, is straightforward..
+.
+1. Download Zadig from http://zadig.akeo.ie
+2. Plug in USBasp
+3. Start zadig
+4. Options > List all devices
+5. Select USBasp from the drop down menu
+6. Select libusbK(v3.0.7.0) driver
+7. Click Install
 
 **This core includes part specific documentation - click the links above for your family of chips and READ IT** These describe issues and "gotchas" specific to certain chips. Be sure to review this documentation!
 
