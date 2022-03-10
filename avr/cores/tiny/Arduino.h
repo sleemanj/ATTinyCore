@@ -121,7 +121,6 @@ void init(void);
 
 void analogReference(uint8_t mode);
 
-
 unsigned long pulseIn(uint8_t pin, uint8_t state, unsigned long timeout);
 #ifndef NO_MILLIS
 unsigned long pulseInLong(uint8_t pin, uint8_t state, unsigned long timeout);

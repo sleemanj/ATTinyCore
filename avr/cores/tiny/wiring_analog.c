@@ -69,6 +69,7 @@ uint16_t _analogRead(uint8_t pin)
 #if ( defined(HAVE_ADC) && !HAVE_ADC ) || !defined(ADCSRA)
   // This is handled by analogRead() in Arduino.h
   // return digitalRead(analogInputToDigitalPin(pin)) ? 1023 : 0; //No ADC, so read as a digital pin instead.
+  (void)pin; // Silence warning about pin not being used
   return 0;
 #else
   #if defined(REFS0)

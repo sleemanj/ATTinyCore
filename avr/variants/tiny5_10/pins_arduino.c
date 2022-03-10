@@ -24,12 +24,12 @@
  *   the core may or may not be able to do pwm, it will make an attempt anyway.
  */
 
-void _turnOnPWM(uint8_t t, uint8_t v)
+void _turnOnPWM(uint8_t t __attribute__((unused)), uint8_t v __attribute__((unused)))
 {
   // Not Used, see pins_arduino.h for Macro Definition turnOnPWM()
 }
 
-void _turnOffPWM(uint8_t t)
+void _turnOffPWM(uint8_t t __attribute__((unused)))
 {
   // Not Used, see pins_arduino.h for Macro Definition turnOffPWM()
 }
@@ -58,7 +58,7 @@ ISR(TIM0_OVF_vect)
 // directly into the turnOnMillis() macro in pins_arduino.h, in other variants
 // you might want to have your turnOnMillis() macro call a function instead
 // if it's more complicated.
-void _turnOnMillis(uint8_t prescale)
+void _turnOnMillis(uint8_t prescale __attribute__((unused)))
 {
   // Not used see pins_arduino.h for Macro Definition turnOnMillis()
 }

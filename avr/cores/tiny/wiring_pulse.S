@@ -57,8 +57,10 @@
  * which is conveniently exactly how much the other fix cost.
  */
 
+
 #include <avr/io.h>
 
+#if !(defined(__AVR_ATtiny4__) || defined(__AVR_ATtiny5__) || defined(__AVR_ATtiny9__) || defined(__AVR_ATtiny10__))
 .section .text
 
 .global countPulseASM
@@ -187,3 +189,5 @@ countPulseASM:
     pop r13  ;   ;  142 popqi [length = 1]
     pop r12  ;   ;  143 popqi [length = 1]
     ret  ;  144 return_from_epilogue  [length = 1]
+
+#endif
