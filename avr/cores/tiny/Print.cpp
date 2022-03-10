@@ -458,8 +458,11 @@ size_t Print::printNumber(UNSIGNED_PRINT_INT_TYPE n, uint8_t base)
         write('b');
         base = 2;
         #endif
+/* We need to support GCC 5.4 for a bit yet because 7.x is broken for 4/5/9/10 */
+#if __GNUC__ >= 7
       __attribute__ ((fallthrough));
-        
+#endif /* __GNUC__ >= 7 */
+
       #ifdef PRINT_USE_BASE_HEX
         case 16: bt = base16; break;
       #endif
