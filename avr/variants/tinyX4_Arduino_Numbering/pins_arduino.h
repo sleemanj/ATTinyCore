@@ -205,7 +205,7 @@ static const uint8_t A6 = 0x80 | 6;
 static const uint8_t A7 = 0x80 | 7;
 
 // Pin Change Interrupt (PCI) Setup
-#define digitalPinToPCICR(p)    ((p) <= 11) ? (&GIMSK) : ((uint8_t *)NULL))
+#define digitalPinToPCICR(p)    (((p) <= 11) ? (&GIMSK) : ((uint8_t *)NULL))
 #define digitalPinToPCICRbit(p) (((p) < 8 ) ? (PCIE0) : (PCIE1))
 #define digitalPinToPCMSK(p)    (((p) < 8)  ? (&PCMSK0) : (&PCMSK1))
 #define digitalPinToPCMSKbit(p) ( \
