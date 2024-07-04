@@ -70,7 +70,7 @@ unsigned int tiny_random()
   return tiny_random_seed-1;
 }
 
-long map(long x, long in_min, long in_max, long out_min, long out_max)
+uint32_t _map( uint32_t x, uint32_t in_min, uint32_t in_max, uint32_t out_min, uint32_t out_max)
 {
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
