@@ -70,6 +70,8 @@ unsigned int tiny_random()
   return tiny_random_seed-1;
 }
 
+// Note that this is alled from the inline'd map() in Arduino.h when there are non-constant arguments
+// https://github.com/sleemanj/optiboot/issues/30
 uint32_t _map( uint32_t x, uint32_t in_min, uint32_t in_max, uint32_t out_min, uint32_t out_max)
 {
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
